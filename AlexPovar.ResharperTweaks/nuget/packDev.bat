@@ -1,0 +1,1 @@
+nuget pack alexpovar.resharpertweaks.dev.nuspec
