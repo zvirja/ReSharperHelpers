@@ -21,7 +21,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ResharperTweaks
 {
-  [Action("Cleanup modified code...")]
+  [Action("Cleanup modified code...", Icon = typeof (MainThemedIcons.ClearIcon))]
   public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction,
     IInsertLast<IntoSolutionItemGroup_Modify>
   {
