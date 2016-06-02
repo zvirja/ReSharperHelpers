@@ -91,6 +91,7 @@
       <HintPath>..\packages\JetBrains.Platform.Lib.Microsoft.Deployment.WindowsInstaller.2.0.20140821.0\lib\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\JetBrains.Platform.Lib.VisualStudio.AnyVs.ShellInterop.PrivateBuild.2.0.20140304.0\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
       <Private>True</Private>
@@ -158,10 +159,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CleanupModificationsCounter.cs" />
     <Compile Include="CleanupModifiedFilesAction.cs" />
     <Compile Include="GitModificationsResolver.cs" />
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatusBarTextUpdater.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

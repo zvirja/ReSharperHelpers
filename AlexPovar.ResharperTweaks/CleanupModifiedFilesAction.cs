@@ -81,7 +81,7 @@ namespace AlexPovar.ResharperTweaks
     }
 
     private static void FormatFiles(CodeCleanupFilesCollector context, CodeCleanupProfile profile,
-      HashSet<FileSystemPath> filesToProcess)
+      HashSet<FileSystemPath> filesToProcess, CleanupModificationsCounter modificationCounter)
     {
       var solution = context.Solution;
       var files = context.GetFiles();
@@ -125,6 +125,8 @@ namespace AlexPovar.ResharperTweaks
                         {
                           codeCleanup.Run(file, DocumentRange.InvalidRange, ref caret, profile, indicator);
                         }
+
+                        modificationCounter.Increment();
                       }
                     }
                     catch (Exception)
@@ -168,12 +170,19 @@ namespace AlexPovar.ResharperTweaks
         return;
       }
 
+      var statusBarUpdater = Shell.Instance.GetComponent<StatusBarTextUpdater>();
+
       if (filesToProcess.Count == 0)
       {
+        statusBarUpdater.SetText("Cleanup Modified - No modified files");
         return;
       }
 
-      FormatFiles(context, profile, filesToProcess);
+      var modificationCounter = new CleanupModificationsCounter();
+
+      FormatFiles(context, profile, filesToProcess, modificationCounter);
+
+      statusBarUpdater.SetText($"Cleanup Modified - Processed files: {modificationCounter.Count}");
     }
 
     protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector collector)
