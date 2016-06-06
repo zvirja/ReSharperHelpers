@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -162,6 +162,10 @@
     <Compile Include="CleanupModificationsCounter.cs" />
     <Compile Include="CleanupModifiedFilesAction.cs" />
     <Compile Include="ContextActions\AutoFixtureAttributeAction.cs" />
+    <Compile Include="ContextActions\ChopInlineContextAction.cs" />
+    <Compile Include="ContextActions\ChopInlineMethodActionBase.cs" />
+    <Compile Include="ContextActions\ChopMethodArgumentsAction.cs" />
+    <Compile Include="ContextActions\OnelineMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\SetGreedyAttributeAction.cs" />
     <Compile Include="ContextActions\SetFrozenAttributeAction.cs" />
     <Compile Include="GitModificationsResolver.cs" />
