@@ -161,10 +161,14 @@
   <ItemGroup>
     <Compile Include="CleanupModificationsCounter.cs" />
     <Compile Include="CleanupModifiedFilesAction.cs" />
+    <Compile Include="ContextActions\AutoFixtureAttributeAction.cs" />
+    <Compile Include="ContextActions\SetGreedyAttributeAction.cs" />
+    <Compile Include="ContextActions\SetFrozenAttributeAction.cs" />
     <Compile Include="GitModificationsResolver.cs" />
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusBarTextUpdater.cs" />
+    <Compile Include="Util\OptionalValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
