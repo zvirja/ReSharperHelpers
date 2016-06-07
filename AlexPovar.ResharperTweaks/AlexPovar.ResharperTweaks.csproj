@@ -168,7 +168,6 @@
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusBarTextUpdater.cs" />
-    <Compile Include="Util\OptionalValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
