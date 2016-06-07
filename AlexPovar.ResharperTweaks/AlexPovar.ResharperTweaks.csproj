@@ -165,6 +165,7 @@
     <Compile Include="ContextActions\ChopInlineContextAction.cs" />
     <Compile Include="ContextActions\ChopInlineMethodActionBase.cs" />
     <Compile Include="ContextActions\ChopMethodArgumentsAction.cs" />
+    <Compile Include="ContextActions\CopyFullClassNameAction.cs" />
     <Compile Include="ContextActions\OnelineMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\SetGreedyAttributeAction.cs" />
     <Compile Include="ContextActions\SetFrozenAttributeAction.cs" />
