@@ -12,7 +12,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ResharperTweaks.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "Copy full class name", Description = "Copy full class name.",
+  [ContextAction(Group = "C#", Name = "[Tweaks] Copy full class name", Description = "Copy full class name.",
     Priority = short.MinValue)]
   public class CopyFullClassNameAction : ContextActionBase
   {

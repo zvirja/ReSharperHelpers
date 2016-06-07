@@ -4,7 +4,7 @@ using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 
 namespace AlexPovar.ResharperTweaks.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "Set Greedy AutoFixture attribute",
+  [ContextAction(Group = "C#", Name = "[Tweaks] Set Greedy AutoFixture attribute",
     Description = "Sets Greedy AutoFixture attribute.",
     Priority = short.MinValue)]
   public class SetGreedyAttributeAction : AutoFixtureAttributeAction
