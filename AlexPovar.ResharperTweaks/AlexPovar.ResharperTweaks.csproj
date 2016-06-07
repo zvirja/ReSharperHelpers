@@ -169,6 +169,8 @@
     <Compile Include="ContextActions\OnelineMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\SetGreedyAttributeAction.cs" />
     <Compile Include="ContextActions\SetFrozenAttributeAction.cs" />
+    <Compile Include="ContextActions\TweaksActionsPosition.cs" />
+    <Compile Include="ContextActions\TweaksContextActionBase.cs" />
     <Compile Include="GitModificationsResolver.cs" />
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

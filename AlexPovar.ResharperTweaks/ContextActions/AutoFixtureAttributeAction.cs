@@ -4,7 +4,6 @@ using JetBrains.Application.Progress;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -14,7 +13,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ResharperTweaks.ContextActions
 {
-  public abstract class AutoFixtureAttributeAction : ContextActionBase
+  public abstract class AutoFixtureAttributeAction : TweaksContextActionBase
   {
     protected AutoFixtureAttributeAction(ICSharpContextActionDataProvider provider, string attributeTypeName)
     {
@@ -24,9 +23,9 @@ namespace AlexPovar.ResharperTweaks.ContextActions
       IsEnabled = IsAutoFixtureXunitReferenced(provider.PsiModule);
     }
 
-    protected ICSharpContextActionDataProvider Provider { get; }
+    private ICSharpContextActionDataProvider Provider { get; }
 
-    protected IClrTypeName AttributeType { get; }
+    private IClrTypeName AttributeType { get; }
 
     private bool IsEnabled { get; }
 

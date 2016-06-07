@@ -11,7 +11,8 @@ using JetBrains.Util;
 
 namespace AlexPovar.ResharperTweaks.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "[Tweaks] Chop method arguments", Description = "Chops method arguments", Priority = short.MinValue)]
+  [ContextAction(Group = "C#", Name = "[Tweaks] Chop method arguments", Description = "Chops method arguments",
+    Priority = short.MinValue)]
   public class ChopInlineContextAction : IContextAction
   {
     [NotNull] private readonly ICSharpContextActionDataProvider _myProvider;
@@ -26,9 +27,9 @@ namespace AlexPovar.ResharperTweaks.ContextActions
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
-      var anchor = new ExecutableGroupAnchor(IntentionsAnchors.ContextActionsAnchor, null, false);
-
       if (ContextMethodDeclaration == null) yield break;
+
+      var anchor = new ExecutableGroupAnchor(TweaksActionsPosition.ContextActionsAnchor, null, false);
 
       var actions = new ChopMethodArgumentsAction(ContextMethodDeclaration).ToContextAction(anchor);
       actions = actions.Concat(new OnelineMethodArgumentsAction(ContextMethodDeclaration).ToContextAction(anchor));
