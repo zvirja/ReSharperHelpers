@@ -23,7 +23,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions
     }
 
     [CanBeNull]
-    private IMethodDeclaration ContextMethodDeclaration { get; set; }
+    private ICSharpParametersOwnerDeclaration ContextMethodDeclaration { get; set; }
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
@@ -41,9 +41,10 @@ namespace AlexPovar.ResharperTweaks.ContextActions
     {
       var methodName = _myProvider.GetSelectedElement<ICSharpIdentifier>();
 
-      var methodDeclaration = methodName?.Parent as IMethodDeclaration;
+      var methodDeclaration = methodName?.Parent as ICSharpParametersOwnerDeclaration;
 
       if (methodDeclaration == null) return false;
+      if (methodDeclaration.ParameterDeclarations.IsEmpty) return false;
 
       ContextMethodDeclaration = methodDeclaration;
       return true;

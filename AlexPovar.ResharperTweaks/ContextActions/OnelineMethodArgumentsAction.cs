@@ -5,7 +5,8 @@ namespace AlexPovar.ResharperTweaks.ContextActions
 {
   public class OnelineMethodArgumentsAction : ChopInlineMethodActionBase
   {
-    public OnelineMethodArgumentsAction([NotNull] IMethodDeclaration methodDeclaration) : base(methodDeclaration)
+    public OnelineMethodArgumentsAction([NotNull] ICSharpParametersOwnerDeclaration methodDeclaration)
+      : base(methodDeclaration)
     {
       //see ChangeModifierAction 
     }

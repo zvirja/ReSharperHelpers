@@ -18,9 +18,9 @@ namespace AlexPovar.ResharperTweaks.ContextActions
 {
   public abstract class ChopInlineMethodActionBase : BulbActionBase
   {
-    private readonly IMethodDeclaration _methodDeclaration;
+    private readonly ICSharpParametersOwnerDeclaration _methodDeclaration;
 
-    protected ChopInlineMethodActionBase(IMethodDeclaration methodDeclaration)
+    protected ChopInlineMethodActionBase(ICSharpParametersOwnerDeclaration methodDeclaration)
     {
       _methodDeclaration = methodDeclaration;
     }
@@ -30,7 +30,8 @@ namespace AlexPovar.ResharperTweaks.ContextActions
       return node.NodeType == CSharpTokenType.NEW_LINE;
     }
 
-    private void DoCleanupLineBreaks(IMethodDeclaration methodDeclaration, IFormalParameterList parameters)
+    private void DoCleanupLineBreaks(ICSharpParametersOwnerDeclaration methodDeclaration,
+      IFormalParameterList parameters)
     {
       var nodesToRemove = new List<ITokenNode>();
 
