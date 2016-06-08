@@ -1,4 +1,4 @@
-﻿namespace AlexPovar.ResharperTweaks
+﻿namespace AlexPovar.ResharperTweaks.CodeCleanup
 {
   public class CleanupModificationsCounter
   {

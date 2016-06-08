@@ -3,7 +3,7 @@ using JetBrains.Application;
 using JetBrains.VsIntegration.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace AlexPovar.ResharperTweaks
+namespace AlexPovar.ResharperTweaks.CodeCleanup
 {
   [ShellComponent]
   public class StatusBarTextUpdater
