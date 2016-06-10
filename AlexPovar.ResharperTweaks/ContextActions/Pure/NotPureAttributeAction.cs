@@ -5,6 +5,7 @@ using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
+using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.CSharp.Impl;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -12,8 +13,7 @@ using JetBrains.TextControl;
 
 namespace AlexPovar.ResharperTweaks.ContextActions.Pure
 {
-  [ContextAction(Group = "C#", Name = "[Tweaks] Remove Pure attribute",
-    Description = "Removes Pure annotation attribute.")]
+  [ContextAction(Group = "C#", Name = "[Tweaks] Remove Pure attribute", Description = "Removes Pure annotation attribute.")]
   public class NotPureAttributeAction : PureAttributeActionBase
   {
     public NotPureAttributeAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider)
@@ -30,9 +30,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
 
       var codeAnnotationCache = methodDeclaration.GetPsiServices().GetCodeAnnotationsCache();
 
-      var pureAttribute =
-        methodDeclaration.AttributesEnumerable.FirstOrDefault(
-          attr => codeAnnotationCache.IsAnnotationAttribute(attr.GetAttributeInstance(), PureAttributeShortName));
+      var pureAttribute = methodDeclaration.AttributesEnumerable.FirstOrDefault(attr => codeAnnotationCache.IsAnnotationAttribute(attr.GetAttributeInstance(), PureAttributeShortName));
 
       if (pureAttribute == null) return null;
 
@@ -41,6 +39,6 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
       return null;
     }
 
-    protected override bool ResolveIsAvailable(bool isAlreadyDeclared) => isAlreadyDeclared;
+    protected override bool ResolveIsAvailable(bool isAlreadyDeclared, IMethod method) => isAlreadyDeclared;
   }
 }

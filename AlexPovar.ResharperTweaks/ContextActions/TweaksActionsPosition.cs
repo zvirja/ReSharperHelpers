@@ -4,10 +4,9 @@ using JetBrains.UI.BulbMenu;
 
 namespace AlexPovar.ResharperTweaks.ContextActions
 {
-  public class TweaksActionsPosition
+  public static class TweaksActionsPosition
   {
     [NotNull]
-    public static IAnchor ContextActionsAnchor { get; } =
-      new InvisibleAnchor(IntentionsAnchors.ContextActionsAnchorPosition.GetNext(), null, true);
+    public static IAnchor ContextActionsAnchor { get; } = new InvisibleAnchor(IntentionsAnchors.ContextActionsAnchorPosition.GetNext(), null, true);
   }
 }

@@ -5,6 +5,7 @@ using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 using JetBrains.ReSharper.Feature.Services.Intentions;
+using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.Util;
@@ -37,18 +38,15 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
       if (declaredMethod == null) return false;
 
       //Is null if Annotations are not installed
-      var pureAttributeType =
-        methodDeclaration.GetPsiServices()
-          .GetCodeAnnotationsCache()
-          .GetAttributeTypeForElement(methodDeclaration, PureAttributeShortName);
+      var pureAttributeType = methodDeclaration.GetPsiServices().GetCodeAnnotationsCache().GetAttributeTypeForElement(methodDeclaration, PureAttributeShortName);
 
       if (pureAttributeType == null) return false;
 
       var isAlreadyDeclared = declaredMethod.HasAttributeInstance(pureAttributeType.GetClrName(), false);
 
-      return ResolveIsAvailable(isAlreadyDeclared);
+      return ResolveIsAvailable(isAlreadyDeclared, declaredMethod);
     }
 
-    protected abstract bool ResolveIsAvailable(bool isAlreadyDeclared);
+    protected abstract bool ResolveIsAvailable(bool isAlreadyDeclared, IMethod method);
   }
 }

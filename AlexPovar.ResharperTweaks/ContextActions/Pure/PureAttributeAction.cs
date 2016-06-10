@@ -5,6 +5,7 @@ using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
+using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.CSharp.Impl;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -53,6 +54,22 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
       return null;
     }
 
-    protected override bool ResolveIsAvailable(bool isAlreadyDeclared) => !isAlreadyDeclared;
+    protected override bool ResolveIsAvailable(bool isAlreadyDeclared, IMethod method)
+    {
+      return !isAlreadyDeclared && IsRelevantForReturnTypeMethod(method);
+    }
+
+    private bool IsRelevantForReturnTypeMethod(IMethod method)
+    {
+      var retType = method.ReturnType;
+
+      if (!retType.IsResolved) return false;
+
+      if (retType.IsVoid()) return false;
+
+      if (method.IsAsync && !retType.IsGenericTask()) return false;
+
+      return true;
+    }
   }
 }

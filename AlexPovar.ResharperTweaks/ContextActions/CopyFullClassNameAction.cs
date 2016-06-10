@@ -12,8 +12,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ResharperTweaks.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "[Tweaks] Copy full class name", Description = "Copy full class name.",
-    Priority = short.MinValue)]
+  [ContextAction(Group = "C#", Name = "[Tweaks] Copy full class name", Description = "Copy full class name.", Priority = short.MinValue)]
   public class CopyFullClassNameAction : TweaksContextActionBase
   {
     [NotNull] private readonly Clipboard _clipboard;

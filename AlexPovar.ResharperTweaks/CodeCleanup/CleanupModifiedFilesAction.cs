@@ -80,8 +80,7 @@ namespace AlexPovar.ResharperTweaks.CodeCleanup
       return false;
     }
 
-    private static void FormatFiles(CodeCleanupFilesCollector context, CodeCleanupProfile profile,
-      HashSet<FileSystemPath> filesToProcess, CleanupModificationsCounter modificationCounter)
+    private static void FormatFiles(CodeCleanupFilesCollector context, CodeCleanupProfile profile, HashSet<FileSystemPath> filesToProcess, CleanupModificationsCounter modificationCounter)
     {
       var solution = context.Solution;
       var files = context.GetFiles();
@@ -90,54 +89,50 @@ namespace AlexPovar.ResharperTweaks.CodeCleanup
       var codeCleanup = JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup.GetInstance(solution);
       try
       {
-        Shell.Instance.GetComponent<UITaskExecutor>()
-          .SingleThreaded.ExecuteTask("Cleanup MODIFIED Code", TaskCancelable.Yes,
-            delegate(IProgressIndicator progress)
+        Shell.Instance.GetComponent<UITaskExecutor>().SingleThreaded.ExecuteTask("Cleanup MODIFIED Code", TaskCancelable.Yes,
+          delegate(IProgressIndicator progress)
+          {
+            using (WriteLockCookie.Create())
             {
-              using (WriteLockCookie.Create())
+              using (Shell.Instance.GetComponent<ICommandProcessor>().UsingBatchTextChange("Code Cleanup"))
               {
-                using (Shell.Instance.GetComponent<ICommandProcessor>().UsingBatchTextChange("Code Cleanup"))
+                using (var cookie = solution.GetComponent<SolutionDocumentTransactionManager>().CreateTransactionCookie(DefaultAction.Commit, "Code Cleanup"))
                 {
-                  using (
-                    var cookie =
-                      solution.GetComponent<SolutionDocumentTransactionManager>()
-                        .CreateTransactionCookie(DefaultAction.Commit, "Code Cleanup"))
+                  try
                   {
-                    try
+                    progress.TaskName = profile.Name;
+                    progress.Start(files.Count);
+                    psiFiles.AssertAllDocumentAreCommitted();
+                    foreach (var file in files)
                     {
-                      progress.TaskName = profile.Name;
-                      progress.Start(files.Count);
-                      psiFiles.AssertAllDocumentAreCommitted();
-                      foreach (var file in files)
+                      InterruptableActivityCookie.CheckAndThrow(progress);
+                      progress.CurrentItemText = file.DisplayName;
+
+                      var fileLocation = file.GetLocation();
+                      if (fileLocation.IsEmpty || !filesToProcess.Contains(fileLocation))
                       {
-                        InterruptableActivityCookie.CheckAndThrow(progress);
-                        progress.CurrentItemText = file.DisplayName;
-
-                        var fileLocation = file.GetLocation();
-                        if (fileLocation.IsEmpty || !filesToProcess.Contains(fileLocation))
-                        {
-                          progress.Advance(1.0);
-                          continue;
-                        }
-
-                        var caret = -1;
-                        using (var indicator = new SubProgressIndicator(progress, 1.0))
-                        {
-                          codeCleanup.Run(file, DocumentRange.InvalidRange, ref caret, profile, indicator);
-                        }
-
-                        modificationCounter.Increment();
+                        progress.Advance(1.0);
+                        continue;
                       }
+
+                      var caret = -1;
+                      using (var indicator = new SubProgressIndicator(progress, 1.0))
+                      {
+                        codeCleanup.Run(file, DocumentRange.InvalidRange, ref caret, profile, indicator);
+                      }
+
+                      modificationCounter.Increment();
                     }
-                    catch (Exception)
-                    {
-                      cookie.Rollback();
-                      throw;
-                    }
+                  }
+                  catch (Exception)
+                  {
+                    cookie.Rollback();
+                    throw;
                   }
                 }
               }
-            });
+            }
+          });
       }
       catch (ProcessCancelledException)
       {
@@ -155,14 +150,11 @@ namespace AlexPovar.ResharperTweaks.CodeCleanup
 
         if (!gitModificationResolver.IsValidRepository)
         {
-          MessageBox.ShowError(
-            $"Unable to resolve solution path as a git repository:{Environment.NewLine}{solutionDir.FullPath}");
+          MessageBox.ShowError($"Unable to resolve solution path as a git repository:{Environment.NewLine}{solutionDir.FullPath}");
           return;
         }
 
-        filesToProcess =
-          new HashSet<FileSystemPath>(
-            gitModificationResolver.GetModifiedFiles().Select(FileSystemPath.CreateByCanonicalPath));
+        filesToProcess = new HashSet<FileSystemPath>(gitModificationResolver.GetModifiedFiles().Select(FileSystemPath.CreateByCanonicalPath));
       }
       catch (Exception ex)
       {

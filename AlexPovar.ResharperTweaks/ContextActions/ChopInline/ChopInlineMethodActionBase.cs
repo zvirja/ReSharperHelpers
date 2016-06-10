@@ -30,8 +30,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
       return node.NodeType == CSharpTokenType.NEW_LINE;
     }
 
-    private void DoCleanupLineBreaks(ICSharpParametersOwnerDeclaration methodDeclaration,
-      IFormalParameterList parameters)
+    private void DoCleanupLineBreaks(ICSharpParametersOwnerDeclaration methodDeclaration, IFormalParameterList parameters)
     {
       var nodesToRemove = new List<ITokenNode>();
 

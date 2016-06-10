@@ -11,8 +11,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
 {
-  [ContextAction(Group = "C#", Name = "[Tweaks] Chop method arguments", Description = "Chops method arguments",
-    Priority = short.MinValue)]
+  [ContextAction(Group = "C#", Name = "[Tweaks] Chop method arguments", Description = "Chops method arguments", Priority = short.MinValue)]
   public class ChopInlineContextAction : IContextAction
   {
     [NotNull] private readonly ICSharpContextActionDataProvider _myProvider;

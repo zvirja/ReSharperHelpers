@@ -33,8 +33,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.AutoFixture
     {
       if (!IsEnabled) return false;
 
-      var parameterDeclaration =
-        Provider.GetSelectedElement<ICSharpParameterDeclaration>() as IRegularParameterDeclaration;
+      var parameterDeclaration = Provider.GetSelectedElement<ICSharpParameterDeclaration>() as IRegularParameterDeclaration;
 
       if (parameterDeclaration == null || !parameterDeclaration.IsValid()) return false;
 
@@ -48,8 +47,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.AutoFixture
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var parameterDeclaration =
-        Provider.GetSelectedElement<ICSharpParameterDeclaration>() as IRegularParameterDeclaration;
+      var parameterDeclaration = Provider.GetSelectedElement<ICSharpParameterDeclaration>() as IRegularParameterDeclaration;
       if (parameterDeclaration == null || !parameterDeclaration.IsValid()) return null;
 
       var psiModule = Provider.PsiModule;
@@ -67,10 +65,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.AutoFixture
 
     private bool IsAutoFixtureXunitReferenced(IPsiModule module)
     {
-      return
-        module.GetPsiServices()
-          .Modules.GetModuleReferences(module)
-          .Any(refModule => refModule.Module.Name.Equals("Ploeh.AutoFixture.Xunit2", StringComparison.Ordinal));
+      return module.GetPsiServices().Modules.GetModuleReferences(module).Any(refModule => refModule.Module.Name.Equals("Ploeh.AutoFixture.Xunit2", StringComparison.Ordinal));
     }
   }
 }

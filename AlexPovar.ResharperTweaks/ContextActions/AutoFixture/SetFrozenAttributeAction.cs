@@ -4,9 +4,7 @@ using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 
 namespace AlexPovar.ResharperTweaks.ContextActions.AutoFixture
 {
-  [ContextAction(Group = "C#", Name = "[Tweaks] Set Frozen AutoFixture attribute",
-    Description = "Sets Frozen AutoFixture attribute.",
-    Priority = short.MinValue)]
+  [ContextAction(Group = "C#", Name = "[Tweaks] Set Frozen AutoFixture attribute", Description = "Sets Frozen AutoFixture attribute.", Priority = short.MinValue)]
   public class SetFrozenAttributeAction : AutoFixtureAttributeAction
   {
     public SetFrozenAttributeAction([NotNull] ICSharpContextActionDataProvider provider)
