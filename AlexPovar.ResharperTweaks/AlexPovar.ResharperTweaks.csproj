@@ -169,6 +169,9 @@
     <Compile Include="ContextActions\ChopInline\OnelineMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\AutoFixture\SetGreedyAttributeAction.cs" />
     <Compile Include="ContextActions\AutoFixture\SetFrozenAttributeAction.cs" />
+    <Compile Include="ContextActions\Pure\NotPureAttributeAction.cs" />
+    <Compile Include="ContextActions\Pure\PureAttributeAction.cs" />
+    <Compile Include="ContextActions\Pure\PureAttributeActionBase.cs" />
     <Compile Include="ContextActions\TweaksActionsPosition.cs" />
     <Compile Include="ContextActions\TweaksContextActionBase.cs" />
     <Compile Include="CodeCleanup\GitModificationsResolver.cs" />
@@ -184,8 +187,8 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainIcons\ThemedIcons.Main.Generated.Xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
