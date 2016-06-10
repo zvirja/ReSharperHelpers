@@ -2,7 +2,7 @@
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 
-namespace AlexPovar.ResharperTweaks.ContextActions
+namespace AlexPovar.ResharperTweaks.ContextActions.AutoFixture
 {
   [ContextAction(Group = "C#", Name = "[Tweaks] Set Frozen AutoFixture attribute",
     Description = "Sets Frozen AutoFixture attribute.",

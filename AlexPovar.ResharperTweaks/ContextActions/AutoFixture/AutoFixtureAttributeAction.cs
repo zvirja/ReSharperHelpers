@@ -11,7 +11,7 @@ using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.TextControl;
 using JetBrains.Util;
 
-namespace AlexPovar.ResharperTweaks.ContextActions
+namespace AlexPovar.ResharperTweaks.ContextActions.AutoFixture
 {
   public abstract class AutoFixtureAttributeAction : TweaksContextActionBase
   {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AlexPovar.ResharperTweaks.MainIcons;
 using JetBrains.ActionManagement;
 using JetBrains.Application;
 using JetBrains.Application.CommandProcessing;

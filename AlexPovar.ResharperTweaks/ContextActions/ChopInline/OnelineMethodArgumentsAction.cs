@@ -1,7 +1,7 @@
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 
-namespace AlexPovar.ResharperTweaks.ContextActions
+namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
 {
   public class OnelineMethodArgumentsAction : ChopInlineMethodActionBase
   {

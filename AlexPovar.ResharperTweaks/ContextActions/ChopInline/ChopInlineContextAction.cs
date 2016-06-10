@@ -9,7 +9,7 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.UI.BulbMenu;
 using JetBrains.Util;
 
-namespace AlexPovar.ResharperTweaks.ContextActions
+namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
 {
   [ContextAction(Group = "C#", Name = "[Tweaks] Chop method arguments", Description = "Chops method arguments",
     Priority = short.MinValue)]

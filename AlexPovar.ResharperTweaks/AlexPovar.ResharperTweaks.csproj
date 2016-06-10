@@ -161,14 +161,14 @@
   <ItemGroup>
     <Compile Include="CodeCleanup\CleanupModificationsCounter.cs" />
     <Compile Include="CodeCleanup\CleanupModifiedFilesAction.cs" />
-    <Compile Include="ContextActions\AutoFixtureAttributeAction.cs" />
-    <Compile Include="ContextActions\ChopInlineContextAction.cs" />
-    <Compile Include="ContextActions\ChopInlineMethodActionBase.cs" />
-    <Compile Include="ContextActions\ChopMethodArgumentsAction.cs" />
+    <Compile Include="ContextActions\AutoFixture\AutoFixtureAttributeAction.cs" />
+    <Compile Include="ContextActions\ChopInline\ChopInlineContextAction.cs" />
+    <Compile Include="ContextActions\ChopInline\ChopInlineMethodActionBase.cs" />
+    <Compile Include="ContextActions\ChopInline\ChopMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\CopyFullClassNameAction.cs" />
-    <Compile Include="ContextActions\OnelineMethodArgumentsAction.cs" />
-    <Compile Include="ContextActions\SetGreedyAttributeAction.cs" />
-    <Compile Include="ContextActions\SetFrozenAttributeAction.cs" />
+    <Compile Include="ContextActions\ChopInline\OnelineMethodArgumentsAction.cs" />
+    <Compile Include="ContextActions\AutoFixture\SetGreedyAttributeAction.cs" />
+    <Compile Include="ContextActions\AutoFixture\SetFrozenAttributeAction.cs" />
     <Compile Include="ContextActions\TweaksActionsPosition.cs" />
     <Compile Include="ContextActions\TweaksContextActionBase.cs" />
     <Compile Include="CodeCleanup\GitModificationsResolver.cs" />

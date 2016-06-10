@@ -14,7 +14,7 @@ using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
 
-namespace AlexPovar.ResharperTweaks.ContextActions
+namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
 {
   public abstract class ChopInlineMethodActionBase : BulbActionBase
   {
