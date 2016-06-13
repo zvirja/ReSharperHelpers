@@ -28,10 +28,10 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
     {
       if (ContextMethodDeclaration == null) yield break;
 
-      var anchor = new ExecutableGroupAnchor(TweaksActionsPosition.ContextActionsAnchor, null, false);
+      var anchor = new ExecutableGroupAnchor(TweaksActionsConstants.ContextActionsAnchor, null, false);
 
-      var actions = new ChopMethodArgumentsAction(ContextMethodDeclaration).ToContextAction(anchor);
-      actions = actions.Concat(new OnelineMethodArgumentsAction(ContextMethodDeclaration).ToContextAction(anchor));
+      var actions = new ChopMethodArgumentsAction(ContextMethodDeclaration).ToContextAction(anchor, TweaksActionsConstants.ContextActionIcon);
+      actions = actions.Concat(new OnelineMethodArgumentsAction(ContextMethodDeclaration).ToContextAction(anchor, TweaksActionsConstants.ContextActionIcon));
 
       foreach (var action in actions) yield return action;
     }

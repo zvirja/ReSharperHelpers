@@ -10,6 +10,6 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
     {
     }
 
-    public override string Text => "[Tweaks] Chop method arguments";
+    public override string Text => "Chop method arguments";
   }
 }

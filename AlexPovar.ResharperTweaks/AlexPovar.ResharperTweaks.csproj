@@ -161,10 +161,14 @@
   <ItemGroup>
     <Compile Include="CodeCleanup\CleanupModificationsCounter.cs" />
     <Compile Include="CodeCleanup\CleanupModifiedFilesAction.cs" />
+    <Compile Include="ContextActions\AnnotationsUtil.cs" />
     <Compile Include="ContextActions\AutoFixture\AutoFixtureAttributeAction.cs" />
     <Compile Include="ContextActions\ChopInline\ChopInlineContextAction.cs" />
     <Compile Include="ContextActions\ChopInline\ChopInlineMethodActionBase.cs" />
     <Compile Include="ContextActions\ChopInline\ChopMethodArgumentsAction.cs" />
+    <Compile Include="ContextActions\ContainerNullability\ContainerNullabilityActionBase.cs" />
+    <Compile Include="ContextActions\ContainerNullability\ItemCanBeNullAction.cs" />
+    <Compile Include="ContextActions\ContainerNullability\ItemNotNullAction.cs" />
     <Compile Include="ContextActions\CopyFullClassNameAction.cs" />
     <Compile Include="ContextActions\ChopInline\OnelineMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\AutoFixture\SetGreedyAttributeAction.cs" />
@@ -172,7 +176,7 @@
     <Compile Include="ContextActions\Pure\NotPureAttributeAction.cs" />
     <Compile Include="ContextActions\Pure\PureAttributeAction.cs" />
     <Compile Include="ContextActions\Pure\PureAttributeActionBase.cs" />
-    <Compile Include="ContextActions\TweaksActionsPosition.cs" />
+    <Compile Include="ContextActions\TweaksActionsConstants.cs" />
     <Compile Include="ContextActions\TweaksContextActionBase.cs" />
     <Compile Include="CodeCleanup\GitModificationsResolver.cs" />
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
@@ -186,11 +190,18 @@
     <ThemedIconPng Include="MainIcons\clearIcon.png" />
   </ItemGroup>
   <ItemGroup>
+    <ThemedIconsXamlV3 Include="MainIcons\ContextActions.Icons.xaml">
+      <ThemeColumns>Gray</ThemeColumns>
+      <RemoveBackgroundElement>True</RemoveBackgroundElement>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ThemedIconsXamlV3>
     <Page Include="MainIcons\ThemedIcons.Main.Generated.Xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Antlr2.Tools.2.7.6.4\build\Antlr2.Tools.targets" Condition="Exists('..\packages\Antlr2.Tools.2.7.6.4\build\Antlr2.Tools.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

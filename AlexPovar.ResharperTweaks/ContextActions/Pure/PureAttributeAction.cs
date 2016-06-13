@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
@@ -7,10 +6,8 @@ using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
-using JetBrains.ReSharper.Psi.CSharp.Impl;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.TextControl;
-using JetBrains.Util;
 
 namespace AlexPovar.ResharperTweaks.ContextActions.Pure
 {
@@ -35,21 +32,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
 
       var pureAttribute = Provider.ElementFactory.CreateAttribute(pureAttributeType);
 
-      var lastAnnotationAttribute = methodDeclaration.AttributesEnumerable.LastOrDefault(attr =>
-      {
-        var attrInstanceType = attr.GetAttributeInstance().GetClrName();
-        return codeAnnotationCache.IsAnnotationType(attrInstanceType, attrInstanceType.ShortName);
-      });
-
-      if (lastAnnotationAttribute == null)
-      {
-        methodDeclaration.AddAttributeAfter(pureAttribute, null);
-      }
-      else
-      {
-        var attrList = (IAttributeList) lastAnnotationAttribute.Parent.NotNull("Attribute parent cannot be null.");
-        attrList.AddAttributeAfter(pureAttribute, lastAnnotationAttribute);
-      }
+      AnnotationsUtil.AddAnnotationAttribute(methodDeclaration, pureAttribute);
 
       return null;
     }
