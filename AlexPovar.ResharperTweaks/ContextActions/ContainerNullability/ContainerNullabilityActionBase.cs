@@ -37,6 +37,8 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
     [NotNull]
     protected abstract string ThisAttributeShortName { get; }
 
+    public bool LastIsAvailableResult { get; private set; }
+
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
       var attributesOwner = Provider.GetSelectedElement<IAttributesOwnerDeclaration>();
@@ -61,8 +63,13 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
       return null;
     }
 
-
     public override bool IsAvailable(IUserDataHolder cache)
+    {
+      LastIsAvailableResult = GetIsAvailable(cache);
+      return LastIsAvailableResult;
+    }
+
+    private bool GetIsAvailable(IUserDataHolder cache)
     {
       var methodName = Provider.GetSelectedElement<ICSharpIdentifier>();
       if (methodName == null) return false;

@@ -167,6 +167,7 @@
     <Compile Include="ContextActions\ChopInline\ChopInlineMethodActionBase.cs" />
     <Compile Include="ContextActions\ChopInline\ChopMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\ContainerNullability\ContainerNullabilityActionBase.cs" />
+    <Compile Include="ContextActions\ContainerNullability\ContainerNullabilityGroupAction.cs" />
     <Compile Include="ContextActions\ContainerNullability\ItemCanBeNullAction.cs" />
     <Compile Include="ContextActions\ContainerNullability\ItemNotNullAction.cs" />
     <Compile Include="ContextActions\CopyFullClassNameAction.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="ContextActions\TweaksActionsConstants.cs" />
     <Compile Include="ContextActions\TweaksContextActionBase.cs" />
     <Compile Include="CodeCleanup\GitModificationsResolver.cs" />
+    <Compile Include="ContextActions\TweaksExtensions.cs" />
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeCleanup\StatusBarTextUpdater.cs" />
