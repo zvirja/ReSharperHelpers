@@ -75,7 +75,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
       if (methodName == null) return false;
 
       var parentNode = methodName.Parent;
-      if (!(parentNode is IMethodDeclaration || parentNode is IPropertyDeclaration || parentNode is IFieldDeclaration)) return false;
+      if (!(parentNode is IMethodDeclaration || parentNode is IPropertyDeclaration || parentNode is IFieldDeclaration || parentNode is IRegularParameterDeclaration)) return false;
 
       //Skip conditions, to not interfere with default nullability attributes
 /*      var decl = parentNode as ICSharpDeclaration;
