@@ -98,6 +98,9 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
 
     private static bool IsIEnumerable([NotNull] IType type)
     {
+      //Exclude string, because it doesn't make sense
+      if (type.IsString()) return false;
+
       var typeElement = type.GetTypeElement();
       if (typeElement == null) return false;
 
