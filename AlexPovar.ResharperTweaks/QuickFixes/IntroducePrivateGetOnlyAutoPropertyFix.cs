@@ -18,20 +18,20 @@ using JetBrains.ReSharper.Psi.Util;
 namespace AlexPovar.ResharperTweaks.QuickFixes
 {
   [QuickFix]
-  public class IntroducePrivateAutoPropertyFix : InitializeAutoPropertyFix, IQuickFix
+  public class IntroducePrivateGetOnlyAutoPropertyFix : InitializeAutoPropertyFix, IQuickFix
   {
     private string _myPattern;
 
 
-    public IntroducePrivateAutoPropertyFix(UnusedParameterGlobalWarning error) : base(error)
+    public IntroducePrivateGetOnlyAutoPropertyFix(UnusedParameterGlobalWarning error) : base(error)
     {
     }
 
-    public IntroducePrivateAutoPropertyFix(UnusedParameterLocalWarning error) : base(error)
+    public IntroducePrivateGetOnlyAutoPropertyFix(UnusedParameterLocalWarning error) : base(error)
     {
     }
 
-    public IntroducePrivateAutoPropertyFix(IParameter parameter) : base(parameter)
+    public IntroducePrivateGetOnlyAutoPropertyFix(IParameter parameter) : base(parameter)
     {
     }
 
