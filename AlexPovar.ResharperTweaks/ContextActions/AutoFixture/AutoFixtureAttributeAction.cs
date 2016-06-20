@@ -17,10 +17,10 @@ namespace AlexPovar.ResharperTweaks.ContextActions.AutoFixture
   {
     protected AutoFixtureAttributeAction(ICSharpContextActionDataProvider provider, string attributeTypeName)
     {
-      Provider = provider;
-      AttributeType = new ClrTypeName(attributeTypeName);
+      this.Provider = provider;
+      this.AttributeType = new ClrTypeName(attributeTypeName);
 
-      IsEnabled = IsAutoFixtureXunitReferenced(provider.PsiModule);
+      this.IsEnabled = this.IsAutoFixtureXunitReferenced(provider.PsiModule);
     }
 
     private ICSharpContextActionDataProvider Provider { get; }
@@ -31,29 +31,29 @@ namespace AlexPovar.ResharperTweaks.ContextActions.AutoFixture
 
     public override bool IsAvailable(IUserDataHolder cache)
     {
-      if (!IsEnabled) return false;
+      if (!this.IsEnabled) return false;
 
-      var parameterDeclaration = Provider.GetSelectedElement<ICSharpParameterDeclaration>() as IRegularParameterDeclaration;
+      var parameterDeclaration = this.Provider.GetSelectedElement<ICSharpParameterDeclaration>() as IRegularParameterDeclaration;
 
       if (parameterDeclaration == null || !parameterDeclaration.IsValid()) return false;
 
       var parameter = parameterDeclaration.DeclaredElement;
       if (parameter == null) return false;
 
-      var alreadyPresent = parameter.GetAttributeInstances(AttributeType, false).Any();
+      var alreadyPresent = parameter.GetAttributeInstances(this.AttributeType, false).Any();
 
       return !alreadyPresent;
     }
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var parameterDeclaration = Provider.GetSelectedElement<ICSharpParameterDeclaration>() as IRegularParameterDeclaration;
+      var parameterDeclaration = this.Provider.GetSelectedElement<ICSharpParameterDeclaration>() as IRegularParameterDeclaration;
       if (parameterDeclaration == null || !parameterDeclaration.IsValid()) return null;
 
-      var psiModule = Provider.PsiModule;
+      var psiModule = this.Provider.PsiModule;
 
       var symbolScope = parameterDeclaration.GetPsiServices().Symbols.GetSymbolScope(psiModule, true, true);
-      var frozenAttributeType = symbolScope.GetTypeElementByCLRName(AttributeType);
+      var frozenAttributeType = symbolScope.GetTypeElementByCLRName(this.AttributeType);
 
       if (frozenAttributeType == null) return null;
 

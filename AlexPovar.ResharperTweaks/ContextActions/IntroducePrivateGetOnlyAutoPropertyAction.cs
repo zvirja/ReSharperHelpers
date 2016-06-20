@@ -9,8 +9,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ResharperTweaks.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "[Tweaks] Create and Initialize private get-only auto-property.",
-    Description = "Creates and Initializes private get-only auto-property.")]
+  [ContextAction(Group = "C#", Name = "[Tweaks] Create and Initialize private get-only auto-property.", Description = "Creates and Initializes private get-only auto-property.")]
   public class IntroducePrivateGetOnlyAutoPropertyAction : InitializeActionBase
   {
     public IntroducePrivateGetOnlyAutoPropertyAction(ICSharpContextActionDataProvider dataProvider)

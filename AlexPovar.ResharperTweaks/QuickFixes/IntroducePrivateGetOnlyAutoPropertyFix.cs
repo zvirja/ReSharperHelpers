@@ -60,13 +60,8 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
 
     public override IMemberFromParameterExec CreateExec()
     {
-      Predicate<ITypeMember> anchorMembersFilter = delegate(ITypeMember member)
-      {
-        var property = member as IProperty;
-        return property != null && property.Parameters.Count == 0;
-      };
-      return new IntroduceAndInitializeReadonlyPropertyExec(this.myParameter, this._myPattern,
-        NamedElementKinds.MethodPropertyEvent, anchorMembersFilter, this.myLanguageHelper);
+      Predicate<ITypeMember> anchorMembersFilter = member => (member as IProperty)?.Parameters.Count == 0;
+      return new IntroduceAndInitializeReadonlyPropertyExec(this.myParameter, this._myPattern, NamedElementKinds.MethodPropertyEvent, anchorMembersFilter, this.myLanguageHelper);
     }
 
     private class IntroduceAndInitializeReadonlyPropertyExec : IMemberFromParameterExec
@@ -97,15 +92,11 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
 
       public void Execute()
       {
-        var member =
-          new IntroduceMemberExec(this._myParameter, this._myPattern, this._myKind, this._myAnchorMembersFilter,
-            this._myLanguageHelper)
-            .Execute();
+        var member = new IntroduceMemberExec(this._myParameter, this._myPattern, this._myKind, this._myAnchorMembersFilter, this._myLanguageHelper).Execute();
 
         this.PostProcessProperty(member);
 
-        new InitializeMemberExec(this._myParameter, member, this._myAnchorMembersFilter, this._myLanguageHelper)
-          .Execute();
+        new InitializeMemberExec(this._myParameter, member, this._myAnchorMembersFilter, this._myLanguageHelper).Execute();
       }
 
       private void PostProcessProperty(ITypeMember typeMember)
@@ -123,9 +114,7 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
 
       private void MakeGetOnly([NotNull] IPropertyDeclaration propertyDeclaration)
       {
-        var setterDecl =
-          propertyDeclaration.AccessorDeclarationsEnumerable.FirstOrDefault(
-            accDecl => accDecl.Kind == AccessorKind.SETTER);
+        var setterDecl = propertyDeclaration.AccessorDeclarationsEnumerable.FirstOrDefault(accDecl => accDecl.Kind == AccessorKind.SETTER);
 
         if (setterDecl == null) return;
 
@@ -144,10 +133,7 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
       {
         var annotations = propDecl.GetPsiServices().GetCodeAnnotationsCache();
 
-        var annotationsAttributes =
-          this._myParameter.GetAttributeInstances(true)
-            .Select(attr => attr.GetClrName())
-            .Where(attrType => annotations.IsAnnotationType(attrType, attrType.ShortName));
+        var annotationsAttributes = this._myParameter.GetAttributeInstances(true).Select(attr => attr.GetClrName()).Where(attrType => annotations.IsAnnotationType(attrType, attrType.ShortName));
 
         foreach (var annotationType in annotationsAttributes)
         {

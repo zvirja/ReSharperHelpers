@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using JetBrains.Annotations;
-using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Impl;
@@ -11,7 +10,8 @@ namespace AlexPovar.ResharperTweaks.ContextActions
 {
   public static class AnnotationsUtil
   {
-    public static void AddAnnotationAttribute([NotNull] IAttributesOwnerDeclaration ownerDeclaration, [NotNull] IAttribute newAttribute, [CanBeNull] CodeAnnotationsCache codeAnnotationCache = null)
+    public static void AddAnnotationAttribute([NotNull] IAttributesOwnerDeclaration ownerDeclaration, [NotNull] IAttribute newAttribute,
+      [CanBeNull] CodeAnnotationsCache codeAnnotationCache = null)
     {
       codeAnnotationCache = codeAnnotationCache ?? ownerDeclaration.GetPsiServices().GetCodeAnnotationsCache();
 
@@ -32,7 +32,8 @@ namespace AlexPovar.ResharperTweaks.ContextActions
       }
     }
 
-    public static void CreateAndAddAnnotationAttribute([NotNull] IAttributesOwnerDeclaration owner, [NotNull] string newAttributeShortName)
+    public static void CreateAndAddAnnotationAttribute([NotNull] IAttributesOwnerDeclaration owner,
+      [NotNull] string newAttributeShortName)
     {
       var codeAnnotationCache = owner.GetPsiServices().GetCodeAnnotationsCache();
 

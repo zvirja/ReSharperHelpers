@@ -12,12 +12,12 @@ namespace AlexPovar.ResharperTweaks.CodeCleanup
 
     public StatusBarTextUpdater([NotNull] RawVsServiceProvider serviceProvider)
     {
-      _serviceProvider = serviceProvider;
+      this._serviceProvider = serviceProvider;
     }
 
     public void SetText([NotNull] string text)
     {
-      var statusBarService = _serviceProvider.Value.TryGetService<SVsStatusbar, IVsStatusbar>();
+      var statusBarService = this._serviceProvider.Value.TryGetService<SVsStatusbar, IVsStatusbar>();
       statusBarService?.SetText(text);
     }
   }

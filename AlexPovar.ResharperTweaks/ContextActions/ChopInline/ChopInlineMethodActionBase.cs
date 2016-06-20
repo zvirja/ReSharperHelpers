@@ -22,7 +22,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
 
     protected ChopInlineMethodActionBase(ICSharpParametersOwnerDeclaration methodDeclaration)
     {
-      _methodDeclaration = methodDeclaration;
+      this._methodDeclaration = methodDeclaration;
     }
 
     private static bool IsLineBreak(ITreeNode node)
@@ -69,15 +69,15 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var methodDeclaration = _methodDeclaration;
+      var methodDeclaration = this._methodDeclaration;
 
       var parameters = methodDeclaration?.Params;
       if (parameters == null) return null;
 
       using (WriteLockCookie.Create())
       {
-        DoCleanupLineBreaks(methodDeclaration, parameters);
-        DoPutNewIndents(parameters);
+        this.DoCleanupLineBreaks(methodDeclaration, parameters);
+        this.DoPutNewIndents(parameters);
       }
 
       parameters.Language.LanguageService()?.CodeFormatter?.Format(parameters, CodeFormatProfile.DEFAULT, progress);

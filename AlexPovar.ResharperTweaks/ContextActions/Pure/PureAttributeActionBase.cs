@@ -20,8 +20,8 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
     {
       if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-      Provider = provider;
-      PureAttributeShortName = CodeAnnotationsCache.PureAttributeShortName;
+      this.Provider = provider;
+      this.PureAttributeShortName = CodeAnnotationsCache.PureAttributeShortName;
     }
 
     [NotNull]
@@ -31,20 +31,20 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
 
     public override bool IsAvailable(IUserDataHolder cache)
     {
-      var methodName = Provider.GetSelectedElement<ICSharpIdentifier>();
+      var methodName = this.Provider.GetSelectedElement<ICSharpIdentifier>();
       var methodDeclaration = methodName?.Parent as IMethodDeclaration;
 
       var declaredMethod = methodDeclaration?.DeclaredElement;
       if (declaredMethod == null) return false;
 
       //Is null if Annotations are not installed
-      var pureAttributeType = methodDeclaration.GetPsiServices().GetCodeAnnotationsCache().GetAttributeTypeForElement(methodDeclaration, PureAttributeShortName);
+      var pureAttributeType = methodDeclaration.GetPsiServices().GetCodeAnnotationsCache().GetAttributeTypeForElement(methodDeclaration, this.PureAttributeShortName);
 
       if (pureAttributeType == null) return false;
 
       var isAlreadyDeclared = declaredMethod.HasAttributeInstance(pureAttributeType.GetClrName(), false);
 
-      return ResolveIsAvailable(isAlreadyDeclared, declaredMethod);
+      return this.ResolveIsAvailable(isAlreadyDeclared, declaredMethod);
     }
 
     protected abstract bool ResolveIsAvailable(bool isAlreadyDeclared, IMethod method);

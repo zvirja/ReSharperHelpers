@@ -22,8 +22,7 @@ using JetBrains.Util;
 namespace AlexPovar.ResharperTweaks.CodeCleanup
 {
   [Action("Cleanup modified code...", Icon = typeof (MainThemedIcons.ClearIcon))]
-  public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction,
-    IInsertLast<IntoSolutionItemGroup_Modify>
+  public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
   {
     void IExecutableAction.Execute(IDataContext context, DelegateExecute nextExecute)
     {
@@ -44,7 +43,7 @@ namespace AlexPovar.ResharperTweaks.CodeCleanup
               return;
 
             case ActionScope.SOLUTION:
-              RunFilesFormat(collector, profile);
+              this.RunFilesFormat(collector, profile);
               return;
           }
         }
@@ -80,7 +79,8 @@ namespace AlexPovar.ResharperTweaks.CodeCleanup
       return false;
     }
 
-    private static void FormatFiles(CodeCleanupFilesCollector context, CodeCleanupProfile profile, HashSet<FileSystemPath> filesToProcess, CleanupModificationsCounter modificationCounter)
+    private static void FormatFiles(CodeCleanupFilesCollector context, CodeCleanupProfile profile,
+      HashSet<FileSystemPath> filesToProcess, CleanupModificationsCounter modificationCounter)
     {
       var solution = context.Solution;
       var files = context.GetFiles();

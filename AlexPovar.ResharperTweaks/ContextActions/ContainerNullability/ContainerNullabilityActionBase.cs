@@ -19,9 +19,9 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
   {
     protected ContainerNullabilityActionBase([NotNull] ICSharpContextActionDataProvider provider)
     {
-      Provider = provider;
-      ItemCanBeNullShortName = CodeAnnotationsCache.ItemCanBeNullAttributeShortName;
-      ItemNotNullShortName = CodeAnnotationsCache.ItemNotNullAttributeShortName;
+      this.Provider = provider;
+      this.ItemCanBeNullShortName = CodeAnnotationsCache.ItemCanBeNullAttributeShortName;
+      this.ItemNotNullShortName = CodeAnnotationsCache.ItemNotNullAttributeShortName;
     }
 
 
@@ -41,22 +41,23 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var attributesOwner = Provider.GetSelectedElement<IAttributesOwnerDeclaration>();
+      var attributesOwner = this.Provider.GetSelectedElement<IAttributesOwnerDeclaration>();
       if (attributesOwner == null) return null;
 
       var annotationsCache = attributesOwner.GetPsiServices().GetCodeAnnotationsCache();
 
       var candidatesToRemove = attributesOwner.AttributesEnumerable
-        .Where(attr => annotationsCache.IsAnnotationAttribute(attr.GetAttributeInstance(), ItemCanBeNullShortName) ||
-                       annotationsCache.IsAnnotationAttribute(attr.GetAttributeInstance(), ItemNotNullShortName))
+        .Where(
+          attr => annotationsCache.IsAnnotationAttribute(attr.GetAttributeInstance(), this.ItemCanBeNullShortName) ||
+                  annotationsCache.IsAnnotationAttribute(attr.GetAttributeInstance(), this.ItemNotNullShortName))
         .ToList();
 
       candidatesToRemove.ForEach(c => attributesOwner.RemoveAttribute(c));
 
-      var attributeType = annotationsCache.GetAttributeTypeForElement(attributesOwner, ThisAttributeShortName);
+      var attributeType = annotationsCache.GetAttributeTypeForElement(attributesOwner, this.ThisAttributeShortName);
       if (attributeType == null) return null;
 
-      var newAttribute = Provider.ElementFactory.CreateAttribute(attributeType);
+      var newAttribute = this.Provider.ElementFactory.CreateAttribute(attributeType);
 
       AnnotationsUtil.AddAnnotationAttribute(attributesOwner, newAttribute);
 
@@ -65,13 +66,13 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
 
     public override bool IsAvailable(IUserDataHolder cache)
     {
-      LastIsAvailableResult = GetIsAvailable(cache);
-      return LastIsAvailableResult;
+      this.LastIsAvailableResult = this.GetIsAvailable(cache);
+      return this.LastIsAvailableResult;
     }
 
     private bool GetIsAvailable(IUserDataHolder cache)
     {
-      var methodName = Provider.GetSelectedElement<ICSharpIdentifier>();
+      var methodName = this.Provider.GetSelectedElement<ICSharpIdentifier>();
       if (methodName == null) return false;
 
       var parentNode = methodName.Parent;
@@ -89,7 +90,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
       var annotationsCache = typeOwner.GetPsiServices().GetCodeAnnotationsCache();
       var attributesOwner = parentNode as IAttributesOwnerDeclaration;
 
-      var alreadyDeclared = attributesOwner.AttributesEnumerable.Any(attr => annotationsCache.IsAnnotationAttribute(attr.GetAttributeInstance(), ThisAttributeShortName));
+      var alreadyDeclared = attributesOwner.AttributesEnumerable.Any(attr => annotationsCache.IsAnnotationAttribute(attr.GetAttributeInstance(), this.ThisAttributeShortName));
 
       if (alreadyDeclared) return false;
 
