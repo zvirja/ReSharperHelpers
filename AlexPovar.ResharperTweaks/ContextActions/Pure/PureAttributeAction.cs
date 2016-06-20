@@ -25,14 +25,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
       var methodDeclaration = Provider.GetSelectedElement<IMethodDeclaration>();
       if (methodDeclaration == null) return null;
 
-      var codeAnnotationCache = methodDeclaration.GetPsiServices().GetCodeAnnotationsCache();
-
-      var pureAttributeType = codeAnnotationCache.GetAttributeTypeForElement(methodDeclaration, PureAttributeShortName);
-      if (pureAttributeType == null) return null;
-
-      var pureAttribute = Provider.ElementFactory.CreateAttribute(pureAttributeType);
-
-      AnnotationsUtil.AddAnnotationAttribute(methodDeclaration, pureAttribute);
+      AnnotationsUtil.CreateAndAddAnnotationAttribute(methodDeclaration, this.PureAttributeShortName);
 
       return null;
     }

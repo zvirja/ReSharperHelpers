@@ -16,6 +16,24 @@
       <RectangleGeometry Rect="48,140,16,16" />
     </DrawingGroup.ClipGeometry>
   </DrawingGroup>
+  <DrawingGroup AutomationProperties.Name="TweaksYellowBulbIcon" AutomationProperties.ItemType="Gray" x:Key="0003">
+    <DrawingGroup.Children>
+      <GeometryDrawing Brush="#00FFFFFF" Pen="{x:Null}">
+        <GeometryDrawing.Geometry>
+          <RectangleGeometry Rect="48,156,16,16" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+      <GeometryDrawing Brush="#FF113616" Geometry="F1M53,168.5C53,170.43 54.57,172 56.5,172 58.43,172 60,170.43 60,168.5L60,167 53,167 53,168.5z" />
+      <GeometryDrawing Brush="#FF113616" Geometry="F1M62,161.5C62,158.468 59.533,156 56.5,156 53.467,156 51,158.468 51,161.5 51,163.204 51.779,164.729 53,165.739L53,167 60,167 60,165.739C61.221,164.729,62,163.204,62,161.5z" />
+      <GeometryDrawing Brush="#FFA6E2AD" Geometry="F1M54,167L54,168.5C54,169.881 55.119,171 56.5,171 57.881,171 59,169.881 59,168.5L59,167 54,167z" />
+      <GeometryDrawing Brush="#FFA6E2AD" Geometry="F1M61,161.5C61,159.015 58.985,157 56.5,157 54.015,157 52,159.015 52,161.5 52,163.06 52.795,164.433 54,165.24L54,167 59,167 59,165.24C60.205,164.433,61,163.06,61,161.5z" />
+      <GeometryDrawing Brush="#FF00FF1E" Geometry="F1M60,161.5C60,159.57 58.43,158 56.5,158 54.57,158 53,159.57 53,161.5 53,162.891 53.822,164.085 55,164.648L55,166 58,166 58,164.648C59.178,164.085,60,162.891,60,161.5z" />
+      <GeometryDrawing Brush="#FF143E19" Geometry="F1M57.5,162L56.5,163 55.5,162 55,162 56,164 56,166 57,166 57,164 58,162 57.5,162z" />
+    </DrawingGroup.Children>
+    <DrawingGroup.ClipGeometry>
+      <RectangleGeometry Rect="48,156,16,16" />
+    </DrawingGroup.ClipGeometry>
+  </DrawingGroup>
   <ImageDrawing AutomationProperties.Name="ClearIcon" AutomationProperties.ItemType="-" x:Key="0000">
     <ToolTipService.ToolTip>
       <x:Array Type="s:String">
