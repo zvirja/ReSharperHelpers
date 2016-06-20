@@ -22,15 +22,15 @@ namespace AlexPovar.ResharperTweaks.ContextActions
     {
       if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-      _provider = provider;
-      _clipboard = Shell.Instance.GetComponent<Clipboard>().NotNull("Unable to resolve clipboard service.");
+      this._provider = provider;
+      this._clipboard = Shell.Instance.GetComponent<Clipboard>().NotNull("Unable to resolve clipboard service.");
     }
 
     public override string Text => "[Tweaks] Copy full class name";
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var classDeclaration = _provider.GetSelectedElement<ICSharpIdentifier>()?.Parent as IClassDeclaration;
+      var classDeclaration = this._provider.GetSelectedElement<ICSharpIdentifier>()?.Parent as IClassDeclaration;
       var declaredClass = classDeclaration?.DeclaredElement;
 
       if (declaredClass == null) return null;
@@ -39,14 +39,14 @@ namespace AlexPovar.ResharperTweaks.ContextActions
       var moduleName = declaredClass.Module.Name;
 
       var fullName = $"{typeName}, {moduleName}";
-      _clipboard.SetText(fullName);
+      this._clipboard.SetText(fullName);
 
       return null;
     }
 
     public override bool IsAvailable(IUserDataHolder cache)
     {
-      var classDeclaration = _provider.GetSelectedElement<ICSharpIdentifier>()?.Parent as IClassDeclaration;
+      var classDeclaration = this._provider.GetSelectedElement<ICSharpIdentifier>()?.Parent as IClassDeclaration;
       return classDeclaration != null;
     }
   }

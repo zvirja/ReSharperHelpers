@@ -13,8 +13,8 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
   {
     public ContainerNullabilityGroupAction([NotNull] ICSharpContextActionDataProvider provider)
     {
-      ItemCanBeNullAction = new ItemCanBeNullAction(provider);
-      ItemNotNullAction = new ItemNotNullAction(provider);
+      this.ItemCanBeNullAction = new ItemCanBeNullAction(provider);
+      this.ItemNotNullAction = new ItemNotNullAction(provider);
     }
 
     [NotNull]
@@ -27,14 +27,14 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
     {
       var anchor = new ExecutableGroupAnchor(TweaksActionsConstants.ContextActionsAnchor, null, false);
 
-      if (ItemNotNullAction.LastIsAvailableResult)
+      if (this.ItemNotNullAction.LastIsAvailableResult)
       {
-        yield return ItemNotNullAction.ToTweaksAnnotateAction(anchor);
+        yield return this.ItemNotNullAction.ToTweaksAnnotateAction(anchor);
       }
 
-      if (ItemCanBeNullAction.LastIsAvailableResult)
+      if (this.ItemCanBeNullAction.LastIsAvailableResult)
       {
-        yield return ItemCanBeNullAction.ToTweaksAnnotateAction(anchor);
+        yield return this.ItemCanBeNullAction.ToTweaksAnnotateAction(anchor);
       }
     }
 
@@ -42,10 +42,10 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
     public bool IsAvailable(IUserDataHolder cache)
     {
       //Both methods should be called, so LastIsAvailableResult is updated for both.
-      ItemNotNullAction.IsAvailable(cache);
-      ItemCanBeNullAction.IsAvailable(cache);
+      this.ItemNotNullAction.IsAvailable(cache);
+      this.ItemCanBeNullAction.IsAvailable(cache);
 
-      return ItemNotNullAction.LastIsAvailableResult || ItemCanBeNullAction.LastIsAvailableResult;
+      return this.ItemNotNullAction.LastIsAvailableResult || this.ItemCanBeNullAction.LastIsAvailableResult;
     }
   }
 }

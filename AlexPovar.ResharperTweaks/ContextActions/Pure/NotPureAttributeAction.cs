@@ -25,12 +25,12 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var methodDeclaration = Provider.GetSelectedElement<IMethodDeclaration>();
+      var methodDeclaration = this.Provider.GetSelectedElement<IMethodDeclaration>();
       if (methodDeclaration == null) return null;
 
       var codeAnnotationCache = methodDeclaration.GetPsiServices().GetCodeAnnotationsCache();
 
-      var pureAttribute = methodDeclaration.AttributesEnumerable.FirstOrDefault(attr => codeAnnotationCache.IsAnnotationAttribute(attr.GetAttributeInstance(), PureAttributeShortName));
+      var pureAttribute = methodDeclaration.AttributesEnumerable.FirstOrDefault(attr => codeAnnotationCache.IsAnnotationAttribute(attr.GetAttributeInstance(), this.PureAttributeShortName));
 
       if (pureAttribute == null) return null;
 

@@ -5,7 +5,6 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.TextControl;
 
@@ -22,24 +21,17 @@ namespace AlexPovar.ResharperTweaks.ContextActions.Pure
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var methodDeclaration = Provider.GetSelectedElement<IMethodDeclaration>();
+      var methodDeclaration = this.Provider.GetSelectedElement<IMethodDeclaration>();
       if (methodDeclaration == null) return null;
 
-      var codeAnnotationCache = methodDeclaration.GetPsiServices().GetCodeAnnotationsCache();
-
-      var pureAttributeType = codeAnnotationCache.GetAttributeTypeForElement(methodDeclaration, PureAttributeShortName);
-      if (pureAttributeType == null) return null;
-
-      var pureAttribute = Provider.ElementFactory.CreateAttribute(pureAttributeType);
-
-      AnnotationsUtil.AddAnnotationAttribute(methodDeclaration, pureAttribute);
+      AnnotationsUtil.CreateAndAddAnnotationAttribute(methodDeclaration, this.PureAttributeShortName);
 
       return null;
     }
 
     protected override bool ResolveIsAvailable(bool isAlreadyDeclared, IMethod method)
     {
-      return !isAlreadyDeclared && IsRelevantForReturnTypeMethod(method);
+      return !isAlreadyDeclared && this.IsRelevantForReturnTypeMethod(method);
     }
 
     private bool IsRelevantForReturnTypeMethod(IMethod method)

@@ -18,7 +18,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
 
     public ChopInlineContextAction(ICSharpContextActionDataProvider provider)
     {
-      _myProvider = provider;
+      this._myProvider = provider;
     }
 
     [CanBeNull]
@@ -26,26 +26,26 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
-      if (ContextMethodDeclaration == null) yield break;
+      if (this.ContextMethodDeclaration == null) yield break;
 
       var anchor = new ExecutableGroupAnchor(TweaksActionsConstants.ContextActionsAnchor, null, false);
 
-      var actions = new ChopMethodArgumentsAction(ContextMethodDeclaration).ToContextAction(anchor, TweaksActionsConstants.ContextActionIcon);
-      actions = actions.Concat(new OnelineMethodArgumentsAction(ContextMethodDeclaration).ToContextAction(anchor, TweaksActionsConstants.ContextActionIcon));
+      var actions = new ChopMethodArgumentsAction(this.ContextMethodDeclaration).ToContextAction(anchor, TweaksActionsConstants.ContextActionIcon);
+      actions = actions.Concat(new OnelineMethodArgumentsAction(this.ContextMethodDeclaration).ToContextAction(anchor, TweaksActionsConstants.ContextActionIcon));
 
       foreach (var action in actions) yield return action;
     }
 
     public bool IsAvailable(IUserDataHolder cache)
     {
-      var methodName = _myProvider.GetSelectedElement<ICSharpIdentifier>();
+      var methodName = this._myProvider.GetSelectedElement<ICSharpIdentifier>();
 
       var methodDeclaration = methodName?.Parent as ICSharpParametersOwnerDeclaration;
 
       if (methodDeclaration == null) return false;
       if (methodDeclaration.ParameterDeclarations.IsEmpty) return false;
 
-      ContextMethodDeclaration = methodDeclaration;
+      this.ContextMethodDeclaration = methodDeclaration;
       return true;
     }
   }

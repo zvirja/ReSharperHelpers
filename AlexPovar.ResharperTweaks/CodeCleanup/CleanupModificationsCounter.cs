@@ -4,6 +4,6 @@
   {
     public int Count { get; private set; }
 
-    public void Increment() => Count++;
+    public void Increment() => this.Count++;
   }
 }

@@ -11,9 +11,9 @@ namespace AlexPovar.ResharperTweaks.CodeCleanup
   {
     public GitModificationsResolver([NotNull] string repoPath)
     {
-      RepoPath = Repository.Discover(repoPath);
+      this.RepoPath = Repository.Discover(repoPath);
 
-      IsValidRepository = Repository.IsValid(RepoPath);
+      this.IsValidRepository = Repository.IsValid(this.RepoPath);
     }
 
     [CanBeNull]
@@ -24,14 +24,14 @@ namespace AlexPovar.ResharperTweaks.CodeCleanup
     [NotNull]
     public IEnumerable<string> GetModifiedFiles()
     {
-      if (!IsValidRepository)
+      if (!this.IsValidRepository)
       {
         throw new InvalidOperationException("This repository is not valid.");
       }
 
       var filePaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-      using (var repo = new Repository(RepoPath))
+      using (var repo = new Repository(this.RepoPath))
       {
         var status = repo.RetrieveStatus();
         var allNotIgnoredFiles = status.Where(s => s.State != FileStatus.Ignored && s.State != FileStatus.Unaltered);

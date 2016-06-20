@@ -11,6 +11,6 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
 
     public override string Text => "Item not null";
 
-    protected override string ThisAttributeShortName => ItemNotNullShortName;
+    protected override string ThisAttributeShortName => this.ItemNotNullShortName;
   }
 }
