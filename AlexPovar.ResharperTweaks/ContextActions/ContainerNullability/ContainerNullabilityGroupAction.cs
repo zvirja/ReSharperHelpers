@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 using JetBrains.ReSharper.Feature.Services.Intentions;
-using JetBrains.UI.BulbMenu;
 using JetBrains.Util;
 
 namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
@@ -25,7 +24,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
-      var anchor = new ExecutableGroupAnchor(TweaksActionsConstants.ContextActionsAnchor, null, false);
+      var anchor = MyUtil.CreateTweaksGroupAnchor();
 
       if (this.ItemNotNullAction.LastIsAvailableResult)
       {

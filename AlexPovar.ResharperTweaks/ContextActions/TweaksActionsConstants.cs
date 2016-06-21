@@ -1,7 +1,6 @@
 ﻿using JetBrains.Annotations;
 using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.UI.BulbMenu;
-using JetBrains.UI.Icons;
 
 namespace AlexPovar.ResharperTweaks.ContextActions
 {
@@ -9,7 +8,5 @@ namespace AlexPovar.ResharperTweaks.ContextActions
   {
     [NotNull]
     public static IAnchor ContextActionsAnchor { get; } = new InvisibleAnchor(IntentionsAnchors.ContextActionsAnchorPosition.GetNext(), null, true);
-
-    public static IconId ContextActionIcon => MainThemedIcons.TweaksContextAction.Id;
   }
 }

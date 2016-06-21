@@ -18,28 +18,49 @@ using JetBrains.ReSharper.Psi.Util;
 namespace AlexPovar.ResharperTweaks.QuickFixes
 {
   [QuickFix]
-  public class IntroducePrivateGetOnlyAutoPropertyFix : InitializeAutoPropertyFix, IQuickFix
+  public class IntroduceGetOnlyAutoPropertyFix : InitializeAutoPropertyFix, IQuickFix
   {
     private string _myPattern;
 
 
-    public IntroducePrivateGetOnlyAutoPropertyFix(UnusedParameterGlobalWarning error) : base(error)
+    public IntroduceGetOnlyAutoPropertyFix(UnusedParameterGlobalWarning error) : base(error)
     {
     }
 
-    public IntroducePrivateGetOnlyAutoPropertyFix(UnusedParameterLocalWarning error) : base(error)
+    public IntroduceGetOnlyAutoPropertyFix(UnusedParameterLocalWarning error) : base(error)
     {
     }
 
-    public IntroducePrivateGetOnlyAutoPropertyFix(IParameter parameter) : base(parameter)
+    public IntroduceGetOnlyAutoPropertyFix(IParameter parameter, AccessRights desiredVisibility) : base(parameter)
     {
+      this.DesiredVisibility = desiredVisibility;
     }
 
-    public override string Text => $"Create and initialize private readonly auto-property '{this.MemberName}'";
+    private AccessRights DesiredVisibility { get; } = AccessRights.PRIVATE;
+
+    [NotNull]
+    public string TextFormat { get; set; } = "Create and initialize {0} get-only auto-property '{1}'";
+
+    public override string Text => string.Format(this.TextFormat, DeclaredElementPresenter.Format(CSharpLanguage.Instance, this.DesiredVisibility), this.MemberName);
 
     public new IEnumerable<IntentionAction> CreateBulbItems()
     {
-      return this.ToQuickFixAction(customIconId: MainThemedIcons.TweaksYellowBulbIcon.Id);
+      var anchor = MyUtil.CreateGroupAnchor(IntentionsAnchors.QuickFixesAnchor);
+
+      var actions = this.ToQuickFixAction(anchor, MyIcons.YellowBulbIcon);
+
+      actions = actions.Concat(this.CreateAuxiliaryFix(AccessRights.PUBLIC).ToQuickFixAction(anchor, MainThemedIcons.TweaksYellowBulbIcon.Id));
+
+      return actions;
+    }
+
+    public IntroduceGetOnlyAutoPropertyFix CreateAuxiliaryFix(AccessRights rights, [CanBeNull] string textFormat = null)
+    {
+      return new IntroduceGetOnlyAutoPropertyFix(this.myParameter, rights)
+      {
+        TextFormat = textFormat ?? "Create {0}",
+        _myPattern = this._myPattern
+      };
     }
 
     protected override bool IsAvailableEx(ITypeElement typeElement, string memberName)
@@ -61,11 +82,14 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
     public override IMemberFromParameterExec CreateExec()
     {
       Predicate<ITypeMember> anchorMembersFilter = member => (member as IProperty)?.Parameters.Count == 0;
-      return new IntroduceAndInitializeReadonlyPropertyExec(this.myParameter, this._myPattern, NamedElementKinds.MethodPropertyEvent, anchorMembersFilter, this.myLanguageHelper);
+      return new IntroduceAndInitializeReadonlyPropertyExec(this.myParameter, this._myPattern, NamedElementKinds.MethodPropertyEvent, this.DesiredVisibility,
+        anchorMembersFilter, this.myLanguageHelper);
     }
 
     private class IntroduceAndInitializeReadonlyPropertyExec : IMemberFromParameterExec
     {
+      private readonly AccessRights _desiredAccessRights;
+
       private readonly Predicate<ITypeMember> _myAnchorMembersFilter;
 
       private readonly NamedElementKinds _myKind;
@@ -80,12 +104,14 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
         [NotNull] IParameter parameter,
         [NotNull] string pattern,
         NamedElementKinds kind,
+        AccessRights desiredAccessRights,
         [NotNull] Predicate<ITypeMember> anchorMembersFilter,
         [NotNull] IIntroduceFromParameterLanguageHelper languageHelper)
       {
         this._myParameter = parameter;
         this._myPattern = pattern;
         this._myKind = kind;
+        this._desiredAccessRights = desiredAccessRights;
         this._myAnchorMembersFilter = anchorMembersFilter;
         this._myLanguageHelper = languageHelper;
       }
@@ -108,7 +134,7 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
         var propertyDecl = (IPropertyDeclaration) propertyDeclarations[0];
 
         this.MakeGetOnly(propertyDecl);
-        this.MakePrivate(propertyDecl);
+        this.ChangeAccessRights(propertyDecl);
         this.CopyAnnotationAttributes(propertyDecl);
       }
 
@@ -121,12 +147,12 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
         propertyDeclaration.RemoveAccessorDeclaration(setterDecl);
       }
 
-      private void MakePrivate([NotNull] IPropertyDeclaration propDecl)
+      private void ChangeAccessRights([NotNull] IPropertyDeclaration propDecl)
       {
         var accessRights = propDecl.GetAccessRights();
-        if (accessRights == AccessRights.PRIVATE) return;
+        if (accessRights == this._desiredAccessRights) return;
 
-        propDecl.SetAccessRights(AccessRights.PRIVATE);
+        propDecl.SetAccessRights(this._desiredAccessRights);
       }
 
       private void CopyAnnotationAttributes([NotNull] IPropertyDeclaration propDecl)

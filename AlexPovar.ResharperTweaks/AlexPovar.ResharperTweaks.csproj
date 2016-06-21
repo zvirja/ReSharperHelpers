@@ -176,7 +176,7 @@
     <Compile Include="ContextActions\ChopInline\OnelineMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\AutoFixture\SetGreedyAttributeAction.cs" />
     <Compile Include="ContextActions\AutoFixture\SetFrozenAttributeAction.cs" />
-    <Compile Include="ContextActions\IntroducePrivateGetOnlyAutoPropertyAction.cs" />
+    <Compile Include="ContextActions\IntroduceGetOnlyAutoPropertyAction.cs" />
     <Compile Include="ContextActions\Pure\NotPureAttributeAction.cs" />
     <Compile Include="ContextActions\Pure\PureAttributeAction.cs" />
     <Compile Include="ContextActions\Pure\PureAttributeActionBase.cs" />
@@ -185,9 +185,11 @@
     <Compile Include="CodeCleanup\GitModificationsResolver.cs" />
     <Compile Include="ContextActions\TweaksExtensions.cs" />
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
+    <Compile Include="MyIcons.cs" />
+    <Compile Include="MyUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeCleanup\StatusBarTextUpdater.cs" />
-    <Compile Include="QuickFixes\IntroducePrivateGetOnlyAutoPropertyFix.cs" />
+    <Compile Include="QuickFixes\IntroduceGetOnlyAutoPropertyFix.cs" />
     <Compile Include="ZoneMarker.cs" />
   </ItemGroup>
   <ItemGroup>

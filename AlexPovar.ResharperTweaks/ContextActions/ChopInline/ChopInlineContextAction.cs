@@ -30,8 +30,8 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ChopInline
 
       var anchor = new ExecutableGroupAnchor(TweaksActionsConstants.ContextActionsAnchor, null, false);
 
-      var actions = new ChopMethodArgumentsAction(this.ContextMethodDeclaration).ToContextAction(anchor, TweaksActionsConstants.ContextActionIcon);
-      actions = actions.Concat(new OnelineMethodArgumentsAction(this.ContextMethodDeclaration).ToContextAction(anchor, TweaksActionsConstants.ContextActionIcon));
+      var actions = new ChopMethodArgumentsAction(this.ContextMethodDeclaration).ToContextAction(anchor, MyIcons.ContextActionIcon);
+      actions = actions.Concat(new OnelineMethodArgumentsAction(this.ContextMethodDeclaration).ToContextAction(anchor, MyIcons.ContextActionIcon));
 
       foreach (var action in actions) yield return action;
     }

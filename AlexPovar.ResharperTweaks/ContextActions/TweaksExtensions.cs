@@ -12,7 +12,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions
     {
       var text = action.Text;
       anchor = anchor ?? IntentionsAnchors.AnnotateActionsAnchor;
-      var iconId = MainThemedIcons.TweaksEditIcon.Id;
+      var iconId = MyIcons.EditIcon;
       return new IntentionAction(action, text, iconId, anchor);
     }
   }

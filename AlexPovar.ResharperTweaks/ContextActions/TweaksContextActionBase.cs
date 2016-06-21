@@ -10,7 +10,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions
   {
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
-      return this.ToContextAction(TweaksActionsConstants.ContextActionsAnchor, TweaksActionsConstants.ContextActionIcon);
+      return this.ToContextAction(TweaksActionsConstants.ContextActionsAnchor, MyIcons.ContextActionIcon);
     }
 
     public abstract bool IsAvailable(IUserDataHolder cache);
