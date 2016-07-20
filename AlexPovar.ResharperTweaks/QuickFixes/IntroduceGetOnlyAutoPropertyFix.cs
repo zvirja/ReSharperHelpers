@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlexPovar.ResharperTweaks.ContextActions;
+using AlexPovar.ResharperTweaks.ContextActions.AssertNotNull;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Daemon.UsageChecking;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
@@ -13,6 +14,7 @@ using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Naming.Settings;
+using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 
 namespace AlexPovar.ResharperTweaks.QuickFixes
@@ -122,7 +124,7 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
 
         this.PostProcessProperty(member);
 
-        new InitializeMemberExec(this._myParameter, member, this._myAnchorMembersFilter, this._myLanguageHelper).Execute();
+        new InitializeMemberExecAfterAssertions(this._myParameter, member, this._myAnchorMembersFilter, this._myLanguageHelper).Execute();
       }
 
       private void PostProcessProperty(ITypeMember typeMember)
@@ -166,6 +168,68 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
           var shortName = annotationType.ShortName;
           AnnotationsUtil.CreateAndAddAnnotationAttribute(propDecl, shortName);
         }
+      }
+    }
+
+    private class InitializeMemberExecAfterAssertions : MemberFromParameterExec
+    {
+      private readonly ITypeMember myMember;
+      private readonly IParameter myParameter;
+
+      public InitializeMemberExecAfterAssertions(
+        [NotNull] IParameter parameter,
+        [NotNull] ITypeMember member,
+        [NotNull] Predicate<ITypeMember> anchorMembersFilter,
+        [NotNull] IIntroduceFromParameterLanguageHelper languageHelper)
+        : base(parameter, anchorMembersFilter, languageHelper)
+      {
+        this.myParameter = parameter;
+        this.myMember = member;
+        this.myAnchorMembersFilter = anchorMembersFilter;
+        this.myLanguageHelper = languageHelper;
+      }
+
+      public void Execute()
+      {
+        var assignmentMatch = this.FindStatementPosition();
+
+        IStatement anchorStatement;
+        bool insertBefore;
+
+        if (assignmentMatch == null)
+        {
+          //Anchor was not found. Ensure inserted after assetions.
+          anchorStatement = this.FindLastAssertionStatement();
+
+          insertBefore = false;
+        }
+        else
+        {
+          anchorStatement = assignmentMatch.AssignmentStatement;
+          insertBefore = assignmentMatch.ParameterDeclaration.GetTreeStartOffset() > this.myParameterDeclaration.GetTreeStartOffset();
+        }
+
+        this.myLanguageHelper.AddAssignmentToBody(this.myConstructorDeclaration, anchorStatement, insertBefore, this.myParameter, this.myMember);
+      }
+
+      [CanBeNull]
+      private IStatement FindLastAssertionStatement()
+      {
+        var ctor = this.myParameter.ContainingParametersOwner as IConstructor;
+        var ctorDeclaration = ctor?.GetDeclarations().First() as IFunctionDeclaration;
+
+        if (ctorDeclaration == null) return null;
+
+        foreach (var statement in this.myLanguageHelper.BodyStatements(ctorDeclaration).Reverse())
+        {
+          var expressionStatement = statement as IExpressionStatement;
+          if (expressionStatement != null && AssertNotNullAction.IsAssertStatement(expressionStatement))
+          {
+            return statement;
+          }
+        }
+
+        return null;
       }
     }
   }
