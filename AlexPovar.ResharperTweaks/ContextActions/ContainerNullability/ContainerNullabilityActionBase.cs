@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
@@ -22,14 +23,18 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
       this.Provider = provider;
       this.ItemCanBeNullShortName = CodeAnnotationsCache.ItemCanBeNullAttributeShortName;
       this.ItemNotNullShortName = CodeAnnotationsCache.ItemNotNullAttributeShortName;
-    }
 
+      this.AttributeNames = new[] {this.ItemNotNullShortName, this.ItemCanBeNullShortName};
+    }
 
     [NotNull]
     protected string ItemNotNullShortName { get; }
 
     [NotNull]
     protected string ItemCanBeNullShortName { get; }
+
+
+    private IEnumerable<string> AttributeNames { get; }
 
     [NotNull]
     private ICSharpContextActionDataProvider Provider { get; }
@@ -46,13 +51,7 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
 
       var annotationsCache = attributesOwner.GetPsiServices().GetCodeAnnotationsCache();
 
-      var candidatesToRemove = attributesOwner.AttributesEnumerable
-        .Where(
-          attr => annotationsCache.IsAnnotationAttribute(attr.GetAttributeInstance(), this.ItemCanBeNullShortName) ||
-                  annotationsCache.IsAnnotationAttribute(attr.GetAttributeInstance(), this.ItemNotNullShortName))
-        .ToList();
-
-      candidatesToRemove.ForEach(c => attributesOwner.RemoveAttribute(c));
+      AnnotationsUtil.RemoveSpecificAttributes(attributesOwner, this.AttributeNames, annotationsCache);
 
       var attributeType = annotationsCache.GetAttributeTypeForElement(attributesOwner, this.ThisAttributeShortName);
       if (attributeType == null) return null;
@@ -112,23 +111,6 @@ namespace AlexPovar.ResharperTweaks.ContextActions.ContainerNullability
       if (interfaceType != null && interfaceType.Equals(iEnumerableType)) return true;
 
       return typeElement.IsDescendantOf(iEnumerableType);
-    }
-
-    // JetBrains.ReSharper.Intentions.CSharp.ContextActions.MarkNullableActionBase
-    private static bool IsContainerDeclarationFromReSharper([CanBeNull] ICSharpDeclaration targetDeclaration)
-    {
-      var methodDeclaration = targetDeclaration as IMethodDeclaration;
-      if (methodDeclaration != null)
-      {
-        return methodDeclaration.IsAsync || methodDeclaration.IsIterator;
-      }
-      var propertyDeclaration = targetDeclaration as IPropertyDeclaration;
-      if (propertyDeclaration != null)
-      {
-        var accessor = propertyDeclaration.GetAccessor(AccessorKind.GETTER);
-        return accessor != null && accessor.IsIterator;
-      }
-      return false;
     }
   }
 }

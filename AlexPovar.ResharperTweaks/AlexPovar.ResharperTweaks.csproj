@@ -164,6 +164,7 @@
     <Compile Include="CodeCleanup\CleanupModificationsCounter.cs" />
     <Compile Include="CodeCleanup\CleanupModifiedFilesAction.cs" />
     <Compile Include="ContextActions\AnnotationsUtil.cs" />
+    <Compile Include="ContextActions\AssertNotNull\AssertNotNullAction.cs" />
     <Compile Include="ContextActions\AutoFixture\AutoFixtureAttributeAction.cs" />
     <Compile Include="ContextActions\ChopInline\ChopInlineContextAction.cs" />
     <Compile Include="ContextActions\ChopInline\ChopInlineMethodActionBase.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="ContextActions\TweaksExtensions.cs" />
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
     <Compile Include="MyIcons.cs" />
+    <Compile Include="MyReflectionUtil.cs" />
     <Compile Include="MyUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeCleanup\StatusBarTextUpdater.cs" />
