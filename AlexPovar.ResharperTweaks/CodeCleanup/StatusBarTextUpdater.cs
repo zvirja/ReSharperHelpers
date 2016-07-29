@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.VsIntegration.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -10,7 +11,8 @@ namespace AlexPovar.ResharperTweaks.CodeCleanup
   {
     private readonly RawVsServiceProvider _serviceProvider;
 
-    public StatusBarTextUpdater([NotNull] RawVsServiceProvider serviceProvider)
+    //Optional is required for tests. In runtime dependency is always resolved.
+    public StatusBarTextUpdater([NotNull, Optional] RawVsServiceProvider serviceProvider)
     {
       this._serviceProvider = serviceProvider;
     }

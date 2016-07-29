@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexPovar.ResharperTweaks", "AlexPovar.ResharperTweaks\AlexPovar.ResharperTweaks.csproj", "{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexPovar.ResharperTweaks.Tests", "AlexPovar.ResharperTweaks.Tests\AlexPovar.ResharperTweaks.Tests.csproj", "{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
