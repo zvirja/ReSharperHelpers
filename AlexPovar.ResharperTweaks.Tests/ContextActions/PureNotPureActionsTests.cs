@@ -22,7 +22,7 @@ namespace AlexPovar.ResharperTweaks.Tests.ContextActions
 
   public class PureAttributeActionAvailabilityTests : PureActionAvailabilityTestBase<PureAttributeAction>
   {
-    [TestCase]
+    [Test]
     public void Run()
     {
       this.DoTestFiles("PureAvailability.cs");
@@ -31,7 +31,7 @@ namespace AlexPovar.ResharperTweaks.Tests.ContextActions
 
   public class NotPureAttributeActionAvailabilityTests : PureActionAvailabilityTestBase<NotPureAttributeAction>
   {
-    [TestCase]
+    [Test]
     public void Run()
     {
       this.DoTestFiles("NotPureAvailability.cs");

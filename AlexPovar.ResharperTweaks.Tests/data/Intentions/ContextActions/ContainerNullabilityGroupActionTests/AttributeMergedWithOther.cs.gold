@@ -1,0 +1,18 @@
+﻿using JetBrains.Annotations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AlexPovar.ResharperTweaks.Tests.data.Intentions.ContextActions.ContainerNullabilityActionTests
+{
+  class AttributeMergedWithOther
+  {
+    [NotNull, ItemNotNull]
+    IEnumerable<string> Get{caret}Result()
+    {
+      return Enumerable.Empty<string>();
+    }
+  }
+}
