@@ -32,6 +32,11 @@ namespace AlexPovar.ResharperTweaks.Tests.data.Intentions.ContextActions.Contain
       return Task.FromResult(1);
     }
 
+    string[] Array{on}Method()
+    {
+      return new string[0];
+    }
+
     IEnumerable<string> Enumerable{on}Method()
     {
       return Enumerable.Empty<string>();

@@ -108,6 +108,8 @@ namespace AlexPovar.ResharperTweaks.ContextActions
       //Exclude string, because it doesn't make sense
       if (type.IsString()) return false;
 
+      if (type is IArrayType) return true;
+
       var typeElement = type.GetTypeElement();
       if (typeElement == null) return false;
 
