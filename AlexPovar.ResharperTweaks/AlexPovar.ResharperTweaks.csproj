@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AlexPovar.ResharperTweaks.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -37,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AlexPovar.ResharperTweaks.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="antlr.runtime, Version=2.7.7.1, Culture=neutral, PublicKeyToken=0f493c87b190d7e9, processorArchitecture=MSIL">
@@ -166,7 +167,7 @@
     <Compile Include="CodeCleanup\CleanupModificationsCounter.cs" />
     <Compile Include="CodeCleanup\CleanupModifiedFilesAction.cs" />
     <Compile Include="ContextActions\AnnotationsUtil.cs" />
-    <Compile Include="ContextActions\AssertNotNull\AssertNotNullAction.cs" />
+    <Compile Include="ContextActions\AssertParametersNotNullAction.cs" />
     <Compile Include="ContextActions\AutoFixture\AutoFixtureAttributeAction.cs" />
     <Compile Include="ContextActions\ChopInline\ChopInlineContextAction.cs" />
     <Compile Include="ContextActions\ChopInline\ChopInlineMethodActionBase.cs" />

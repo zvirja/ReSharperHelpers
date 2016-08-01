@@ -7,9 +7,4 @@ namespace AlexPovar.ResharperTweaks.Tests
   {
     protected override string ExtraPath => this.GetType().Name;
   }
-
-  public abstract class PathedCSharpContextActionAvailabilityTestBase<TContextAction> : CSharpContextActionAvailabilityTestBase<TContextAction> where TContextAction : class, IContextAction
-  {
-    protected override string ExtraPath => this.GetType().Name;
-  }
 }

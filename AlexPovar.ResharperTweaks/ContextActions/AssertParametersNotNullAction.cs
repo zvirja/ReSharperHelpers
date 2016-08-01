@@ -19,10 +19,10 @@ using JetBrains.TextControl;
 using JetBrains.UI.BulbMenu;
 using JetBrains.Util;
 
-namespace AlexPovar.ResharperTweaks.ContextActions.AssertNotNull
+namespace AlexPovar.ResharperTweaks.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "[Tweaks] Assert not null (or empty) action", Description = "Assert parameter for null or empty.", Priority = short.MaxValue)]
-  public class AssertNotNullAction : ParameterCheckActionBase
+  [ContextAction(Group = "C#", Name = "[Tweaks] Assert parameters not null (or empty) action", Description = "Assert parameter for null or empty.", Priority = short.MaxValue)]
+  public class AssertParametersNotNullAction : ParameterCheckActionBase
   {
     private const string ArgumentNotNullAssetionMethod = "ArgumentNotNull";
     private const string ArgumentNotNullOrEmptyAssetionMethod = "ArgumentNotNullOrEmpty";
@@ -34,12 +34,12 @@ namespace AlexPovar.ResharperTweaks.ContextActions.AssertNotNull
     private static readonly Action<IDeclaration> AddAnnotationInvoker =
       MyReflectionUtil.CreateStaticMethodInvocationDelegate<Action<IDeclaration>>(typeof (CheckParamNullAction), "AddAnnotation");
 
-    public AssertNotNullAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider)
+    public AssertParametersNotNullAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider)
     {
       this.AssertAllAction = new AssertAllParamsNotNullAction(provider, this);
     }
 
-    protected AssertNotNullAction(ICSharpContextActionDataProvider provider, bool recursionGuard) : base(provider)
+    protected AssertParametersNotNullAction(ICSharpContextActionDataProvider provider, bool recursionGuard) : base(provider)
     {
     }
 
@@ -184,13 +184,13 @@ namespace AlexPovar.ResharperTweaks.ContextActions.AssertNotNull
 
       private IList<ICSharpParameterDeclaration> _myParameterDeclarations = EmptyArray<ICSharpParameterDeclaration>.Instance;
 
-      public AssertAllParamsNotNullAction(ICSharpContextActionDataProvider myProvider, AssertNotNullAction assertNotNullAction)
+      public AssertAllParamsNotNullAction(ICSharpContextActionDataProvider myProvider, AssertParametersNotNullAction assertNotNullAction)
       {
         this._myProvider = myProvider;
         this.AssertNotNullAction = assertNotNullAction;
       }
 
-      private AssertNotNullAction AssertNotNullAction { get; }
+      private AssertParametersNotNullAction AssertNotNullAction { get; }
 
       public override string Text => "Assert all parameters are not null";
 

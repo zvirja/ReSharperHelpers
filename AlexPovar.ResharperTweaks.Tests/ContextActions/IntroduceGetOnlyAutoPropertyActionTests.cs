@@ -1,4 +1,5 @@
 ﻿using AlexPovar.ResharperTweaks.ContextActions;
+using JetBrains.ReSharper.FeaturesTestFramework.Intentions;
 using NUnit.Framework;
 
 namespace AlexPovar.ResharperTweaks.Tests.ContextActions
@@ -14,7 +15,7 @@ namespace AlexPovar.ResharperTweaks.Tests.ContextActions
     }
   }
 
-  public class IntroduceGetOnlyAutoPropertyActionAvailabilityTests : PathedCSharpContextActionAvailabilityTestBase<IntroduceGetOnlyAutoPropertyAction>
+  public class IntroduceGetOnlyAutoPropertyActionAvailabilityTests : CSharpContextActionAvailabilityTestBase<IntroduceGetOnlyAutoPropertyAction>
   {
     protected override string ExtraPath => nameof(IntroduceGetOnlyAutoPropertyActionTests);
 

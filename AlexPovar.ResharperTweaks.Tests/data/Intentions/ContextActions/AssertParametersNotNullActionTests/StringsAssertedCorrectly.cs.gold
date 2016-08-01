@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
+
+namespace AlexPovar.ResharperTweaks.Tests.data.Intentions.ContextActions.AssertParametersNotNullActionTests
+{
+  class StringsAssertedCorrectly
+  {
+    void TestMethod([NotNull] string ar{caret}g1)
+    {
+      Assert.ArgumentNotNullOrEmpty(arg1, nameof(arg1));
+    }
+  }
+}

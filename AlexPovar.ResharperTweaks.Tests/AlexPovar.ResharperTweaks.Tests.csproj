@@ -30,6 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,6 +40,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="antlr.runtime, Version=2.7.7.1, Culture=neutral, PublicKeyToken=0f493c87b190d7e9, processorArchitecture=MSIL">
@@ -160,6 +162,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ContextActions\AssertParametersNotNullActionTests.cs" />
     <Compile Include="ContextActions\CopyFullClassNameActionTests.cs" />
     <None Include="data\Intentions\ContextActions\CopyFullClassNameActionTests\FileIsNotChanged.cs" />
     <Compile Include="ContextActions\IntroduceGetOnlyAutoPropertyActionTests.cs" />
@@ -172,6 +175,14 @@
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\PublicPropertyIntroduced.cs.gold" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\Availability.cs" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\AnnotationsAreCopied.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertStatementAndAnnotationAdded.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertStatementAndAnnotationAdded.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\StringsAssertedCorrectly.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\StringsAssertedCorrectly.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllWorksCorrectly.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllWorksCorrectly.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\Availability.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllAvailability.cs" />
     <Compile Include="PathedContextActionExecuteTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuickFixes\IntroduceGetOnlyAutoPropertyFixTests.cs" />
