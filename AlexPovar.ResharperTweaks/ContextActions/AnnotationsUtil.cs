@@ -62,5 +62,10 @@ namespace AlexPovar.ResharperTweaks.ContextActions
     {
       RemoveSpecificAttributes(attributesOwner, NullabilityAttributes, cache);
     }
+
+    public static bool IsAnnotationAttributePresent([NotNull] string attributeShortName, [NotNull] IAttributesOwnerDeclaration attributesOwner, [NotNull] CodeAnnotationsCache cache)
+    {
+      return attributesOwner.AttributesEnumerable.Any(attr => cache.IsAnnotationAttribute(attr.GetAttributeInstance(), attributeShortName));
+    }
   }
 }

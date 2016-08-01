@@ -1,4 +1,4 @@
-﻿using AlexPovar.ResharperTweaks.ContextActions.ContainerNullability;
+﻿using AlexPovar.ResharperTweaks.ContextActions;
 using JetBrains.ReSharper.FeaturesTestFramework.Intentions;
 using NUnit.Framework;
 

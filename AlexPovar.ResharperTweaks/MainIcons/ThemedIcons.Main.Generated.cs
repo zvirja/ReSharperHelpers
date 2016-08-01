@@ -10,8 +10,8 @@
 
 [assembly: global::System.Windows.Markup.XmlnsDefinitionAttribute("urn:shemas-jetbrains-com:ui-application-icons-main", "AlexPovar.ResharperTweaks")]
 [assembly: global::JetBrains.UI.Icons.CompiledIcons.CompiledIconsPackAttribute(IconPackResourceIdentification="AlexPovar.ResharperTweaks;component/MainIcons/ThemedIcons.Main.Generated.Xaml", IconNames=new string[] {
-		"TweaksEditIcon",
 		"TweaksYellowBulbIcon",
+		"TweaksEditIcon",
 		"ClearIcon",
 		"TweaksContextAction"})]
 
@@ -181,7 +181,7 @@ namespace AlexPovar.ResharperTweaks
 		///<example>
 		///  <code>themediconmanager.GetIcon&lt;MainThemedIcons.TweaksEditIcon&gt;()        // Icon image for rendering</code>
 		///</example>
-		[global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClassAttribute("AlexPovar.ResharperTweaks;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 0, "TweaksEditIcon")]
+		[global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClassAttribute("AlexPovar.ResharperTweaks;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 1, "TweaksEditIcon")]
 		public sealed class TweaksEditIcon : global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClass
 		{
 			
@@ -207,7 +207,7 @@ namespace AlexPovar.ResharperTweaks
 			///<example>
 			///  <code>themediconmanager.GetIcon&lt;MainThemedIcons.TweaksEditIcon&gt;()        // Icon image for rendering</code>
 			///</example>
-			public static global::JetBrains.UI.Icons.IconId Id = new global::JetBrains.UI.Icons.CompiledIcons.CompiledIconId("AlexPovar.ResharperTweaks;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 0, "TweaksEditIcon");
+			public static global::JetBrains.UI.Icons.IconId Id = new global::JetBrains.UI.Icons.CompiledIcons.CompiledIconId("AlexPovar.ResharperTweaks;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 1, "TweaksEditIcon");
 		}
 		
 		/// <summary>
@@ -232,7 +232,7 @@ namespace AlexPovar.ResharperTweaks
 		///<example>
 		///  <code>themediconmanager.GetIcon&lt;MainThemedIcons.TweaksYellowBulbIcon&gt;()        // Icon image for rendering</code>
 		///</example>
-		[global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClassAttribute("AlexPovar.ResharperTweaks;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 1, "TweaksYellowBulbIcon")]
+		[global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClassAttribute("AlexPovar.ResharperTweaks;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 0, "TweaksYellowBulbIcon")]
 		public sealed class TweaksYellowBulbIcon : global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClass
 		{
 			
@@ -258,7 +258,7 @@ namespace AlexPovar.ResharperTweaks
 			///<example>
 			///  <code>themediconmanager.GetIcon&lt;MainThemedIcons.TweaksYellowBulbIcon&gt;()        // Icon image for rendering</code>
 			///</example>
-			public static global::JetBrains.UI.Icons.IconId Id = new global::JetBrains.UI.Icons.CompiledIcons.CompiledIconId("AlexPovar.ResharperTweaks;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 1, "TweaksYellowBulbIcon");
+			public static global::JetBrains.UI.Icons.IconId Id = new global::JetBrains.UI.Icons.CompiledIcons.CompiledIconId("AlexPovar.ResharperTweaks;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 0, "TweaksYellowBulbIcon");
 		}
 	}
 }

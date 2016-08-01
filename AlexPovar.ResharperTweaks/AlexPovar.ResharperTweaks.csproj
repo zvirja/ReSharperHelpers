@@ -189,10 +189,7 @@
     <Compile Include="ContextActions\ChopInline\ChopInlineContextAction.cs" />
     <Compile Include="ContextActions\ChopInline\ChopInlineMethodActionBase.cs" />
     <Compile Include="ContextActions\ChopInline\ChopMethodArgumentsAction.cs" />
-    <Compile Include="ContextActions\ContainerNullability\ContainerNullabilityActionBase.cs" />
-    <Compile Include="ContextActions\ContainerNullability\ContainerNullabilityGroupAction.cs" />
-    <Compile Include="ContextActions\ContainerNullability\ItemCanBeNullAction.cs" />
-    <Compile Include="ContextActions\ContainerNullability\ItemNotNullAction.cs" />
+    <Compile Include="ContextActions\ContainerNullabilityGroupAction.cs" />
     <Compile Include="ContextActions\CopyFullClassNameAction.cs" />
     <Compile Include="ContextActions\ChopInline\OnelineMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\AutoFixture\SetGreedyAttributeAction.cs" />

@@ -22,24 +22,7 @@
       <RectangleGeometry Rect="48,52.0000991821289,16,16" />
     </DrawingGroup.ClipGeometry>
   </DrawingGroup>
-  <DrawingGroup AutomationProperties.Name="TweaksEditIcon" AutomationProperties.ItemType="Gray" x:Key="0000">
-    <DrawingGroup.Children>
-      <GeometryDrawing Brush="#00FFFFFF" Pen="{x:Null}">
-        <GeometryDrawing.Geometry>
-          <RectangleGeometry Rect="48,140,16,16" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <GeometryDrawing Brush="#FF123616" Geometry="F1M48,151.586L48,156 52.414,156 62.207,146.207 57.793,141.793 48,151.586z" />
-      <GeometryDrawing Brush="#FF123616" Geometry="F1M59.293,140.293L57.793,141.793 62.207,146.207 63.707,144.707C64.098,144.316,64.098,143.684,63.707,143.293L60.707,140.293C60.316,139.902,59.684,139.902,59.293,140.293z" />
-      <GeometryDrawing Brush="#FFA3E0AA" Geometry="F1M63,144L62,145 59,142 60,141 63,144z" />
-      <GeometryDrawing Brush="#FFA3E0AA" Geometry="F1M49,155L52,155 49,152 M58,143L50,151 53,154 61,146 58,143z" />
-      <GeometryDrawing Brush="#FF143D19" Geometry="F1M58,144L51,151 52,151 58,145 58,144z" />
-    </DrawingGroup.Children>
-    <DrawingGroup.ClipGeometry>
-      <RectangleGeometry Rect="48,140,16,16" />
-    </DrawingGroup.ClipGeometry>
-  </DrawingGroup>
-  <DrawingGroup AutomationProperties.Name="TweaksYellowBulbIcon" AutomationProperties.ItemType="Gray" x:Key="0001">
+  <DrawingGroup AutomationProperties.Name="TweaksYellowBulbIcon" AutomationProperties.ItemType="Gray" x:Key="0000">
     <DrawingGroup.Children>
       <GeometryDrawing Brush="#00FFFFFF" Pen="{x:Null}">
         <GeometryDrawing.Geometry>
@@ -55,6 +38,23 @@
     </DrawingGroup.Children>
     <DrawingGroup.ClipGeometry>
       <RectangleGeometry Rect="48,156,16,16" />
+    </DrawingGroup.ClipGeometry>
+  </DrawingGroup>
+  <DrawingGroup AutomationProperties.Name="TweaksEditIcon" AutomationProperties.ItemType="Gray" x:Key="0001">
+    <DrawingGroup.Children>
+      <GeometryDrawing Brush="#00FFFFFF" Pen="{x:Null}">
+        <GeometryDrawing.Geometry>
+          <RectangleGeometry Rect="48,140,16,16" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+      <GeometryDrawing Brush="#FF123616" Geometry="F1M48,151.586L48,156 52.414,156 62.207,146.207 57.793,141.793 48,151.586z" />
+      <GeometryDrawing Brush="#FF123616" Geometry="F1M59.293,140.293L57.793,141.793 62.207,146.207 63.707,144.707C64.098,144.316,64.098,143.684,63.707,143.293L60.707,140.293C60.316,139.902,59.684,139.902,59.293,140.293z" />
+      <GeometryDrawing Brush="#FFA3E0AA" Geometry="F1M63,144L62,145 59,142 60,141 63,144z" />
+      <GeometryDrawing Brush="#FFA3E0AA" Geometry="F1M49,155L52,155 49,152 M58,143L50,151 53,154 61,146 58,143z" />
+      <GeometryDrawing Brush="#FF143D19" Geometry="F1M58,144L51,151 52,151 58,145 58,144z" />
+    </DrawingGroup.Children>
+    <DrawingGroup.ClipGeometry>
+      <RectangleGeometry Rect="48,140,16,16" />
     </DrawingGroup.ClipGeometry>
   </DrawingGroup>
 </ResourceDictionary>
