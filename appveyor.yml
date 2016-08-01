@@ -18,6 +18,8 @@ after_build:
   - nuget pack AlexPovar.ResharperTweaks.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ResharperTweaks\bin\Release
   #If I use artifacts section, name will contain relative path.
   - appveyor PushArtifact AlexPovar.ResharperTweaks\bin\Release\AlexPovar.ResharperTweaks.dll
+  
+test: off
 
 artifacts:
   - path: '*.nupkg'
