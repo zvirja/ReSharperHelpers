@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlexPovar.ResharperTweaks.ContextActions;
-using AlexPovar.ResharperTweaks.ContextActions.AssertNotNull;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Daemon.UsageChecking;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
@@ -223,7 +222,7 @@ namespace AlexPovar.ResharperTweaks.QuickFixes
         foreach (var statement in this.myLanguageHelper.BodyStatements(ctorDeclaration).Reverse())
         {
           var expressionStatement = statement as IExpressionStatement;
-          if (expressionStatement != null && AssertNotNullAction.IsAssertStatement(expressionStatement))
+          if (expressionStatement != null && AssertParametersNotNullAction.IsAssertStatement(expressionStatement))
           {
             return statement;
           }
