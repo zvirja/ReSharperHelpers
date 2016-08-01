@@ -169,6 +169,8 @@
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\AnnotationsAreCopied.cs.gold" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\PrivatePropertyIntroduced.cs.gold" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\PrivatePropertyIntroduced.cs" />
+    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsMergedWithOther.cs.gold" />
+    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsRemoved.cs.gold" />
     <None Include="data\QuickFixes\IntroduceGetOnlyAutoPropertyFixTests\AnnotationsAreCopied.cs" />
     <None Include="data\QuickFixes\IntroduceGetOnlyAutoPropertyFixTests\AnnotationsAreCopied.cs.gold" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\PublicPropertyIntroduced.cs" />
@@ -183,6 +185,13 @@
     <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllWorksCorrectly.cs" />
     <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\Availability.cs" />
     <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllAvailability.cs" />
+    <Compile Include="ContextActions\PureNotPureActionsTests.cs" />
+    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsAdded.cs" />
+    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsAdded.cs.gold" />
+    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsRemoved.cs" />
+    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsMergedWithOther.cs" />
+    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\NotPureAvailability.cs" />
+    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAvailability.cs" />
     <Compile Include="PathedContextActionExecuteTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuickFixes\IntroduceGetOnlyAutoPropertyFixTests.cs" />
