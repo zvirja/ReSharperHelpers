@@ -1,6 +1,7 @@
 version: '1.0.0.{build}'
 configuration: Release
-platform: x86
+#I should build AnyCPU instead of x86. Otherwise, Plugin installer will not install extension
+platform: AnyCPU
 
 #branches:
 #  only:
