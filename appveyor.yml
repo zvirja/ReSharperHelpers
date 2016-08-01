@@ -1,0 +1,30 @@
+version: '1.0.0.{build}'
+configuration: Release
+platform: x86
+
+#branches:
+#  only:
+#    - master
+#    - develop
+
+before_build:
+  - nuget restore
+
+build:
+  project: AlexPovar.ResharperTweaks.sln
+  verbosity: minimal
+  
+after_build:
+  - nuget pack AlexPovar.ResharperTweaks.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ResharperTweaks\bin\Release
+  #If I use artifacts section, name will contain relative path.
+  - appveyor PushArtifact AlexPovar.ResharperTweaks\bin\Release\AlexPovar.ResharperTweaks.dll
+
+artifacts:
+  - path: '*.nupkg'
+    
+assembly_info:
+  patch: true
+  file: AlexPovar.ResharperTweaks\Properties\AssemblyInfo.cs
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}-rc1'
