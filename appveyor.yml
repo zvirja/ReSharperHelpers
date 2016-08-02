@@ -4,7 +4,7 @@
   branches:
     only:
       - master
-      - $(APPVEYOR_REPO_TAG_NAME)
+      - /v\d(.\d)+/
   
   skip_non_tags: true
   
