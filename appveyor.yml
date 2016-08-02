@@ -35,7 +35,7 @@
     assembly_informational_version: '{version}'
     
   deploy:
-    release: AlexPovar.ResharperTweaks %{APPVEYOR_REPO_TAG_NAME} %APPVEYOR_BUILD_VERSION% APPVEYOR_REPO_TAG_NAME {APPVEYOR_REPO_TAG_NAME} $APPVEYOR_REPO_TAG_NAME
+    release: 'AlexPovar.ResharperTweaks %{APPVEYOR_REPO_TAG_NAME} %APPVEYOR_BUILD_VERSION% APPVEYOR_REPO_TAG_NAME {APPVEYOR_REPO_TAG_NAME} $APPVEYOR_REPO_TAG_NAME'
     description: >
       ### Release notes:
         - XXX
