@@ -2,8 +2,7 @@
 -
   branches:
     only:
-    #- master
-    - feature/support-release-in-build-script
+    - master
   
   version: 1.0.0.{build}
   configuration: Release
@@ -19,10 +18,9 @@
   after_build:
     - nuget pack AlexPovar.ResharperTweaks.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ResharperTweaks\bin\Release
   
-#  test:
-#    assemblies:
-#      - AlexPovar.ResharperTweaks.Tests.dll
-  test: off
+  test:
+    assemblies:
+      - AlexPovar.ResharperTweaks.Tests.dll
 
   artifacts:
     - path: '*.nupkg'
