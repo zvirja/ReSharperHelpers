@@ -1,7 +1,12 @@
 # ReSharper Helpers
-Custom plugin to extend R# functionality.
+Plugin to extend R# functionality by set of custom actions.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh?svg=true)](https://ci.appveyor.com/project/Zvirja/resharperhelpers)
+
+### Installation:
+Plugin is published to ReSharper plugins Store. Just find it by name: `ReSharper Helpers by Alex Povar`;
+
+### Features:
 
 Currently, the following features are implemented:  
 * `Cleanup modified files` - Extend solution context menu with additional action to perform cleanup on modified files only. Action uses git to get list of modified files.
