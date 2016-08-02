@@ -3,7 +3,8 @@
   #Run builds for tags only
   branches:
     only:
-    - $(APPVEYOR_REPO_TAG_NAME)
+      - master
+      - $(APPVEYOR_REPO_TAG_NAME)
   
   skip_non_tags: true
   
