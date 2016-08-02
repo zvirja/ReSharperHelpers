@@ -51,7 +51,7 @@
         #appveyor_repo_tag: true        # deploy on tag push only   
     -
       provider: NuGet
-      server: https://resharper-plugins.jetbrains.com/api/v2
+      server: https://resharper-plugins.jetbrains.com
       api_key:
         secure: n7O2pQ5KhsdnT2DhKmiU40gCt3Tl3/T/zxnclsYxgYwgxpNK2iZvK9apawWFMpCO
       skip_symbols: true
