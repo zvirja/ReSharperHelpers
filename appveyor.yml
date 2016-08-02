@@ -36,7 +36,9 @@
     
   deploy:
     release: AlexPovar.ResharperTweaks %APPVEYOR_REPO_TAG_NAME%
-    description: '### Release notes:'
+    description: >
+      ### Release notes:
+        - XXX
     provider: GitHub
     auth_token:
       secure: OzVU+dQH6Xnhe6lBhEjUsJNTfKHQCT22+khHIBi2zRMelT+UzW1rCgGunZtAlBWP
