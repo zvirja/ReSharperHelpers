@@ -4,6 +4,9 @@
     only:
     - master
   
+  #Run builds for tags only
+  skip_non_tags: true
+  
   version: 1.0.0.{build}
   configuration: Release
   platform: Any CPU
