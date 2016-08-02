@@ -1,12 +1,13 @@
 ######## RELEASE CONFIGURATION ########
 -
+  #Run builds for tags only
   branches:
     only:
-    - master
+    - /v\d(.\d)+/
   
-  #Run builds for tags only
   skip_non_tags: true
   
+  #Don't forget to update version for DEV build too
   version: 0.0.0.{build}
   configuration: Release
   platform: Any CPU
