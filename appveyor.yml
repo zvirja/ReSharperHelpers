@@ -35,19 +35,26 @@
     assembly_informational_version: '{version}'
     
   deploy:
-    release: AlexPovar.ResharperTweaks $(APPVEYOR_REPO_TAG_NAME)
-    description: >
-      ### Release notes:
-        - XXX
-    provider: GitHub
-    auth_token:
-      secure: OzVU+dQH6Xnhe6lBhEjUsJNTfKHQCT22+khHIBi2zRMelT+UzW1rCgGunZtAlBWP
-    artifact: /.*\.nupkg/
-    draft: true
-    prerelease: false
-    on:
-      #branch: master
-      appveyor_repo_tag: true        # deploy on tag push only   
+    -
+      release: AlexPovar.ResharperTweaks $(APPVEYOR_REPO_TAG_NAME)
+      description: >
+        ### Release notes:
+          - XXX
+      provider: GitHub
+      auth_token:
+        secure: OzVU+dQH6Xnhe6lBhEjUsJNTfKHQCT22+khHIBi2zRMelT+UzW1rCgGunZtAlBWP
+      artifact: /.*\.nupkg/
+      draft: true
+      prerelease: false
+    #  on:
+        #branch: master
+        #appveyor_repo_tag: true        # deploy on tag push only   
+    -
+      provider: NuGet
+      api_key:
+        secure: n7O2pQ5KhsdnT2DhKmiU40gCt3Tl3/T/zxnclsYxgYwgxpNK2iZvK9apawWFMpCO
+      skip_symbols: true
+      artifact: /.*\.nupkg/
       
 ######## DEBUG BUILD ########
 -
