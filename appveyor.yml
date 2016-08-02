@@ -10,6 +10,9 @@
   version: 1.0.0.{build}
   configuration: Release
   platform: Any CPU
+  
+  init:
+    - ps: Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<"
 
   before_build:
     - nuget restore
@@ -64,6 +67,9 @@
   version: 1.0.0.{build}
   configuration: Debug
   platform: Any CPU
+  
+  init:
+    - ps: Write-Host ">>>>>>>>> RUN DEBUG BUILD <<<<<<<<<<<"
   
   before_build:
     - nuget restore
