@@ -7,7 +7,7 @@
   #Run builds for tags only
   skip_non_tags: true
   
-  version: 1.0.0.{build}
+  version: 0.0.0.{build}
   configuration: Release
   platform: Any CPU
   
@@ -64,7 +64,7 @@
       
 ######## DEBUG BUILD ########
 -
-  version: 1.0.0.{build}
+  version: 0.0.0.{build}
   configuration: Debug
   platform: Any CPU
   
