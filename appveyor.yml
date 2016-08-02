@@ -1,11 +1,8 @@
-environment:
-  build_version: '1.0.0.{build}'
-
 ######## RELEASE CONFIGURATION ########
 -
   branches:
    only:
-     - feature/support-release-in-build-script
+     - master
   
   version: 1.0.0.{build}
   configuration: Release
@@ -34,5 +31,24 @@ environment:
     file: AlexPovar.ResharperTweaks\Properties\AssemblyInfo.cs
     assembly_version: '{version}'
     assembly_file_version: '{version}'
-    assembly_informational_version: '{version}-rc1'
+    assembly_informational_version: '{version}'
     
+######## ANY_CONFIGURATION_BUILD ########
+-
+  version: 1.0.0.{build}
+  configuration: Debug
+  
+  before_build:
+    - nuget restore
+    
+  build:
+    project: AlexPovar.ResharperTweaks.sln
+    verbosity: minimal
+    
+  after_build:
+    - nuget pack AlexPovar.ResharperTweaks.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ResharperTweaks\bin\Debug
+    
+  test: off
+  
+  artifacts:
+    - path: '*.nupkg'
