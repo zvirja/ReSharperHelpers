@@ -35,7 +35,7 @@
     assembly_informational_version: '{version}'
     
   deploy:
-    release: AlexPovar.ResharperTweaks-v$(appveyor_build_version)
+    release: AlexPovar.ResharperTweaks %APPVEYOR_REPO_TAG_NAME%
     description: '### Release notes:'
     provider: GitHub
     auth_token:
@@ -46,7 +46,8 @@
     on:
       #branch: master
       appveyor_repo_tag: true        # deploy on tag push only   
-######## ANY_CONFIGURATION_BUILD ########
+      
+######## DEBUG BUILD ########
 -
   version: 1.0.0.{build}
   configuration: Debug
