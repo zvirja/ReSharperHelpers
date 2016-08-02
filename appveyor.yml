@@ -37,13 +37,14 @@
 -
   version: 1.0.0.{build}
   configuration: Debug
+  platform: Any CPU
   
   before_build:
     - nuget restore
     
   build:
     project: AlexPovar.ResharperTweaks.sln
-    verbosity: minimal
+    verbosity: detailed
     
   after_build:
     - nuget pack AlexPovar.ResharperTweaks.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ResharperTweaks\bin\Debug
