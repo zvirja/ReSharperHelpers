@@ -35,12 +35,12 @@
     assembly_informational_version: '{version}'
     
   deploy:
-    release: myproduct-v$(appveyor_build_version)
+    release: AlexPovar.ResharperTweaks-v$(appveyor_build_version)
     description: 'Release description'
     provider: GitHub
     auth_token:
       secure: OzVU+dQH6Xnhe6lBhEjUsJNTfKHQCT22+khHIBi2zRMelT+UzW1rCgGunZtAlBWP
-    artifact: '*.nupkg'
+    artifact: /.*\.nupkg/
     draft: true
     prerelease: false
 #    on:
