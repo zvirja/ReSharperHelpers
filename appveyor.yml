@@ -1,3 +1,6 @@
+environment:
+  build_version: '1.0.0.{build}'
+
 ######## RELEASE CONFIGURATION ########
 -
   branches:
