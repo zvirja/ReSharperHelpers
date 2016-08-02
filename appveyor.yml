@@ -3,7 +3,7 @@
   #Run builds for tags only
   branches:
     only:
-    - /v\d(.\d)+/
+    - $(APPVEYOR_REPO_TAG_NAME)
   
   skip_non_tags: true
   
