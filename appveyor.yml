@@ -1,17 +1,12 @@
-environment:
-  build_version: '1.0.0.{build}'
-  #I should build AnyCPU instead of x86. Otherwise, Plugin installer will not install extension
-  build_platform: Any CPU  
-
 ######## RELEASE CONFIGURATION ########
 -
   branches:
    only:
      - feature/support-release-in-build-script
   
-  version: {build_version}
+  version: 1.0.0.{build}
   configuration: Release
-  platform: {build_platform}
+  platform: Any CPU
 
   before_build:
     - nuget restore
