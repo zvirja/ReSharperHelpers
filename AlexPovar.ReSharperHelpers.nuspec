@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>AlexPovar.ReSharperHelpers</id>
+    <title>Resharper Helpers by Alex Povar</title>
+    <description>Set of custom actions for ReSharper. Refer to project site for more details.</description>
+    <!-- It will be replaced by CI -->
+    <version>0.0.0.0</version>
+    <authors>Alex Povar</authors>
+    <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
+    <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/develop/LICENSE</licenseUrl>
+    <copyright>Copyright &#x00A9; 2016 Alex Povar</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <dependencies>
+      <dependency id="Wave" version="[4.0]" />
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- Plugin -->
+    <file src="AlexPovar.ReSharperHelpers.dll" target="DotFiles" />
+    <file src="LibGit2Sharp.dll" target="DotFiles" />
+    <file src="NativeBinaries\x86\git2-785d8c4.dll" target="DotFiles" />
+  </files>
+</package>

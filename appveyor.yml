@@ -20,29 +20,29 @@
     - nuget restore
 
   build:
-    project: AlexPovar.ResharperTweaks.sln
+    project: AlexPovar.ReSharperHelpers.sln
     verbosity: minimal
   
   after_build:
-    - nuget pack AlexPovar.ResharperTweaks.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ResharperTweaks\bin\Release
+    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
   
   test:
     assemblies:
-      - AlexPovar.ResharperTweaks.Tests.dll
+      - AlexPovar.ReSharperHelpers.Tests.dll
 
   artifacts:
     - path: '*.nupkg'
     
   assembly_info:
     patch: true
-    file: AlexPovar.ResharperTweaks\Properties\AssemblyInfo.cs
+    file: AlexPovar.ReSharperHelpers\Properties\AssemblyInfo.cs
     assembly_version: '{version}'
     assembly_file_version: '{version}'
     assembly_informational_version: '{version}'
     
   deploy:
     -
-      release: AlexPovar.ResharperTweaks $(APPVEYOR_REPO_TAG_NAME)
+      release: AlexPovar.ReSharperHelpers $(APPVEYOR_REPO_TAG_NAME)
       description: >
         ### Release notes:
           - XXX
@@ -77,11 +77,11 @@
     - nuget restore
     
   build:
-    project: AlexPovar.ResharperTweaks.sln
+    project: AlexPovar.ReSharperHelpers.sln
     verbosity: minimal
     
   after_build:
-    - nuget pack AlexPovar.ResharperTweaks.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ResharperTweaks\bin\Release
+    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
     
   test: off
   

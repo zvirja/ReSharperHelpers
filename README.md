@@ -1,7 +1,7 @@
-# ResharperTweaks
+# ReSharper Helpers
 Custom plugin to extend R# functionality.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/0yvkmy6lo10mpmr7/branch/master?svg=true)](https://ci.appveyor.com/project/Zvirja/resharpertweaks/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh?svg=true)](https://ci.appveyor.com/project/Zvirja/resharperhelpers)
 
 Currently, the following features are implemented:  
 * `Cleanup modified files` - Extend solution context menu with additional action to perform cleanup on modified files only. Action uses git to get list of modified files.
