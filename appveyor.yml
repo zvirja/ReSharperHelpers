@@ -63,14 +63,14 @@
       on:
         appveyor_repo_tag: true
       
-######## DEBUG BUILD ########
+######## LATEST BUILD ########
 -
   version: 0.0.0.{build}
-  configuration: Debug
+  configuration: Release
   platform: Any CPU
-  
+    
   init:
-    - ps: Write-Host ">>>>>>>>> RUN DEBUG BUILD <<<<<<<<<<<"
+    - ps: Write-Host ">>>>>>>>> RUN LATEST BUILD <<<<<<<<<<<"
   
   before_build:
     - nuget restore
@@ -80,10 +80,10 @@
     verbosity: minimal
     
   after_build:
-    - nuget pack AlexPovar.ResharperTweaks.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ResharperTweaks\bin\Debug
+    - nuget pack AlexPovar.ResharperTweaks.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ResharperTweaks\bin\Release
     
   test: off
   
   artifacts:
     - path: '*.nupkg'
-      name: DEBUG build
+      name: LATEST package
