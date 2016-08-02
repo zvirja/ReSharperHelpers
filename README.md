@@ -1,4 +1,4 @@
-# ResharperTweaks
+# ReSharper Helpers
 Custom plugin to extend R# functionality.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/0yvkmy6lo10mpmr7/branch/master?svg=true)](https://ci.appveyor.com/project/Zvirja/resharpertweaks/branch/master)

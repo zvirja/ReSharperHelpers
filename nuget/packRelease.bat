@@ -1,2 +1,2 @@
-"c:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" ..\AlexPovar.ResharperTweaks.sln  /t:Build /p:Configuration=Release
-nuget pack ..\AlexPovar.ResharperTweaks.nuspec -BasePath ..\AlexPovar.ResharperTweaks\bin\Release
+"c:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" ..\AlexPovar.ReSharperHelpers.sln  /t:Build /p:Configuration=Release
+nuget pack ..\AlexPovar.ReSharperHelpers.nuspec -BasePath ..\AlexPovar.ReSharperHelpers\bin\Release
