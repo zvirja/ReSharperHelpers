@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlexPovar.ReSharperHelpers.ContextActions;
+using AlexPovar.ReSharperHelpers.Helpers;
+using AlexPovar.ReSharperHelpers.MainIcons;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Daemon.UsageChecking;
 using JetBrains.ReSharper.Feature.Services.Bulbs;

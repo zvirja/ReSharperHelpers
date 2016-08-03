@@ -186,7 +186,7 @@
   <ItemGroup>
     <Compile Include="CodeCleanup\CleanupModificationsCounter.cs" />
     <Compile Include="CodeCleanup\CleanupModifiedFilesAction.cs" />
-    <Compile Include="ContextActions\AnnotationsUtil.cs" />
+    <Compile Include="Helpers\AnnotationsUtil.cs" />
     <Compile Include="ContextActions\AssertParametersNotNullAction.cs" />
     <Compile Include="ContextActions\AutoFixture\AutoFixtureAttributeAction.cs" />
     <Compile Include="ContextActions\ChopInline\ChopInlineContextAction.cs" />
@@ -201,10 +201,10 @@
     <Compile Include="ContextActions\Pure\NotPureAttributeAction.cs" />
     <Compile Include="ContextActions\Pure\PureAttributeAction.cs" />
     <Compile Include="ContextActions\Pure\PureAttributeActionBase.cs" />
-    <Compile Include="ContextActions\HelperActionsConstants.cs" />
+    <Compile Include="Helpers\HelperActionsConstants.cs" />
     <Compile Include="ContextActions\HelpersContextActionBase.cs" />
     <Compile Include="CodeCleanup\GitModificationsResolver.cs" />
-    <Compile Include="ContextActions\HelpersExtensions.cs" />
+    <Compile Include="Helpers\HelpersExtensions.cs" />
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
     <Compile Include="MyIcons.cs" />
     <Compile Include="MyReflectionUtil.cs" />

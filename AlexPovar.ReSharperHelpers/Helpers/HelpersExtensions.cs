@@ -3,7 +3,7 @@ using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.UI.BulbMenu;
 
-namespace AlexPovar.ReSharperHelpers.ContextActions
+namespace AlexPovar.ReSharperHelpers.Helpers
 {
   public static class HelpersExtensions
   {

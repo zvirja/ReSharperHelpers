@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;

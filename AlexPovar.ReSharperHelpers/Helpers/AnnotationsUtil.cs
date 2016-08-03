@@ -7,7 +7,7 @@ using JetBrains.ReSharper.Psi.CSharp.Impl;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.Util;
 
-namespace AlexPovar.ReSharperHelpers.ContextActions
+namespace AlexPovar.ReSharperHelpers.Helpers
 {
   public static class AnnotationsUtil
   {

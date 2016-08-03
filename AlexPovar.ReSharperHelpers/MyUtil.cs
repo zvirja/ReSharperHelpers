@@ -1,4 +1,4 @@
-﻿using AlexPovar.ReSharperHelpers.ContextActions;
+﻿using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.UI.BulbMenu;
 
