@@ -186,6 +186,7 @@
   <ItemGroup>
     <Compile Include="CodeCleanup\CleanupModificationsCounter.cs" />
     <Compile Include="CodeCleanup\CleanupModifiedFilesAction.cs" />
+    <Compile Include="ContextActions\CreateOrBrowseTestFileAction.cs" />
     <Compile Include="Helpers\AnnotationsUtil.cs" />
     <Compile Include="ContextActions\AssertParametersNotNullAction.cs" />
     <Compile Include="ContextActions\AutoFixture\AutoFixtureAttributeAction.cs" />
