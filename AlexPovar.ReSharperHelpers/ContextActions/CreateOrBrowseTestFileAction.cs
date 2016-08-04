@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlexPovar.ReSharperHelpers.Helpers;
+using AlexPovar.ReSharperHelpers.Settings;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
+using JetBrains.Application.Settings;
+using JetBrains.Application.Settings.Store.Implementation;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.IDE;
 using JetBrains.ProjectModel;
+using JetBrains.ProjectModel.DataContext;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
@@ -22,6 +26,7 @@ using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
 using JetBrains.Util;
+using JetBrains.Util.Extension;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
 {
@@ -38,7 +43,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
       this._myProvider = provider;
 
-      this.IsEnabledForProject = provider.Project?.Name.EndsWith(".Tests") != true;
+      this.IsEnabledForProject = ResolveIsEnabledForProvider(provider);
     }
 
     private bool IsEnabledForProject { get; }
@@ -59,7 +64,23 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
             var declaredType = declaration?.DeclaredElement;
             if (declaredType == null) return;
 
-            var project = solution.GetProjectsByName("TestProject.Tests").Single();
+            var settingsStore = declaration.GetSettingsStore();
+
+            var helperSettings = settingsStore.GetKey<ReSharperHelperSettings>(SettingsOptimization.OptimizeDefault);
+
+            var projectName = helperSettings.TestsProjectName;
+            if (projectName.IsNullOrEmpty())
+            {
+              MessageBox.ShowError($"The test project value is not configured.{Environment.NewLine}Specify project name in configuration.", "ReSharper Helpers");
+              return;
+            }
+
+            var project = solution.GetProjectsByName(projectName).FirstOrDefault();
+            if (project == null)
+            {
+              MessageBox.ShowError($"Unable to find '{projectName}' project. Ensure project name is correct", "ReSharper Helpers");
+              return;
+            }
 
             var testNamespaceParts = GetExpectedTestNamespacePartsWithoutRoot(project, declaredType.GetContainingNamespace().QualifiedName);
             var testFolderLocation = testNamespaceParts.Aggregate(project.Location, (current, part) => current.Combine(part));
@@ -70,7 +91,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
             testFileName = declaredType.ShortName + "Tests.cs";
 
             testFileTemplate =
-              StoredTemplatesProvider.Instance.EnumerateTemplates(declaration.GetSettingsStore(), TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
+              StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
           }
 
           if (testFileTemplate != null)
@@ -111,9 +132,28 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       var typeName = declaredElement.ShortName;
       if (typeName.EndsWith("Test") || typeName.EndsWith("Tests")) return false;
 
+
       return true;
     }
 
+    private static bool ResolveIsEnabledForProvider([NotNull] ICSharpContextActionDataProvider provider)
+    {
+      var project = provider.Project;
+      if (project == null) return false;
+
+      var dataContext = project.ToDataContext();
+      var contextRange = ContextRange.Smart(dataContext);
+
+      var settingsStore = Shell.Instance.GetComponent<SettingsStore>();
+
+      var settingsStoreBound = settingsStore.BindToContextTransient(contextRange);
+      var mySettings = settingsStoreBound.GetKey<ReSharperHelperSettings>(SettingsOptimization.OptimizeDefault);
+
+      return !project.Name.Equals(mySettings.TestsProjectName);
+    }
+
+
+    [NotNull]
     private static string[] GetExpectedTestNamespacePartsWithoutRoot([NotNull] IProject project, [NotNull] string classNamespace)
     {
       var namespaceParts = StringUtil.FullySplitFQName(classNamespace);
