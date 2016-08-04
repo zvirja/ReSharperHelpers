@@ -213,6 +213,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeCleanup\StatusBarTextUpdater.cs" />
     <Compile Include="QuickFixes\IntroduceGetOnlyAutoPropertyFix.cs" />
+    <Compile Include="Settings\ReSharperHelperSettings.cs" />
+    <Compile Include="Settings\ReSharperHelpersOptionsPage.xaml.cs">
+      <DependentUpon>ReSharperHelpersOptionsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ReSharperHelpersOptionsPageViewModel.cs" />
     <Compile Include="ZoneMarker.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +227,10 @@
     <ThemedIconPng Include="MainIcons\clearIcon.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Settings\ReSharperHelpersOptionsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <ThemedIconsXamlV3 Include="MainIcons\ContextActions.Icons.xaml">
       <ThemeColumns>Gray</ThemeColumns>
       <RemoveBackgroundElement>True</RemoveBackgroundElement>

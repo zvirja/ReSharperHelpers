@@ -10,8 +10,8 @@
 
 [assembly: global::System.Windows.Markup.XmlnsDefinitionAttribute("urn:shemas-jetbrains-com:ui-application-icons-main", "AlexPovar.ReSharperHelpers")]
 [assembly: global::JetBrains.UI.Icons.CompiledIcons.CompiledIconsPackAttribute(IconPackResourceIdentification="AlexPovar.ReSharperHelpers;component/MainIcons/ThemedIcons.Main.Generated.Xaml", IconNames=new string[] {
-		"HelpersEditIcon",
 		"HelpersContextAction",
+		"HelpersEditIcon",
 		"ClearIcon",
 		"HelpersYellowBulbIcon"})]
 
@@ -130,7 +130,7 @@ namespace AlexPovar.ReSharperHelpers
 		///<example>
 		///  <code>themediconmanager.GetIcon&lt;MainThemedIcons.HelpersContextAction&gt;()        // Icon image for rendering</code>
 		///</example>
-		[global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClassAttribute("AlexPovar.ReSharperHelpers;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 1, "HelpersContextAction")]
+		[global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClassAttribute("AlexPovar.ReSharperHelpers;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 0, "HelpersContextAction")]
 		public sealed class HelpersContextAction : global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClass
 		{
 			
@@ -156,7 +156,7 @@ namespace AlexPovar.ReSharperHelpers
 			///<example>
 			///  <code>themediconmanager.GetIcon&lt;MainThemedIcons.HelpersContextAction&gt;()        // Icon image for rendering</code>
 			///</example>
-			public static global::JetBrains.UI.Icons.IconId Id = new global::JetBrains.UI.Icons.CompiledIcons.CompiledIconId("AlexPovar.ReSharperHelpers;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 1, "HelpersContextAction");
+			public static global::JetBrains.UI.Icons.IconId Id = new global::JetBrains.UI.Icons.CompiledIcons.CompiledIconId("AlexPovar.ReSharperHelpers;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 0, "HelpersContextAction");
 		}
 		
 		/// <summary>
@@ -181,7 +181,7 @@ namespace AlexPovar.ReSharperHelpers
 		///<example>
 		///  <code>themediconmanager.GetIcon&lt;MainThemedIcons.HelpersEditIcon&gt;()        // Icon image for rendering</code>
 		///</example>
-		[global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClassAttribute("AlexPovar.ReSharperHelpers;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 0, "HelpersEditIcon")]
+		[global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClassAttribute("AlexPovar.ReSharperHelpers;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 1, "HelpersEditIcon")]
 		public sealed class HelpersEditIcon : global::JetBrains.UI.Icons.CompiledIcons.CompiledIconClass
 		{
 			
@@ -207,7 +207,7 @@ namespace AlexPovar.ReSharperHelpers
 			///<example>
 			///  <code>themediconmanager.GetIcon&lt;MainThemedIcons.HelpersEditIcon&gt;()        // Icon image for rendering</code>
 			///</example>
-			public static global::JetBrains.UI.Icons.IconId Id = new global::JetBrains.UI.Icons.CompiledIcons.CompiledIconId("AlexPovar.ReSharperHelpers;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 0, "HelpersEditIcon");
+			public static global::JetBrains.UI.Icons.IconId Id = new global::JetBrains.UI.Icons.CompiledIcons.CompiledIconId("AlexPovar.ReSharperHelpers;component/MainIcons/ThemedIcons.Main.Generated.Xaml", 1, "HelpersEditIcon");
 		}
 		
 		/// <summary>
