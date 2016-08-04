@@ -20,7 +20,9 @@ using JetBrains.ReSharper.Feature.Services.LiveTemplates.Settings;
 using JetBrains.ReSharper.Feature.Services.LiveTemplates.Templates;
 using JetBrains.ReSharper.Feature.Services.Util;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Resources.Shell;
@@ -48,8 +50,17 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     private bool IsEnabledForProject { get; }
 
+    [CanBeNull]
+    private IProjectFile ExistingProjectFile { get; set; }
+
     public void Execute(ISolution solution, ITextControl textControl)
     {
+      if (this.ExistingProjectFile != null)
+      {
+        ShowProjectFile(solution, this.ExistingProjectFile);
+        return;
+      }
+
       using (ReadLockCookie.Create())
       {
         using (CompilationContextCookie.Create(textControl.GetContext(solution)))
@@ -82,13 +93,13 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
               return;
             }
 
-            var testNamespaceParts = GetExpectedTestNamespacePartsWithoutRoot(project, declaredType.GetContainingNamespace().QualifiedName);
+            var testNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject(), declaredType.GetContainingNamespace().QualifiedName);
             var testFolderLocation = testNamespaceParts.Aggregate(project.Location, (current, part) => current.Combine(part));
 
             testFolder = project.GetOrCreateProjectFolder(testFolderLocation, cookie);
             if (testFolder == null) return;
 
-            testFileName = declaredType.ShortName + "Tests.cs";
+            testFileName = MakeTestClassName(declaredType.ShortName) + ".cs";
 
             testFileTemplate =
               StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
@@ -109,7 +120,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       }
     }
 
-    public string Text => "[Helpers] Create test file";
+    public string Text => this.ExistingProjectFile == null ? "[Helpers] Create test file" : "[Helpers] Go to test file";
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
@@ -118,6 +129,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     public bool IsAvailable(IUserDataHolder cache)
     {
+      this.ExistingProjectFile = null;
       if (!this.IsEnabledForProject) return false;
 
       var typeDeclaration = this._myProvider.GetSelectedElement<ICSharpTypeDeclaration>();
@@ -129,11 +141,41 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       var declaredElement = typeDeclaration.DeclaredElement;
       if (declaredElement == null) return false;
 
-      var typeName = declaredElement.ShortName;
-      if (typeName.EndsWith("Test") || typeName.EndsWith("Tests")) return false;
+      //TRY RESOLVE EXISTING TEST
+      var symbolScope = typeDeclaration.GetPsiServices().Symbols.GetSymbolScope(LibrarySymbolScope.NONE, true);
 
+      var typeName = declaredElement.ShortName;
+      var alreadyDeclaredClasses = symbolScope.GetElementsByShortName(MakeTestClassName(typeName)).OfType<IClass>().Where(c => c != null).ToArray();
+      if (alreadyDeclaredClasses.Length == 0) return true;
+
+      var myProject = typeDeclaration.GetProject();
+      if (myProject == null) return true;
+
+      var expectedNamespaceParts = TrimDefaultProjectNamespace(myProject, declaredElement.GetContainingNamespace().QualifiedName);
+
+      var exactMatchTestClass = alreadyDeclaredClasses
+        .Where(
+          testCandidateClass =>
+          {
+            var testProj = (testCandidateClass.Module as IProjectPsiModule)?.Project;
+            if (testProj == null) return false;
+
+            var actualNamespaceParts = TrimDefaultProjectNamespace(testProj, testCandidateClass.GetContainingNamespace().QualifiedName);
+            if (actualNamespaceParts.Length != expectedNamespaceParts.Length) return false;
+
+            return expectedNamespaceParts.SequenceEqual(actualNamespaceParts, StringComparer.Ordinal);
+          })
+        .FirstOrDefault();
+
+      this.ExistingProjectFile = exactMatchTestClass?.GetSingleOrDefaultSourceFile()?.ToProjectFile();
+      ;
 
       return true;
+    }
+
+    private static string MakeTestClassName(string className)
+    {
+      return className + "Tests";
     }
 
     private static bool ResolveIsEnabledForProvider([NotNull] ICSharpContextActionDataProvider provider)
@@ -154,7 +196,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
 
     [NotNull]
-    private static string[] GetExpectedTestNamespacePartsWithoutRoot([NotNull] IProject project, [NotNull] string classNamespace)
+    private static string[] TrimDefaultProjectNamespace([NotNull] IProject project, [NotNull] string classNamespace)
     {
       var namespaceParts = StringUtil.FullySplitFQName(classNamespace);
 
@@ -163,7 +205,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       {
         var parts = StringUtil.FullySplitFQName(defaultNamespace);
 
-        namespaceParts = namespaceParts.SkipWhile((part, index) => part.Equals(parts[index], StringComparison.Ordinal)).ToArray();
+        namespaceParts = namespaceParts.SkipWhile((part, index) => index < parts.Length && part.Equals(parts[index], StringComparison.Ordinal)).ToArray();
       }
 
       return namespaceParts;
