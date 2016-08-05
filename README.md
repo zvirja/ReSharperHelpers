@@ -20,4 +20,4 @@ Currently, the following features are implemented:
 
 
 ### Pre-release builds
-Pre-release builds (develop branch) are published to [custom nuget feed](https://www.myget.org/feed/Sync/alexpovar-resharperhelpers-prerelease). If you want to have pre-release builds, add the following NuGet package source to ReSharper: `https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2`.
+Pre-release builds (develop branch) are published to [custom nuget feed](https://www.myget.org/feed/alexpovar-resharperhelpers-prerelease/package/nuget/AlexPovar.ReSharperHelpers). If you want to have pre-release builds, add the following NuGet package source to ReSharper: `https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2`.
