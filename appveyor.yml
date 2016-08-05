@@ -103,7 +103,7 @@
     
   init:
     - ps: >
-        $env:SKIP_DEPLOY = [regex]::ismatch("", "\[nodeploy\]")
+        $env:SKIP_DEPLOY = [regex]::ismatch("$env:APPVEYOR_REPO_COMMIT_MESSAGE", "\[nodeploy\]")
         
         Write-Host ">>>>>>>>> RUN DEVELOP BUILD. SKIP DEPLOY: $env:SKIP_DEPLOY <<<<<<<<<<<"
         
