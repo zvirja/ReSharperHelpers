@@ -132,23 +132,23 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       this.ExistingProjectFile = null;
       if (!this.IsEnabledForProject) return false;
 
-      var typeDeclaration = this._myProvider.GetSelectedElement<ICSharpTypeDeclaration>();
-      if (typeDeclaration == null) return false;
+      var classDeclaration = this._myProvider.GetSelectedElement<ICSharpIdentifier>()?.Parent as IClassDeclaration;
+      if (classDeclaration == null) return false;
 
       //Disable for nested classes
-      if (typeDeclaration.GetContainingTypeDeclaration() != null) return false;
+      if (classDeclaration.GetContainingTypeDeclaration() != null) return false;
 
-      var declaredElement = typeDeclaration.DeclaredElement;
+      var declaredElement = classDeclaration.DeclaredElement;
       if (declaredElement == null) return false;
 
       //TRY RESOLVE EXISTING TEST
-      var symbolScope = typeDeclaration.GetPsiServices().Symbols.GetSymbolScope(LibrarySymbolScope.NONE, true);
+      var symbolScope = classDeclaration.GetPsiServices().Symbols.GetSymbolScope(LibrarySymbolScope.NONE, true);
 
       var typeName = declaredElement.ShortName;
       var alreadyDeclaredClasses = symbolScope.GetElementsByShortName(MakeTestClassName(typeName)).OfType<IClass>().Where(c => c != null).ToArray();
       if (alreadyDeclaredClasses.Length == 0) return true;
 
-      var myProject = typeDeclaration.GetProject();
+      var myProject = classDeclaration.GetProject();
       if (myProject == null) return true;
 
       var expectedNamespaceParts = TrimDefaultProjectNamespace(myProject, declaredElement.GetContainingNamespace().QualifiedName);
@@ -168,7 +168,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         .FirstOrDefault();
 
       this.ExistingProjectFile = exactMatchTestClass?.GetSingleOrDefaultSourceFile()?.ToProjectFile();
-      ;
 
       return true;
     }
