@@ -42,7 +42,7 @@
     verbosity: minimal
   
   after_build:
-    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
+    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %SEMANTIC_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
   
   test:
     off

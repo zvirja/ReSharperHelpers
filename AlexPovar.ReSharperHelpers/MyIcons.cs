@@ -1,5 +1,4 @@
-﻿using AlexPovar.ReSharperHelpers.MainIcons;
-using JetBrains.UI.Icons;
+﻿using JetBrains.UI.Icons;
 
 namespace AlexPovar.ReSharperHelpers
 {
