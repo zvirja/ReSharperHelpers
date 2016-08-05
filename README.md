@@ -3,11 +3,8 @@ Plugin to extend R# functionality by set of custom actions.
 
 [ReSharper Gallery](https://resharper-plugins.jetbrains.com/packages/AlexPovar.ReSharperHelpers/)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh/branch/master?svg=true)](https://ci.appveyor.com/project/Zvirja/resharperhelpers/branch/master)
-[![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh/branch/develop?svg=true)](https://ci.appveyor.com/project/Zvirja/resharperhelpers/branch/develop)
-
-### Installation:
-Plugin is published to ReSharper plugins store. Use ReSharper Extensions Manager and find it by name: `ReSharper Helpers by Alex Povar`.
+Master: [![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh/branch/master?svg=true)](https://ci.appveyor.com/project/Zvirja/resharperhelpers/branch/master)  
+Develop: [![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh/branch/develop?svg=true)](https://ci.appveyor.com/project/Zvirja/resharperhelpers/branch/develop)
 
 ### Features:
 
@@ -22,5 +19,5 @@ Currently, the following features are implemented:
 * `AutoFixture: Freeze, Greedy` - Quick actions to quickly add [Frozen] or [Greedy] attributes.
 
 
-## Pre-release builds
+### Pre-release builds
 Pre-release builds (develop branch) are published to [custom nuget feed](https://www.myget.org/feed/Sync/alexpovar-resharperhelpers-prerelease). If you want to have pre-release builds, add the following NuGet package source to ReSharper: `https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2`.
