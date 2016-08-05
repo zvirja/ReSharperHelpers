@@ -5,6 +5,7 @@
     only:
       - master
       - /v\d(.\d)+/
+      - /v\d(.\d)+-beta/
   
   skip_non_tags: true
   
@@ -13,9 +14,26 @@
   configuration: Release
   platform: Any CPU
   
+  environment:
+    SEMANTIC_BUILD_VERSION: $(APPVEYOR_BUILD_VERSION)
+    IS_PRERELASE_BUILD: false
+    SKIP: true
+  
   init:
-    - ps: Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<"
-
+    - ps: >
+        Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<"
+        
+        $tagSuffix = [regex]::Match($env:APPVEYOR_REPO_TAG_NAME, "\d(.\d)+-(?<suffix>(\w)+)").Groups['suffix'].value
+        
+        if($tagSuffix) 
+        { 
+          $env:SEMANTIC_BUILD_VERSION = "$env:SEMANTIC_BUILD_VERSION-$tagSuffix"
+          
+          $env:IS_PRERELASE_BUILD = True
+        }
+        
+        Write-Host "SEMANTIC VERSION: $env:SEMANTIC_BUILD_VERSION"
+            
   before_build:
     - nuget restore
 
@@ -27,8 +45,9 @@
     - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
   
   test:
-    assemblies:
-      - AlexPovar.ReSharperHelpers.Tests.dll
+    off
+#    assemblies:
+#      - AlexPovar.ReSharperHelpers.Tests.dll
 
   artifacts:
     - path: '*.nupkg'
@@ -53,7 +72,9 @@
       draft: true
       prerelease: false
       on:
-        appveyor_repo_tag: true        # deploy on tag push only   
+        appveyor_repo_tag: true         # deploy on tag push only
+        IS_PRERELASE_BUILD: false       # skip pre-release builds
+        SKIP: false
     -
       provider: NuGet
       server: https://resharper-plugins.jetbrains.com
@@ -63,6 +84,7 @@
       artifact: /.*\.nupkg/
       on:
         appveyor_repo_tag: true
+        SKIP: false
       
 ######## LATEST BUILD ########
 -
@@ -72,7 +94,7 @@
     
   init:
     - ps: Write-Host ">>>>>>>>> RUN LATEST BUILD <<<<<<<<<<<"
-  
+    
   before_build:
     - nuget restore
     
