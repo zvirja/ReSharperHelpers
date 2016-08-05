@@ -3,8 +3,8 @@ Plugin to extend R# functionality by set of custom actions.
 
 [ReSharper Gallery](https://resharper-plugins.jetbrains.com/packages/AlexPovar.ReSharperHelpers/)
 
-Master: [![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh/branch/master?svg=true)](https://ci.appveyor.com/project/Zvirja/resharperhelpers/branch/master)  
-Develop: [![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh/branch/develop?svg=true)](https://ci.appveyor.com/project/Zvirja/resharperhelpers/branch/develop)
+[![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh/branch/master?svg=true&passingText=master%20-%20OK)](https://ci.appveyor.com/project/Zvirja/resharperhelpers/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh/branch/develop?svg=true&passingText=master%20-%20OK)](https://ci.appveyor.com/project/Zvirja/resharperhelpers/branch/develop)
 
 ### Features:
 
