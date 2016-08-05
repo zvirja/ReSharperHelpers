@@ -97,9 +97,15 @@
   version: 1.0.0.{build}
   configuration: Release
   platform: Any CPU
+  
+  environment:
+    SKIP_DEPLOY: false
     
   init:
-    - ps: Write-Host ">>>>>>>>> RUN DEVELOP BUILD WITH PRIVATE DEPLOY <<<<<<<<<<<"
+    - ps: >
+        $env:SKIP_DEPLOY = [regex]::ismatch("", "\[nodeploy\]")
+        
+        Write-Host ">>>>>>>>> RUN DEVELOP BUILD. SKIP DEPLOY: $env:SKIP_DEPLOY <<<<<<<<<<<"
     
   before_build:
     - nuget restore
@@ -132,3 +138,5 @@
         secure: lbUAU6S3paEy82ZkEL0prxDANjgz/LFCyXeyCKaFQ00vvD3nENf5an+nTvDakFlL
       skip_symbols: true
       artifact: /.*\.nupkg/
+      on:
+        SKIP_DEPLOY: false
