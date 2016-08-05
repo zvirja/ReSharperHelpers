@@ -35,7 +35,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   [ContextAction(Group = "C#", Name = "[AlexHelpers] Create or browse test file", Description = "Creates new or opens the existing test file.", Priority = short.MinValue)]
   public class CreateOrBrowseTestFileAction : IBulbAction, IContextAction
   {
-    private const string TemplateDescription = "[AlexPovarHelpers] TestFile";
+    private const string TemplateDescription = "[AlexHelpers] TestFile";
 
     [NotNull] private readonly ICSharpContextActionDataProvider _myProvider;
 
