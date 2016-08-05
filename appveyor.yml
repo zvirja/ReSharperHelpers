@@ -106,6 +106,9 @@
         $env:SKIP_DEPLOY = [regex]::ismatch("", "\[nodeploy\]")
         
         Write-Host ">>>>>>>>> RUN DEVELOP BUILD. SKIP DEPLOY: $env:SKIP_DEPLOY <<<<<<<<<<<"
+        
+  cache:
+    - packages -> **\packages.config
     
   before_build:
     - nuget restore
