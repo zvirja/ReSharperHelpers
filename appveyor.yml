@@ -123,7 +123,7 @@
   deploy:
     -
       provider: NuGet
-      server: https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/feed-state
+      server: https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/package
       api_key:
         secure: lbUAU6S3paEy82ZkEL0prxDANjgz/LFCyXeyCKaFQ00vvD3nENf5an+nTvDakFlL
       skip_symbols: true
