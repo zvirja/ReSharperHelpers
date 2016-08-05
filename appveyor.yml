@@ -90,6 +90,10 @@
       - develop
       - feature/push-prerelease-to-custom-feed
       
+  skip_commits:
+    files:
+      - '*.md'
+  
   version: 1.0.0.{build}
   configuration: Release
   platform: Any CPU
