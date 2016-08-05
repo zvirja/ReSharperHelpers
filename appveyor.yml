@@ -5,6 +5,7 @@
     only:
       - master
       - /v\d(.\d)+/
+      - /v\d(.\d)+-(\w)+/
   
   skip_non_tags: true
   
@@ -13,8 +14,24 @@
   configuration: Release
   platform: Any CPU
   
+  environment:
+    SEMANTIC_BUILD_VERSION: $(APPVEYOR_BUILD_VERSION)
+    IS_PRERELASE_BUILD: false
+  
   init:
-    - ps: Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<"
+    - ps: >
+        Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<"
+        
+        $tagSuffix = [regex]::Match($env:APPVEYOR_REPO_TAG_NAME, "\d(.\d)+-(?<suffix>(\w)+)").Groups['suffix'].value
+        
+        if($tagSuffix) 
+        { 
+          $env:SEMANTIC_BUILD_VERSION = "$env:SEMANTIC_BUILD_VERSION-$tagSuffix"
+          
+          $env:IS_PRERELASE_BUILD = $true
+        }
+        
+        Write-Host "SEMANTIC VERSION: $env:SEMANTIC_BUILD_VERSION, is pre-release: $env:IS_PRERELASE_BUILD"
 
   before_build:
     - nuget restore
@@ -24,7 +41,7 @@
     verbosity: minimal
   
   after_build:
-    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
+    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %SEMANTIC_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
   
   test:
     assemblies:
@@ -42,18 +59,20 @@
     
   deploy:
     -
+      tag: $(APPVEYOR_REPO_TAG_NAME)
       release: AlexPovar.ReSharperHelpers $(APPVEYOR_REPO_TAG_NAME)
       description: >
-        ### Release notes:
+        ## Release notes:
           - XXX
       provider: GitHub
       auth_token:
         secure: OzVU+dQH6Xnhe6lBhEjUsJNTfKHQCT22+khHIBi2zRMelT+UzW1rCgGunZtAlBWP
       artifact: /.*\.nupkg/
       draft: true
-      prerelease: false
+      prerelease: $(IS_PRERELASE_BUILD)
       on:
-        appveyor_repo_tag: true        # deploy on tag push only   
+        appveyor_repo_tag: true         # deploy on tag push only
+
     -
       provider: NuGet
       server: https://resharper-plugins.jetbrains.com
@@ -72,7 +91,7 @@
     
   init:
     - ps: Write-Host ">>>>>>>>> RUN LATEST BUILD <<<<<<<<<<<"
-  
+    
   before_build:
     - nuget restore
     
