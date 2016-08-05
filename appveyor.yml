@@ -82,15 +82,20 @@
       artifact: /.*\.nupkg/
       on:
         appveyor_repo_tag: true
+
+######## DEVELOP BUILD ########
+- 
+  branches:
+    only:
+      - develop
+      - feature/push-prerelease-to-custom-feed
       
-######## LATEST BUILD ########
--
   version: 1.0.0.{build}
   configuration: Release
   platform: Any CPU
     
   init:
-    - ps: Write-Host ">>>>>>>>> RUN LATEST BUILD <<<<<<<<<<<"
+    - ps: Write-Host ">>>>>>>>> RUN DEVELOP BUILD WITH PRIVATE DEPLOY <<<<<<<<<<<"
     
   before_build:
     - nuget restore
@@ -107,3 +112,19 @@
   artifacts:
     - path: '*.nupkg'
       name: LATEST package
+      
+  assembly_info:
+    patch: true
+    file: AlexPovar.ReSharperHelpers\Properties\AssemblyInfo.cs
+    assembly_version: '{version}'
+    assembly_file_version: '{version}'
+    assembly_informational_version: '{version}'
+    
+  deploy:
+    -
+      provider: NuGet
+      server: https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/package
+      api_key:
+        secure: lbUAU6S3paEy82ZkEL0prxDANjgz/LFCyXeyCKaFQ00vvD3nENf5an+nTvDakFlL
+      skip_symbols: true
+      artifact: /.*\.nupkg/
