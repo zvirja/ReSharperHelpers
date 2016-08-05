@@ -5,7 +5,7 @@
     only:
       - master
       - /v\d(.\d)+/
-      - /v\d(.\d)+-beta/
+      - /v\d(.\d)+-(\w)+/
   
   skip_non_tags: true
   
@@ -17,7 +17,6 @@
   environment:
     SEMANTIC_BUILD_VERSION: $(APPVEYOR_BUILD_VERSION)
     IS_PRERELASE_BUILD: false
-    SKIP: true
   
   init:
     - ps: >
@@ -29,11 +28,11 @@
         { 
           $env:SEMANTIC_BUILD_VERSION = "$env:SEMANTIC_BUILD_VERSION-$tagSuffix"
           
-          $env:IS_PRERELASE_BUILD = True
+          $env:IS_PRERELASE_BUILD = $true
         }
         
-        Write-Host "SEMANTIC VERSION: $env:SEMANTIC_BUILD_VERSION"
-            
+        Write-Host "SEMANTIC VERSION: $env:SEMANTIC_BUILD_VERSION, is pre-release: $env:IS_PRERELASE_BUILD"
+
   before_build:
     - nuget restore
 
@@ -45,9 +44,8 @@
     - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %SEMANTIC_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
   
   test:
-    off
-#    assemblies:
-#      - AlexPovar.ReSharperHelpers.Tests.dll
+    assemblies:
+      - AlexPovar.ReSharperHelpers.Tests.dll
 
   artifacts:
     - path: '*.nupkg'
@@ -61,20 +59,20 @@
     
   deploy:
     -
+      tag: $(APPVEYOR_REPO_TAG_NAME)
       release: AlexPovar.ReSharperHelpers $(APPVEYOR_REPO_TAG_NAME)
       description: >
-        ### Release notes:
+        ## Release notes:
           - XXX
       provider: GitHub
       auth_token:
         secure: OzVU+dQH6Xnhe6lBhEjUsJNTfKHQCT22+khHIBi2zRMelT+UzW1rCgGunZtAlBWP
       artifact: /.*\.nupkg/
       draft: true
-      prerelease: false
+      prerelease: $(IS_PRERELASE_BUILD)
       on:
         appveyor_repo_tag: true         # deploy on tag push only
-        IS_PRERELASE_BUILD: false       # skip pre-release builds
-        SKIP: false
+
     -
       provider: NuGet
       server: https://resharper-plugins.jetbrains.com
@@ -84,7 +82,6 @@
       artifact: /.*\.nupkg/
       on:
         appveyor_repo_tag: true
-        SKIP: false
       
 ######## LATEST BUILD ########
 -
