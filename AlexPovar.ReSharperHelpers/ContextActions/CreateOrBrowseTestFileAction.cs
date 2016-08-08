@@ -21,7 +21,9 @@ using JetBrains.ReSharper.Feature.Services.LiveTemplates.Templates;
 using JetBrains.ReSharper.Feature.Services.Util;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Caches;
+using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
@@ -57,7 +59,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     {
       if (this.ExistingProjectFile != null)
       {
-        ShowProjectFile(solution, this.ExistingProjectFile);
+        ShowProjectFile(solution, this.ExistingProjectFile, null);
         return;
       }
 
@@ -65,6 +67,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       {
         using (CompilationContextCookie.Create(textControl.GetContext(solution)))
         {
+          string testClassName;
+          string testNamespace;
           string testFileName;
           IProjectFolder testFolder;
           Template testFileTemplate;
@@ -93,16 +97,18 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
               return;
             }
 
-            var testNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject(), declaredType.GetContainingNamespace().QualifiedName);
-            var testFolderLocation = testNamespaceParts.Aggregate(project.Location, (current, part) => current.Combine(part));
+            var originalNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject(), declaredType.GetContainingNamespace().QualifiedName);
+            var testFolderLocation = originalNamespaceParts.Aggregate(project.Location, (current, part) => current.Combine(part));
+
+            testNamespace = project.GetDefaultNamespace() + StringUtil.MakeFQName(originalNamespaceParts);
 
             testFolder = project.GetOrCreateProjectFolder(testFolderLocation, cookie);
             if (testFolder == null) return;
 
-            testFileName = MakeTestClassName(declaredType.ShortName) + ".cs";
+            testClassName = MakeTestClassName(declaredType.ShortName);
+            testFileName = testClassName + ".cs";
 
-            testFileTemplate =
-              StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
+            testFileTemplate = StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
           }
 
           if (testFileTemplate != null)
@@ -111,10 +117,28 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
           }
           else
           {
-            var newFile = AddNewItemUtil.AddFile(testFolder, testFileName,
-              $"File template with description '{TemplateDescription}' is not defined.{Environment.NewLine}Navigate to Templates Explorer and define appropriate file template.");
+            var newFile = AddNewItemUtil.AddFile(testFolder, testFileName);
+            int? caretPosition = -1;
 
-            ShowProjectFile(solution, newFile);
+            solution.GetPsiServices().Transactions.Execute(this.Text, () =>
+            {
+              var psiSourceFile = newFile.ToSourceFile();
+
+              var csharpFile = psiSourceFile?.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
+              if (csharpFile == null) return;
+
+              var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
+
+              var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testNamespace);
+              var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
+
+              var classLikeDeclaration = (IClassLikeDeclaration) elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
+              var addedTypeDeclaration = addedNs.AddTypeDeclarationAfter(classLikeDeclaration, null) as IClassDeclaration;
+
+              caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
+            });
+
+            ShowProjectFile(solution, newFile, caretPosition);
           }
         }
       }
@@ -210,10 +234,12 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       return namespaceParts;
     }
 
-    private static void ShowProjectFile([NotNull] ISolution solution, [NotNull] IProjectFile file)
+    private static void ShowProjectFile([NotNull] ISolution solution, [NotNull] IProjectFile file, int? caretPosition)
     {
       var editor = solution.GetComponent<IEditorManager>();
-      editor.OpenProjectFile(file, true);
+      var textControl = editor.OpenProjectFile(file, true);
+
+      if (caretPosition != null) textControl.Caret.MoveTo(caretPosition.Value, CaretVisualPlacement.DontScrollIfVisible);
     }
   }
 }
