@@ -120,7 +120,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       //Validate that parameter is valid
       if (parameterToMatch != null)
       {
-        if (invocation?.Arguments.Count != 2) return false;
+        if (invocation.Arguments.Count != 2) return false;
         var firstArgExpr = invocation.Arguments[0].Expression as IReferenceExpression;
         if (firstArgExpr?.Reference.Resolve().DeclaredElement?.Equals(parameterToMatch) != true) return false;
       }

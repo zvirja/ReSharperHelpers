@@ -10,6 +10,8 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
   {
     [Test] public void AssertAllWorksCorrectly() { this.DoNamedTest(); }
 
+    [Test] public void AssertionPositionIsCorrect() { this.DoNamedTest(); }
+
     [Test] public void AssertStatementAndAnnotationAdded() { this.DoNamedTest(); }
 
     [Test] public void StringsAssertedCorrectly() { this.DoNamedTest(); }

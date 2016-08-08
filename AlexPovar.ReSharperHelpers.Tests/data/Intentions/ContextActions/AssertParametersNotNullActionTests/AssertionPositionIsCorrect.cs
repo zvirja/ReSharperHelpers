@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.AssertParametersNotNullActionTests
 {
-  class AssertAllWorksCorrectly
+  class AssertionPositionIsCorrect
   {
-    void TestMethod(object ar{caret:Assert:all:parameters:are:not:null}g1, int arg2, string arg3)
+    void Method([NotNull] object arg1, object ar{caret:Assert:parameter:is:not:null}g2, [NotNull] object arg3)
     {
+      Assert.ArgumentNotNull(arg1, nameof(arg1));
+      Assert.ArgumentNotNull(arg3, nameof(arg3));
     }
   }
 

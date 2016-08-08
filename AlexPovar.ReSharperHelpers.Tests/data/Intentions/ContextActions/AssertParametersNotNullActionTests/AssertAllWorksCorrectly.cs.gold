@@ -15,4 +15,10 @@ namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.Assert
       Assert.ArgumentNotNullOrEmpty(arg3, nameof(arg3));
     }
   }
+
+  public static class Assert
+  {
+    public static void ArgumentNotNull<T>(T value, string argName);
+    public static void ArgumentNotOrEmptyNull<T>(T value, string argName);
+  }
 }
