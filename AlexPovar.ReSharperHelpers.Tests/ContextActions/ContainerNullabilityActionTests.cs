@@ -6,15 +6,15 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
 {
   public class ContainerNullabilityGroupActionTests : PathedContextActionExecuteTestBase<ContainerNullabilityGroupAction>
   {
-    [TestCase("ItemNotNullAttributeAdded.cs")]
-    [TestCase("ItemCanBeNullAttributeAdded.cs")]
-    [TestCase("AttributeMergedWithOther.cs")]
-    [TestCase("OppositeAttributeIsRemoved.cs")]
-    [TestCase("AddedToProperty.cs")]
-    public void Run(string testName)
-    {
-      this.DoTestFiles(testName);
-    }
+    [Test] public void AddedToProperty() { this.DoNamedTest(); }
+
+    [Test] public void AttributeMergedWithOther() { this.DoNamedTest(); }
+
+    [Test] public void ItemCanBeNullAttributeAdded() { this.DoNamedTest(); }
+
+    [Test] public void ItemNotNullAttributeAdded() { this.DoNamedTest(); }
+
+    [Test] public void OppositeAttributeIsRemoved() { this.DoNamedTest(); }
   }
 
 
@@ -22,10 +22,6 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
   {
     protected override string ExtraPath => nameof(ContainerNullabilityGroupActionTests);
 
-    [Test]
-    public void Run()
-    {
-      this.DoTestFiles("Availability.cs");
-    }
+    [Test] public void Availability() { this.DoNamedTest(); }
   }
 }

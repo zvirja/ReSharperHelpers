@@ -8,24 +8,18 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
 {
   public class AssertParametersNotNullActionTests : PathedContextActionExecuteTestBase<AssertParametersNotNullAction>
   {
-    [TestCase("AssertStatementAndAnnotationAdded.cs")]
-    [TestCase("StringsAssertedCorrectly.cs")]
-    [TestCase("AssertAllWorksCorrectly.cs")]
-    public void Run(string testName)
-    {
-      this.DoTestFiles(testName);
-    }
+    [Test] public void AssertAllWorksCorrectly() { this.DoNamedTest(); }
+
+    [Test] public void AssertStatementAndAnnotationAdded() { this.DoNamedTest(); }
+
+    [Test] public void StringsAssertedCorrectly() { this.DoNamedTest(); }
   }
 
   public class AssertParametersNotNullActionAvailabilityTests : CSharpContextActionAvailabilityTestBase<AssertParametersNotNullAction>
   {
     protected override string ExtraPath => nameof(AssertParametersNotNullActionTests);
 
-    [Test]
-    public void Run()
-    {
-      this.DoTestFiles("Availability.cs");
-    }
+    [Test] public void Availability() { this.DoNamedTest(); }
   }
 
   public class AssertParametersNotNullActionAssertAllAvailabilityTests : CSharpContextActionAvailabilityTestBase<AssertParametersNotNullAction>
@@ -42,10 +36,6 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
       return assertAllAction != null;
     }
 
-    [Test]
-    public void Run()
-    {
-      this.DoTestFiles("AssertAllAvailability.cs");
-    }
+    [Test] public void AssertAllAvailability() { this.DoNamedTest(); }
   }
 }

@@ -6,7 +6,7 @@ using JetBrains.UI.Options.OptionPages.ToolsPages;
 
 namespace AlexPovar.ReSharperHelpers.Settings
 {
-  [OptionsPage(PID, "Alex Povar ReSharper Helpers", typeof (MainThemedIcons.HelpersContextAction), ParentId = ToolsPage.PID)]
+  [OptionsPage(PID, "Alex Povar ReSharper Helpers", typeof(MainThemedIcons.HelpersContextAction), ParentId = ToolsPage.PID)]
   public partial class ReSharperHelpersOptionsPage : IOptionsPage
   {
     // ReSharper disable once InconsistentNaming

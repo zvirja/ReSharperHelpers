@@ -11,8 +11,8 @@ namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.Assert
   {
     void TestMethod([NotNull] object ar{caret}g1, int arg2, [NotNull] string arg3)
     {
-      Assert.ArgumentNotNullOrEmpty(arg3, nameof(arg3));
       Assert.ArgumentNotNull(arg1, nameof(arg1));
+      Assert.ArgumentNotNullOrEmpty(arg3, nameof(arg3));
     }
   }
 }
