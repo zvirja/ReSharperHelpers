@@ -8,11 +8,15 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
 {
   public class AssertParametersNotNullActionTests : PathedContextActionExecuteTestBase<AssertParametersNotNullAction>
   {
+    [Test] public void AssertAllOrderedForNotResolved() { this.DoNamedTest(); }
+
     [Test] public void AssertAllWorksCorrectly() { this.DoNamedTest(); }
 
     [Test] public void AssertionPositionIsCorrect() { this.DoNamedTest(); }
 
     [Test] public void AssertStatementAndAnnotationAdded() { this.DoNamedTest(); }
+
+    [Test] public void NamespaceIsImported() { this.DoNamedTest(); }
 
     [Test] public void StringsAssertedCorrectly() { this.DoNamedTest(); }
   }

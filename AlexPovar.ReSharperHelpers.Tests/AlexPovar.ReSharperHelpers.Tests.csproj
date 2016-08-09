@@ -187,7 +187,9 @@
     <Compile Include="ContextActions\ChopInlineContextActionTests.cs" />
     <Compile Include="ContextActions\ContainerNullabilityActionTests.cs" />
     <Compile Include="ContextActions\CopyFullClassNameActionTests.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllOrderedForNotResolved.cs.gold" />
     <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertionPositionIsCorrect.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\NamespaceIsImported.cs.gold" />
     <None Include="data\Intentions\ContextActions\CopyFullClassNameActionTests\FileIsNotChanged.cs" />
     <Compile Include="ContextActions\IntroduceGetOnlyAutoPropertyActionTests.cs" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\AnnotationsAreCopied.cs.gold" />
@@ -233,6 +235,8 @@
     <None Include="data\Intentions\ContextActions\ChopInlineContextActionTests\MethodInlinedCorrectly.cs.gold" />
     <None Include="data\Intentions\ContextActions\ChopInlineContextActionTests\Availability.cs" />
     <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertionPositionIsCorrect.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllOrderedForNotResolved.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\NamespaceIsImported.cs" />
     <Compile Include="PathedContextActionExecuteTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuickFixes\IntroduceGetOnlyAutoPropertyFixTests.cs" />

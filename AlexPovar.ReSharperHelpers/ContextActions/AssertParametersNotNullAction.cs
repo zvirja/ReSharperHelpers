@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
@@ -11,10 +12,13 @@ using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.ReSharper.Intentions.CSharp.ContextActions;
 using JetBrains.ReSharper.Intentions.CSharp.ContextActions.CheckParameters;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Modules;
+using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.ReSharper.Psi.Util;
 using JetBrains.TextControl;
 using JetBrains.UI.BulbMenu;
 using JetBrains.Util;
@@ -29,10 +33,10 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     private const string AssertTypeName = "Assert";
 
     private static readonly Func<IDeclaration, bool> NeedsAnnotationInvoker =
-      MyReflectionUtil.CreateStaticMethodInvocationDelegate<Func<IDeclaration, bool>>(typeof(CheckParamNullAction), "NeedsAnnotation");
+      MyReflectionUtil.CreateStaticMethodInvocationDelegate<Func<IDeclaration, bool>>(typeof (CheckParamNullAction), "NeedsAnnotation");
 
     private static readonly Action<IDeclaration> AddAnnotationInvoker =
-      MyReflectionUtil.CreateStaticMethodInvocationDelegate<Action<IDeclaration>>(typeof(CheckParamNullAction), "AddAnnotation");
+      MyReflectionUtil.CreateStaticMethodInvocationDelegate<Action<IDeclaration>>(typeof (CheckParamNullAction), "AddAnnotation");
 
     public AssertParametersNotNullAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider)
     {
@@ -46,6 +50,9 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     private AssertAllParamsNotNullAction AssertAllAction { get; }
 
     private bool AssertAllIsAvailable { get; set; }
+
+    [CanBeNull]
+    private IClrTypeName CachedAssertClassTypeName { get; set; }
 
     public override string Text => "Assert parameter is not null";
 
@@ -127,8 +134,25 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
       //Validate this is Assert.Argument... method.
       var reference = invocation.InvokedExpression as IReferenceExpression;
+      if (reference == null) return false;
 
-      var method = reference?.Reference.Resolve().DeclaredElement as IMethod;
+      var resolveResult = reference.Reference.Resolve();
+
+      //Handle case when reference is not resolved 
+      if (resolveResult.ResolveErrorType == ResolveErrorType.NOT_RESOLVED)
+      {
+        var referenceText = reference.GetText();
+        var parts = StringUtil.FullySplitFQName(referenceText);
+
+        if (parts.Length != 2) return false;
+        if (parts[0] != AssertTypeName) return false;
+
+        var methodReferenceName = parts[1];
+
+        return methodReferenceName == ArgumentNotNullAssetionMethod || methodReferenceName == ArgumentNotNullOrEmptyAssetionMethod;
+      }
+
+      var method = reference.Reference.Resolve().DeclaredElement as IMethod;
 
       if (method == null) return false;
 
@@ -164,7 +188,34 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     {
       var assertionMethodName = parameter.Type.IsString() ? ArgumentNotNullOrEmptyAssetionMethod : ArgumentNotNullAssetionMethod;
 
+      var assertionMethod = this.FindAssertionMethod(assertionMethodName, psiModule);
+
+      if (assertionMethod != null)
+      {
+        return factory.CreateStatement("$0($1, $2);", assertionMethod, parameter, parameterName);
+      }
+
+      //Fallback to unresoled
       return factory.CreateStatement("$0.$1($2, $3);", AssertTypeName, assertionMethodName, parameter, parameterName);
+    }
+
+    [CanBeNull]
+    private IMethod FindAssertionMethod([NotNull] string assertionMethodName, [NotNull] IPsiModule module)
+    {
+      var symbolScope = module.GetPsiServices().Symbols.GetSymbolScope(LibrarySymbolScope.REFERENCED, true);
+
+      IClass typeDecl;
+      if (this.CachedAssertClassTypeName != null)
+      {
+        typeDecl = symbolScope.GetTypeElementByCLRName(this.CachedAssertClassTypeName) as IClass;
+      }
+      else
+      {
+        typeDecl = symbolScope.GetElementsByShortName(AssertTypeName).OfType<IClass>().SingleOrDefault(c => (c.Module as IAssemblyPsiModule)?.Assembly.IsMscorlib != true);
+        if (typeDecl != null) this.CachedAssertClassTypeName = typeDecl.GetClrName();
+      }
+
+      return typeDecl?.EnumerateMembers(assertionMethodName, true).OfType<IMethod>().SingleOrDefault();
     }
 
     private static void AddAnnotationIfNeeded([CanBeNull] IDeclaration declaration)
@@ -178,7 +229,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     private class AssertAllParamsNotNullAction : ContextActionBase
     {
       private static readonly ExecuteOverParameterDelegate ExecuteOverParameterInvoker =
-        MyReflectionUtil.CreateInstanceMethodInvocationDelegate<ExecuteOverParameterDelegate>(typeof(ParameterCheckActionBase), "ExecuteOverParameter");
+        MyReflectionUtil.CreateInstanceMethodInvocationDelegate<ExecuteOverParameterDelegate>(typeof (ParameterCheckActionBase), "ExecuteOverParameter");
 
       private readonly ICSharpContextActionDataProvider _myProvider;
 
