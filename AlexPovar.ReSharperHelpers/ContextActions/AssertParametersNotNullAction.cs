@@ -12,7 +12,6 @@ using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.ReSharper.Intentions.CSharp.ContextActions;
 using JetBrains.ReSharper.Intentions.CSharp.ContextActions.CheckParameters;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Modules;
@@ -202,20 +201,21 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     [CanBeNull]
     private IMethod FindAssertionMethod([NotNull] string assertionMethodName, [NotNull] IPsiModule module)
     {
-      var symbolScope = module.GetPsiServices().Symbols.GetSymbolScope(LibrarySymbolScope.REFERENCED, true);
+      var symbolScope = module.GetPsiServices().Symbols.GetSymbolScope(module, true, true);
 
-      IClass typeDecl;
+      IClass typeDecl = null;
       if (this.CachedAssertClassTypeName != null)
       {
         typeDecl = symbolScope.GetTypeElementByCLRName(this.CachedAssertClassTypeName) as IClass;
       }
       else
       {
-        typeDecl = symbolScope.GetElementsByShortName(AssertTypeName).OfType<IClass>().SingleOrDefault(c => (c.Module as IAssemblyPsiModule)?.Assembly.IsMscorlib != true);
+        var candidates = symbolScope.GetElementsByShortName(AssertTypeName).OfType<IClass>().Where(c => (c.Module as IAssemblyPsiModule)?.Assembly.IsMscorlib != true).ToArray();
+        if (candidates.Length == 1) typeDecl = candidates[0];
         if (typeDecl != null) this.CachedAssertClassTypeName = typeDecl.GetClrName();
       }
 
-      return typeDecl?.EnumerateMembers(assertionMethodName, true).OfType<IMethod>().SingleOrDefault();
+      return typeDecl?.EnumerateMembers(assertionMethodName, true).OfType<IMethod>().FirstOrDefault();
     }
 
     private static void AddAnnotationIfNeeded([CanBeNull] IDeclaration declaration)
