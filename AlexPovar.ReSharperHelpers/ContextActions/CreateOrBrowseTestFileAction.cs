@@ -100,7 +100,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
             var originalNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject(), declaredType.GetContainingNamespace().QualifiedName);
             var testFolderLocation = originalNamespaceParts.Aggregate(project.Location, (current, part) => current.Combine(part));
 
-            testNamespace = project.GetDefaultNamespace() + StringUtil.MakeFQName(originalNamespaceParts);
+            testNamespace = StringUtil.MakeFQName(project.GetDefaultNamespace(), StringUtil.MakeFQName(originalNamespaceParts));
 
             testFolder = project.GetOrCreateProjectFolder(testFolderLocation, cookie);
             if (testFolder == null) return;
@@ -109,6 +109,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
             testFileName = testClassName + ".cs";
 
             testFileTemplate = StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
+
+            cookie.Commit(NullProgressIndicator.Instance);
           }
 
           if (testFileTemplate != null)
