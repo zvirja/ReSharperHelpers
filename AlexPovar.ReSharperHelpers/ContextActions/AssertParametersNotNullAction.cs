@@ -32,10 +32,10 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     private const string AssertTypeName = "Assert";
 
     private static readonly Func<IDeclaration, bool> NeedsAnnotationInvoker =
-      MyReflectionUtil.CreateStaticMethodInvocationDelegate<Func<IDeclaration, bool>>(typeof (CheckParamNullAction), "NeedsAnnotation");
+      MyReflectionUtil.CreateStaticMethodInvocationDelegate<Func<IDeclaration, bool>>(typeof(CheckParamNullAction), "NeedsAnnotation");
 
     private static readonly Action<IDeclaration> AddAnnotationInvoker =
-      MyReflectionUtil.CreateStaticMethodInvocationDelegate<Action<IDeclaration>>(typeof (CheckParamNullAction), "AddAnnotation");
+      MyReflectionUtil.CreateStaticMethodInvocationDelegate<Action<IDeclaration>>(typeof(CheckParamNullAction), "AddAnnotation");
 
     public AssertParametersNotNullAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider)
     {
@@ -229,7 +229,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     private class AssertAllParamsNotNullAction : ContextActionBase
     {
       private static readonly ExecuteOverParameterDelegate ExecuteOverParameterInvoker =
-        MyReflectionUtil.CreateInstanceMethodInvocationDelegate<ExecuteOverParameterDelegate>(typeof (ParameterCheckActionBase), "ExecuteOverParameter");
+        MyReflectionUtil.CreateInstanceMethodInvocationDelegate<ExecuteOverParameterDelegate>(typeof(ParameterCheckActionBase), "ExecuteOverParameter");
 
       private readonly ICSharpContextActionDataProvider _myProvider;
 
