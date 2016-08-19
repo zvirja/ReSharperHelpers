@@ -13,7 +13,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
     {
       this.RepoPath = Repository.Discover(repoPath);
 
-      this.IsValidRepository = Repository.IsValid(this.RepoPath);
+      this.IsValidRepository = this.RepoPath != null && Repository.IsValid(this.RepoPath);
     }
 
     [CanBeNull]

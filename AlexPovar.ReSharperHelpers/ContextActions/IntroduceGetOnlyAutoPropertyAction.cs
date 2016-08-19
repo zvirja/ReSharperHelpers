@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AlexPovar.ReSharperHelpers.QuickFixes;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
@@ -27,14 +26,15 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     public new IEnumerable<IntentionAction> CreateBulbItems()
     {
-      if (this.CachedFix == null) return Enumerable.Empty<IntentionAction>();
+      if (this.CachedFix == null) yield break;
 
       var anchor = MyUtil.CreateGroupAnchor(IntentionsAnchors.ContextActionsAnchor);
 
-      var actions = this.CachedFix.ToContextAction(anchor, MyIcons.ContextActionIcon);
-      actions = actions.Concat(this.CachedFix.CreateAuxiliaryFix(AccessRights.PUBLIC, "Initialize {0}").ToContextAction(anchor, MyIcons.ContextActionIcon));
+      var createPrivateAction = this.CachedFix.ToContextActionIntention(anchor, MyIcons.ContextActionIcon);
+      var createPublicAction = this.CachedFix.CreateAuxiliaryFix(AccessRights.PUBLIC, "Initialize {0}").ToContextActionIntention(anchor, MyIcons.ContextActionIcon);
 
-      return actions;
+      yield return createPrivateAction;
+      yield return createPublicAction;
     }
 
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
@@ -29,12 +28,13 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
     {
       if (this.ContextMethodDeclaration == null) yield break;
 
-      var anchor = new ExecutableGroupAnchor(HelperActionsConstants.ContextActionsAnchor, null, false);
+      var anchor = new SubmenuAnchor(HelperActionsConstants.ContextActionsAnchor, SubmenuBehavior.Executable);
 
-      var actions = new ChopMethodArgumentsAction(this.ContextMethodDeclaration).ToContextAction(anchor, MyIcons.ContextActionIcon);
-      actions = actions.Concat(new OnelineMethodArgumentsAction(this.ContextMethodDeclaration).ToContextAction(anchor, MyIcons.ContextActionIcon));
+      var chopAction = new ChopMethodArgumentsAction(this.ContextMethodDeclaration).ToContextActionIntention(anchor, MyIcons.ContextActionIcon);
+      var oneLineAction = new OnelineMethodArgumentsAction(this.ContextMethodDeclaration).ToContextActionIntention(anchor, MyIcons.ContextActionIcon);
 
-      foreach (var action in actions) yield return action;
+      yield return chopAction;
+      yield return oneLineAction;
     }
 
     public bool IsAvailable(IUserDataHolder cache)

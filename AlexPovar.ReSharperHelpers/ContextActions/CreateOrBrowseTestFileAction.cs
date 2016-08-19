@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using JetBrains.Application.Progress;
 using JetBrains.Application.Settings;
 using JetBrains.Application.Settings.Store.Implementation;
+using JetBrains.DocumentManagers.impl;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.IDE;
 using JetBrains.ProjectModel;
@@ -65,83 +66,80 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
       using (ReadLockCookie.Create())
       {
-        using (CompilationContextCookie.Create(textControl.GetContext(solution)))
+        string testClassName;
+        string testNamespace;
+        string testFileName;
+        IProjectFolder testFolder;
+        Template testFileTemplate;
+
+        using (var cookie = solution.CreateTransactionCookie(DefaultAction.Rollback, this.Text, NullProgressIndicator.Instance))
         {
-          string testClassName;
-          string testNamespace;
-          string testFileName;
-          IProjectFolder testFolder;
-          Template testFileTemplate;
+          var declaration = this._myProvider.GetSelectedElement<ICSharpTypeDeclaration>();
+          var declaredType = declaration?.DeclaredElement;
+          if (declaredType == null) return;
 
-          using (var cookie = solution.CreateTransactionCookie(DefaultAction.Rollback, this.Text, NullProgressIndicator.Instance))
+          var settingsStore = declaration.GetSettingsStore();
+
+          var helperSettings = settingsStore.GetKey<ReSharperHelperSettings>(SettingsOptimization.OptimizeDefault);
+
+          var projectName = helperSettings.TestsProjectName;
+          if (projectName.IsNullOrEmpty())
           {
-            var declaration = this._myProvider.GetSelectedElement<ICSharpTypeDeclaration>();
-            var declaredType = declaration?.DeclaredElement;
-            if (declaredType == null) return;
-
-            var settingsStore = declaration.GetSettingsStore();
-
-            var helperSettings = settingsStore.GetKey<ReSharperHelperSettings>(SettingsOptimization.OptimizeDefault);
-
-            var projectName = helperSettings.TestsProjectName;
-            if (projectName.IsNullOrEmpty())
-            {
-              MessageBox.ShowError($"The test project value is not configured.{Environment.NewLine}Specify project name in configuration.", "ReSharper Helpers");
-              return;
-            }
-
-            var project = solution.GetProjectsByName(projectName).FirstOrDefault();
-            if (project == null)
-            {
-              MessageBox.ShowError($"Unable to find '{projectName}' project. Ensure project name is correct", "ReSharper Helpers");
-              return;
-            }
-
-            var originalNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject(), declaredType.GetContainingNamespace().QualifiedName);
-            var testFolderLocation = originalNamespaceParts.Aggregate(project.Location, (current, part) => current.Combine(part));
-
-            testNamespace = StringUtil.MakeFQName(project.GetDefaultNamespace(), StringUtil.MakeFQName(originalNamespaceParts));
-
-            testFolder = project.GetOrCreateProjectFolder(testFolderLocation, cookie);
-            if (testFolder == null) return;
-
-            testClassName = MakeTestClassName(declaredType.ShortName);
-            testFileName = testClassName + ".cs";
-
-            testFileTemplate = StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
-
-            cookie.Commit(NullProgressIndicator.Instance);
+            MessageBox.ShowError($"The test project value is not configured.{Environment.NewLine}Specify project name in configuration.", "ReSharper Helpers");
+            return;
           }
 
-          if (testFileTemplate != null)
+          var project = solution.GetProjectsByName(projectName).FirstOrDefault();
+          if (project == null)
           {
-            FileTemplatesManager.Instance.CreateFileFromTemplate(testFileName, testFolder, testFileTemplate);
+            MessageBox.ShowError($"Unable to find '{projectName}' project. Ensure project name is correct", "ReSharper Helpers");
+            return;
           }
-          else
+
+          var originalNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject(), declaredType.GetContainingNamespace().QualifiedName);
+          var testFolderLocation = originalNamespaceParts.Aggregate(project.Location, (current, part) => current.Combine(part));
+
+          testNamespace = StringUtil.MakeFQName(project.GetDefaultNamespace(), StringUtil.MakeFQName(originalNamespaceParts));
+
+          testFolder = project.GetOrCreateProjectFolder(testFolderLocation, cookie);
+          if (testFolder == null) return;
+
+          testClassName = MakeTestClassName(declaredType.ShortName);
+          testFileName = testClassName + ".cs";
+
+          testFileTemplate = StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
+
+          cookie.Commit(NullProgressIndicator.Instance);
+        }
+
+        if (testFileTemplate != null)
+        {
+          FileTemplatesManager.Instance.CreateFileFromTemplate(testFileName, new ProjectFolderWithLocation(testFolder), testFileTemplate);
+        }
+        else
+        {
+          var newFile = AddNewItemUtil.AddFile(testFolder, testFileName);
+          int? caretPosition = -1;
+
+          solution.GetPsiServices().Transactions.Execute(this.Text, () =>
           {
-            var newFile = AddNewItemUtil.AddFile(testFolder, testFileName);
-            int? caretPosition = -1;
+            var psiSourceFile = newFile.ToSourceFile();
 
-            solution.GetPsiServices().Transactions.Execute(this.Text, () =>
-            {
-              var psiSourceFile = newFile.ToSourceFile();
+            var csharpFile = psiSourceFile?.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
+            if (csharpFile == null) return;
 
-              var csharpFile = psiSourceFile?.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
-              if (csharpFile == null) return;
+            var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
 
-              var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
+            var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testNamespace);
+            var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
 
-              var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testNamespace);
-              var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
+            var classLikeDeclaration = (IClassLikeDeclaration) elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
+            var addedTypeDeclaration = addedNs.AddTypeDeclarationAfter(classLikeDeclaration, null) as IClassDeclaration;
 
-              var classLikeDeclaration = (IClassLikeDeclaration) elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
-              var addedTypeDeclaration = addedNs.AddTypeDeclarationAfter(classLikeDeclaration, null) as IClassDeclaration;
+            caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
+          });
 
-              caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
-            });
-
-            ShowProjectFile(solution, newFile, caretPosition);
-          }
+          ShowProjectFile(solution, newFile, caretPosition);
         }
       }
     }
@@ -150,7 +148,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
-      return this.ToContextAction(HelperActionsConstants.ContextActionsAnchor, MyIcons.ContextActionIcon);
+      return this.ToContextActionIntentions(HelperActionsConstants.ContextActionsAnchor, MyIcons.ContextActionIcon);
     }
 
     public bool IsAvailable(IUserDataHolder cache)

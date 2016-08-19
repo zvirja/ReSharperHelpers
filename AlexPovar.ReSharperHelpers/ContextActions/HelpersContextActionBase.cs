@@ -11,7 +11,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   {
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
-      return this.ToContextAction(HelperActionsConstants.ContextActionsAnchor, MyIcons.ContextActionIcon);
+      return this.ToContextActionIntentions(HelperActionsConstants.ContextActionsAnchor, MyIcons.ContextActionIcon);
     }
 
     public abstract bool IsAvailable(IUserDataHolder cache);
