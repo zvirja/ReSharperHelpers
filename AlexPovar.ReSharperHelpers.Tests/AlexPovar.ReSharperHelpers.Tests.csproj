@@ -117,6 +117,10 @@
       <HintPath>..\packages\JetBrains.Platform.Lib.Microsoft.Deployment.Compression.Cab.2.0.20140304.0\lib\Microsoft.Deployment.Compression.Cab.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\JetBrains.Platform.Lib.VisualStudio.AnyVs.ShellInterop.PrivateBuild.2.0.20140304.0\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Web.XmlTransform, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
       <Private>True</Private>
@@ -305,20 +309,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ContextActions\AssertParametersNotNullActionTests.cs" />
-    <Compile Include="ContextActions\ChopInlineContextActionTests.cs" />
-    <Compile Include="ContextActions\ContainerNullabilityActionTests.cs" />
-    <Compile Include="ContextActions\CopyFullClassNameActionTests.cs" />
     <None Include="app.config" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllOrderedForNotResolved.cs.gold" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertionPositionIsCorrect.cs.gold" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\NamespaceIsImported.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertAllParametersNotNullActionTests\OrderedForNotResolved.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertAllParametersNotNullActionTests\WorksCorrectly.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\AssertionPositionIsCorrect.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\NamespaceIsImported.cs.gold" />
     <None Include="data\Intentions\ContextActions\CopyFullClassNameActionTests\FileIsNotChanged.cs" />
-    <Compile Include="ContextActions\IntroduceGetOnlyAutoPropertyActionTests.cs" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\AnnotationsAreCopied.cs.gold" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\PrivatePropertyIntroduced.cs.gold" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\PrivatePropertyIntroduced.cs" />
-    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsMergedWithOther.cs.gold" />
     <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsRemoved.cs.gold" />
     <None Include="data\QuickFixes\IntroduceGetOnlyAutoPropertyFixTests\AnnotationsAreCopied.cs" />
     <None Include="data\QuickFixes\IntroduceGetOnlyAutoPropertyFixTests\AnnotationsAreCopied.cs.gold" />
@@ -326,40 +325,32 @@
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\PublicPropertyIntroduced.cs.gold" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\Availability.cs" />
     <None Include="data\Intentions\ContextActions\IntroduceGetOnlyAutoPropertyActionTests\AnnotationsAreCopied.cs" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertStatementAndAnnotationAdded.cs.gold" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertStatementAndAnnotationAdded.cs" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\StringsAssertedCorrectly.cs.gold" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\StringsAssertedCorrectly.cs" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllWorksCorrectly.cs.gold" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllWorksCorrectly.cs" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\Availability.cs" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllAvailability.cs" />
-    <Compile Include="ContextActions\PureNotPureActionsTests.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\AssertStatementAndAnnotationAdded.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\AssertStatementAndAnnotationAdded.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\StringsAssertedCorrectly.cs.gold" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\StringsAssertedCorrectly.cs" />
+    <None Include="data\Intentions\ContextActions\AssertAllParametersNotNullActionTests\WorksCorrectly.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\Availability.cs" />
+    <None Include="data\Intentions\ContextActions\AssertAllParametersNotNullActionTests\Availability.cs" />
     <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsAdded.cs" />
     <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsAdded.cs.gold" />
     <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsRemoved.cs" />
-    <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAttributeIsMergedWithOther.cs" />
     <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\NotPureAvailability.cs" />
     <None Include="data\Intentions\ContextActions\PureNotPureActionsTests\PureAvailability.cs" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\ItemNotNullAttributeAdded.cs.gold" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\ItemNotNullAttributeAdded.cs" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\ItemCanBeNullAttributeAdded.cs" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\ItemCanBeNullAttributeAdded.cs.gold" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\AttributeMergedWithOther.cs" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\AttributeMergedWithOther.cs.gold" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\OppositeAttributeIsRemoved.cs" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\OppositeAttributeIsRemoved.cs.gold" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\AddedToProperty.cs" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\AddedToProperty.cs.gold" />
-    <None Include="data\Intentions\ContextActions\ContainerNullabilityGroupActionTests\Availability.cs" />
     <None Include="data\Intentions\ContextActions\ChopInlineContextActionTests\MethodChoppedCorrectly.cs.gold" />
     <None Include="data\Intentions\ContextActions\ChopInlineContextActionTests\MethodChoppedCorrectly.cs" />
     <None Include="data\Intentions\ContextActions\ChopInlineContextActionTests\MethodInlinedCorrectly.cs" />
     <None Include="data\Intentions\ContextActions\ChopInlineContextActionTests\MethodInlinedCorrectly.cs.gold" />
     <None Include="data\Intentions\ContextActions\ChopInlineContextActionTests\Availability.cs" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertionPositionIsCorrect.cs" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\AssertAllOrderedForNotResolved.cs" />
-    <None Include="data\Intentions\ContextActions\AssertParametersNotNullActionTests\NamespaceIsImported.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\AssertionPositionIsCorrect.cs" />
+    <None Include="data\Intentions\ContextActions\AssertAllParametersNotNullActionTests\OrderedForNotResolved.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\NamespaceIsImported.cs" />
+    <Compile Include="ContextActions\AssertAllParametersNotNullActionTests.cs" />
+    <Compile Include="ContextActions\AssertParameterNotNullActionTests.cs" />
+    <Compile Include="ContextActions\ChopInlineContextActionTests.cs" />
+    <Compile Include="ContextActions\CopyFullClassNameActionTests.cs" />
+    <Compile Include="ContextActions\IntroduceGetOnlyAutoPropertyActionTests.cs" />
+    <Compile Include="ContextActions\PureNotPureActionsTests.cs" />
     <Compile Include="PathedContextActionExecuteTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuickFixes\IntroduceGetOnlyAutoPropertyFixTests.cs" />
@@ -369,7 +360,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Intentions\ContextActions\CopyFullClassNameActionTests\FileIsNotChanged.cs.gold" />
-    <None Include="data\nuget.config" />
+    <None Include="data\nuget.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj">
@@ -420,6 +413,7 @@
     <Error Condition="!Exists('..\packages\JetBrains.Psi.Features.test.Framework.106.0.20160818.164034\build\JetBrains.Psi.Features.test.Framework.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JetBrains.Psi.Features.test.Framework.106.0.20160818.164034\build\JetBrains.Psi.Features.test.Framework.Targets'))" />
     <Error Condition="!Exists('..\packages\JetBrains.ReSharper.SDK.Internal.106.0.20160818.171542\build\JetBrains.ReSharper.SDK.Internal.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JetBrains.ReSharper.SDK.Internal.106.0.20160818.171542\build\JetBrains.ReSharper.SDK.Internal.Targets'))" />
     <Error Condition="!Exists('..\packages\JetBrains.ReSharper.SDK.Tests.2016.2.20160818.171542\build\JetBrains.ReSharper.SDK.Tests.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JetBrains.ReSharper.SDK.Tests.2016.2.20160818.171542\build\JetBrains.ReSharper.SDK.Tests.props'))" />
+    <Error Condition="!Exists('..\packages\JetBrains.Platform.VisualStudio.106.0.20160818.163532\build\JetBrains.Platform.VisualStudio.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JetBrains.Platform.VisualStudio.106.0.20160818.163532\build\JetBrains.Platform.VisualStudio.Targets'))" />
   </Target>
   <Import Project="..\packages\JetBrains.Build.Platform.Tasks.ThemedIconsPacker.2.0.20151217.1\build\JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Targets" Condition="Exists('..\packages\JetBrains.Build.Platform.Tasks.ThemedIconsPacker.2.0.20151217.1\build\JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Targets')" />
   <Import Project="..\packages\JetBrains.Platform.Interop.dotMemoryUnit.Framework.106.0.20160818.163532\build\JetBrains.Platform.Interop.dotMemoryUnit.Framework.Targets" Condition="Exists('..\packages\JetBrains.Platform.Interop.dotMemoryUnit.Framework.106.0.20160818.163532\build\JetBrains.Platform.Interop.dotMemoryUnit.Framework.Targets')" />
@@ -436,6 +430,7 @@
   <Import Project="..\packages\JetBrains.Psi.Features.UnitTesting.106.0.20160818.164034\build\JetBrains.Psi.Features.UnitTesting.Targets" Condition="Exists('..\packages\JetBrains.Psi.Features.UnitTesting.106.0.20160818.164034\build\JetBrains.Psi.Features.UnitTesting.Targets')" />
   <Import Project="..\packages\JetBrains.Psi.Features.test.Framework.106.0.20160818.164034\build\JetBrains.Psi.Features.test.Framework.Targets" Condition="Exists('..\packages\JetBrains.Psi.Features.test.Framework.106.0.20160818.164034\build\JetBrains.Psi.Features.test.Framework.Targets')" />
   <Import Project="..\packages\JetBrains.ReSharper.SDK.Internal.106.0.20160818.171542\build\JetBrains.ReSharper.SDK.Internal.Targets" Condition="Exists('..\packages\JetBrains.ReSharper.SDK.Internal.106.0.20160818.171542\build\JetBrains.ReSharper.SDK.Internal.Targets')" />
+  <Import Project="..\packages\JetBrains.Platform.VisualStudio.106.0.20160818.163532\build\JetBrains.Platform.VisualStudio.Targets" Condition="Exists('..\packages\JetBrains.Platform.VisualStudio.106.0.20160818.163532\build\JetBrains.Platform.VisualStudio.Targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

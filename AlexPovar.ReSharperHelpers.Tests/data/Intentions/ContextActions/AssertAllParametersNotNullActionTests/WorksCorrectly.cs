@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.AssertParametersNotNullActionTests
+namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.AssertAllParametersNotNullActionTests
 {
-  class AssertAllWorksCorrectly
+  class WorksCorrectly
   {
-    void TestMethod(object ar{caret:Assert:all:parameters:are:not:null}g1, int arg2, string arg3)
+    void TestMethod(object ar{caret}g1, int arg2, string arg3)
     {
     }
   }
