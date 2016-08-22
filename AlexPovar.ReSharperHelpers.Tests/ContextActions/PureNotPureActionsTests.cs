@@ -34,8 +34,6 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
   public class PureAttributeActionTests : PureActionTestBase<PureAttributeAction>
   {
     [Test] public void PureAttributeIsAdded() { this.DoNamedTest(); }
-
-    [Test] public void PureAttributeIsMergedWithOther() { this.DoNamedTest(); }
   }
 
   public class NotPureAttributeActionTests : PureActionTestBase<NotPureAttributeAction>

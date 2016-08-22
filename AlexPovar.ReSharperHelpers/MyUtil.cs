@@ -9,7 +9,7 @@ namespace AlexPovar.ReSharperHelpers
     [NotNull]
     public static IAnchor CreateGroupAnchor([NotNull] IAnchor ownerAnchor)
     {
-      return new ExecutableGroupAnchor(ownerAnchor, null, false);
+      return new SubmenuAnchor(ownerAnchor, SubmenuBehavior.Executable);
     }
 
     [NotNull]
