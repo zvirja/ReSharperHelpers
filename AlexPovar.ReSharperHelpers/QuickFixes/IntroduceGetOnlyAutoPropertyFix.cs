@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlexPovar.ReSharperHelpers.ContextActions;
+using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Daemon.UsageChecking;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
@@ -48,11 +49,11 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
     {
       var anchor = MyUtil.CreateGroupAnchor(IntentionsAnchors.QuickFixesAnchor);
 
-      var actions = this.ToQuickFixAction(anchor, MyIcons.YellowBulbIcon);
+      var createPublicFix = this.ToQuickFixIntention(anchor, MyIcons.YellowBulbIcon);
+      var createPrivateFix = this.CreateAuxiliaryFix(AccessRights.PUBLIC).ToQuickFixIntention(anchor, MyIcons.YellowBulbIcon);
 
-      actions = actions.Concat(this.CreateAuxiliaryFix(AccessRights.PUBLIC).ToQuickFixAction(anchor, MainThemedIcons.HelpersYellowBulbIcon.Id));
-
-      return actions;
+      yield return createPublicFix;
+      yield return createPrivateFix;
     }
 
     public IntroduceGetOnlyAutoPropertyFix CreateAuxiliaryFix(AccessRights rights, [CanBeNull] string textFormat = null)
@@ -158,13 +159,15 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
 
       private void CopyAnnotationAttributes([NotNull] IPropertyDeclaration propDecl)
       {
-        var annotations = propDecl.GetPsiServices().GetCodeAnnotationsCache();
+        var annotationsConfig = propDecl.GetPsiServices().GetComponent<CodeAnnotationsConfiguration>();
 
-        var annotationsAttributes = this._myParameter.GetAttributeInstances(true).Select(attr => attr.GetClrName()).Where(attrType => annotations.IsAnnotationType(attrType, attrType.ShortName));
+        var annotationsAttributes =
+          this._myParameter.GetAttributeInstances(true).Select(attr => attr.GetClrName()).Where(attrType => annotationsConfig.IsAnnotationType(attrType, attrType.ShortName));
 
         foreach (var annotationType in annotationsAttributes)
         {
           var shortName = annotationType.ShortName;
+
           AnnotationsUtil.CreateAndAddAnnotationAttribute(propDecl, shortName);
         }
       }
@@ -222,7 +225,7 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
         foreach (var statement in this.myLanguageHelper.BodyStatements(ctorDeclaration).Reverse())
         {
           var expressionStatement = statement as IExpressionStatement;
-          if (expressionStatement != null && AssertParametersNotNullAction.IsAssertStatement(expressionStatement))
+          if (expressionStatement != null && AssertParameterNotNullAction.IsAssertStatement(expressionStatement))
           {
             return statement;
           }

@@ -1,4 +1,4 @@
-﻿using AlexPovar.ReSharperHelpers.ContextActions;
+﻿using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.UI.BulbMenu;
 
@@ -9,7 +9,7 @@ namespace AlexPovar.ReSharperHelpers
     [NotNull]
     public static IAnchor CreateGroupAnchor([NotNull] IAnchor ownerAnchor)
     {
-      return new ExecutableGroupAnchor(ownerAnchor, null, false);
+      return new SubmenuAnchor(ownerAnchor, SubmenuBehavior.Executable);
     }
 
     [NotNull]

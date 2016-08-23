@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.AssertParametersNotNullActionTests
+namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.AssertAllParametersNotNullActionTests
 {
-  class AssertAllAvailability
+  class Availability
   {
     public void TestMethodA(object obj{off}arg)
     {      

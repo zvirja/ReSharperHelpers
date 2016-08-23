@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.Intentions;
@@ -10,7 +11,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   {
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
-      return this.ToContextAction(HelperActionsConstants.ContextActionsAnchor, MyIcons.ContextActionIcon);
+      return this.ToContextActionIntentions(HelperActionsConstants.ContextActionsAnchor, MyIcons.ContextActionIcon);
     }
 
     public abstract bool IsAvailable(IUserDataHolder cache);

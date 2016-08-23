@@ -22,39 +22,22 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
 
   public class PureAttributeActionAvailabilityTests : PureActionAvailabilityTestBase<PureAttributeAction>
   {
-    [Test]
-    public void Run()
-    {
-      this.DoTestFiles("PureAvailability.cs");
-    }
+    [Test] public void PureAvailability() { this.DoNamedTest(); }
   }
 
   public class NotPureAttributeActionAvailabilityTests : PureActionAvailabilityTestBase<NotPureAttributeAction>
   {
-    [Test]
-    public void Run()
-    {
-      this.DoTestFiles("NotPureAvailability.cs");
-    }
+    [Test] public void NotPureAvailability() { this.DoNamedTest(); }
   }
 
 
   public class PureAttributeActionTests : PureActionTestBase<PureAttributeAction>
   {
-    [TestCase("PureAttributeIsAdded.cs")]
-    [TestCase("PureAttributeIsMergedWithOther.cs")]
-    public void Run(string testName)
-    {
-      this.DoTestFiles(testName);
-    }
+    [Test] public void PureAttributeIsAdded() { this.DoNamedTest(); }
   }
 
   public class NotPureAttributeActionTests : PureActionTestBase<NotPureAttributeAction>
   {
-    [TestCase("PureAttributeIsRemoved.cs")]
-    public void Run(string testName)
-    {
-      this.DoTestFiles(testName);
-    }
+    [Test] public void PureAttributeIsRemoved() { this.DoNamedTest(); }
   }
 }

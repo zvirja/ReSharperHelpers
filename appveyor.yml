@@ -5,16 +5,33 @@
     only:
       - master
       - /v\d(.\d)+/
+      - /v\d(.\d)+-(\w)+/
   
   skip_non_tags: true
   
   #Don't forget to update version for DEV build too
-  version: 1.0.0.{build}
+  version: 1.1.0.{build}
   configuration: Release
   platform: Any CPU
   
+  environment:
+    SEMANTIC_BUILD_VERSION: $(APPVEYOR_BUILD_VERSION)
+    IS_PRERELASE_BUILD: false
+  
   init:
-    - ps: Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<"
+    - ps: >
+        Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<"
+        
+        $tagSuffix = [regex]::Match($env:APPVEYOR_REPO_TAG_NAME, "\d(.\d)+-(?<suffix>(\w)+)").Groups['suffix'].value
+        
+        if($tagSuffix) 
+        { 
+          $env:SEMANTIC_BUILD_VERSION = "$env:SEMANTIC_BUILD_VERSION-$tagSuffix"
+          
+          $env:IS_PRERELASE_BUILD = $true
+        }
+        
+        Write-Host "SEMANTIC VERSION: $env:SEMANTIC_BUILD_VERSION, is pre-release: $env:IS_PRERELASE_BUILD"
 
   before_build:
     - nuget restore
@@ -24,7 +41,7 @@
     verbosity: minimal
   
   after_build:
-    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %APPVEYOR_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
+    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %SEMANTIC_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release
   
   test:
     assemblies:
@@ -42,18 +59,20 @@
     
   deploy:
     -
+      tag: $(APPVEYOR_REPO_TAG_NAME)
       release: AlexPovar.ReSharperHelpers $(APPVEYOR_REPO_TAG_NAME)
       description: >
-        ### Release notes:
+        ## Release notes:
           - XXX
       provider: GitHub
       auth_token:
         secure: OzVU+dQH6Xnhe6lBhEjUsJNTfKHQCT22+khHIBi2zRMelT+UzW1rCgGunZtAlBWP
       artifact: /.*\.nupkg/
       draft: true
-      prerelease: false
+      prerelease: $(IS_PRERELASE_BUILD)
       on:
-        appveyor_repo_tag: true        # deploy on tag push only   
+        appveyor_repo_tag: true         # deploy on tag push only
+
     -
       provider: NuGet
       server: https://resharper-plugins.jetbrains.com
@@ -63,16 +82,34 @@
       artifact: /.*\.nupkg/
       on:
         appveyor_repo_tag: true
+
+######## DEVELOP BUILD ########
+- 
+  branches:
+    only:
+      - develop
+      - feature/push-prerelease-to-custom-feed
       
-######## LATEST BUILD ########
--
-  version: 1.0.0.{build}
+  skip_commits:
+    files:
+      - '*.md'
+  
+  version: 1.1.0.{build}
   configuration: Release
   platform: Any CPU
+  
+  environment:
+    SKIP_DEPLOY: false
     
   init:
-    - ps: Write-Host ">>>>>>>>> RUN LATEST BUILD <<<<<<<<<<<"
-  
+    - ps: >
+        $env:SKIP_DEPLOY = [regex]::ismatch("$env:APPVEYOR_REPO_COMMIT_MESSAGE", "\[nodeploy\]")
+        
+        Write-Host ">>>>>>>>> RUN DEVELOP BUILD. SKIP DEPLOY: $env:SKIP_DEPLOY <<<<<<<<<<<"
+        
+  cache:
+    - packages -> **\packages.config
+    
   before_build:
     - nuget restore
     
@@ -88,3 +125,21 @@
   artifacts:
     - path: '*.nupkg'
       name: LATEST package
+      
+  assembly_info:
+    patch: true
+    file: AlexPovar.ReSharperHelpers\Properties\AssemblyInfo.cs
+    assembly_version: '{version}'
+    assembly_file_version: '{version}'
+    assembly_informational_version: '{version}'
+    
+  deploy:
+    -
+      provider: NuGet
+      server: https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/package
+      api_key:
+        secure: lbUAU6S3paEy82ZkEL0prxDANjgz/LFCyXeyCKaFQ00vvD3nENf5an+nTvDakFlL
+      skip_symbols: true
+      artifact: /.*\.nupkg/
+      on:
+        SKIP_DEPLOY: false

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.ActionManagement;
 using JetBrains.Application;
 using JetBrains.Application.CommandProcessing;
@@ -14,6 +15,7 @@ using JetBrains.ReSharper.Feature.Services.Actions;
 using JetBrains.ReSharper.Feature.Services.CodeCleanup;
 using JetBrains.ReSharper.Features.Altering.CodeCleanup;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.UI.ActionsRevised;
 using JetBrains.UI.Application.Progress;
@@ -21,7 +23,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.CodeCleanup
 {
-  [Action("Cleanup modified code...", Icon = typeof (MainThemedIcons.ClearIcon))]
+  [Action("Cleanup modified code...", Icon = typeof(MainThemedIcons.ClearIcon))]
   public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
   {
     void IExecutableAction.Execute(IDataContext context, DelegateExecute nextExecute)
@@ -31,7 +33,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       {
         var collector = CodeCleanupFilesCollector.TryCreate(context);
         var actionScope = collector.GetActionScope();
-        var profile = SelectProfileDialog(collector, false);
+        var profile = SelectProfileDialog(collector, false, context);
         if (profile != null)
         {
           switch (actionScope)
@@ -79,60 +81,65 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       return false;
     }
 
-    private static void FormatFiles(CodeCleanupFilesCollector context, CodeCleanupProfile profile,
-      HashSet<FileSystemPath> filesToProcess, CleanupModificationsCounter modificationCounter)
+    protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector collector, IDataContext context)
     {
-      var solution = context.Solution;
-      var files = context.GetFiles();
+      throw new NotSupportedException();
+    }
 
-      var psiFiles = solution.GetPsiServices().Files;
-      var codeCleanup = JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup.GetInstance(solution);
+    [CopyFromOriginal]
+    private static void FormatFiles(CodeCleanupFilesCollector context, CodeCleanupProfile profile,
+      /* START_MODIFICATION */ HashSet<FileSystemPath> filesToProcess, CleanupModificationsCounter modificationCounter /* END_MODIFICATION */)
+    {
+      ISolution solution = context.Solution;
+      IList<IPsiSourceFile> files = context.GetFiles();
+      IPsiFiles psiFiles = solution.GetPsiServices().Files;
+      JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup codeCleanup = JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup.GetInstance(solution);
       try
       {
-        Shell.Instance.GetComponent<UITaskExecutor>().SingleThreaded.ExecuteTask("Cleanup MODIFIED Code", TaskCancelable.Yes,
-          delegate(IProgressIndicator progress)
+        Shell.Instance.GetComponent<UITaskExecutor>().SingleThreaded.ExecuteTask( /*START_MOD*/ "Cleanup MODIFIED Code" /*END_MOD*/, TaskCancelable.Yes, delegate(IProgressIndicator progress)
+        {
+          ICommandProcessor component = Shell.Instance.GetComponent<ICommandProcessor>();
+          SolutionDocumentTransactionManager component2 = solution.GetComponent<SolutionDocumentTransactionManager>();
+          using (component.UsingBatchTextChange("Code Cleanup"))
           {
-            using (WriteLockCookie.Create())
+            using (ITransactionCookie transactionCookie = component2.CreateTransactionCookie(DefaultAction.Commit, "Code Cleanup"))
             {
-              using (Shell.Instance.GetComponent<ICommandProcessor>().UsingBatchTextChange("Code Cleanup"))
+              try
               {
-                using (var cookie = solution.GetComponent<SolutionDocumentTransactionManager>().CreateTransactionCookie(DefaultAction.Commit, "Code Cleanup"))
+                progress.TaskName = profile.Name;
+                progress.Start(files.Count);
+                psiFiles.AssertAllDocumentAreCommitted();
+                foreach (IPsiSourceFile file in files)
                 {
-                  try
+                  InterruptableActivityCookie.CheckAndThrow(progress);
+
+                  /* START_MODIFICATION */
+                  var fileLocation = file.GetLocation();
+                  if (fileLocation.IsEmpty || !filesToProcess.Contains(fileLocation))
                   {
-                    progress.TaskName = profile.Name;
-                    progress.Start(files.Count);
-                    psiFiles.AssertAllDocumentAreCommitted();
-                    foreach (var file in files)
-                    {
-                      InterruptableActivityCookie.CheckAndThrow(progress);
-                      progress.CurrentItemText = file.DisplayName;
-
-                      var fileLocation = file.GetLocation();
-                      if (fileLocation.IsEmpty || !filesToProcess.Contains(fileLocation))
-                      {
-                        progress.Advance(1.0);
-                        continue;
-                      }
-
-                      var caret = -1;
-                      using (var indicator = new SubProgressIndicator(progress, 1.0))
-                      {
-                        codeCleanup.Run(file, DocumentRange.InvalidRange, ref caret, profile, indicator);
-                      }
-
-                      modificationCounter.Increment();
-                    }
+                    progress.Advance(1.0);
+                    continue;
                   }
-                  catch (Exception)
+
+                  modificationCounter.Increment();
+                  /* END_MODIFICATION */
+
+                  progress.CurrentItemText = file.DisplayName;
+                  int caret = -1;
+                  using (SubProgressIndicator subProgressIndicator = new SubProgressIndicator(progress, 1.0))
                   {
-                    cookie.Rollback();
-                    throw;
+                    codeCleanup.Run(file, DocumentRange.InvalidRange, ref caret, profile, subProgressIndicator);
                   }
                 }
               }
+              catch (Exception)
+              {
+                transactionCookie.Rollback();
+                throw;
+              }
             }
-          });
+          }
+        });
       }
       catch (ProcessCancelledException)
       {
@@ -175,11 +182,6 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       FormatFiles(context, profile, filesToProcess, modificationCounter);
 
       statusBarUpdater.SetText($"Cleanup Modified - Processed files: {modificationCounter.Count}");
-    }
-
-    protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector collector)
-    {
-      throw new NotSupportedException();
     }
   }
 }
