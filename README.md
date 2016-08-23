@@ -16,6 +16,7 @@ Currently, the following features are implemented:
 * `[Pure] annotation` - Quick actions to add/remove `Pure` annotation attribute.
 * `Chop/inline method` - Quick actions to chop or inline method arguments.
 * `AutoFixture: Freeze, Greedy` - Quick actions to quickly add [Frozen] or [Greedy] attributes.
+* `Create test/Go to test` - Class action to go to corresponding test file or create it. Test project name should be configured in settings.
 
 
 ### Pre-release builds
