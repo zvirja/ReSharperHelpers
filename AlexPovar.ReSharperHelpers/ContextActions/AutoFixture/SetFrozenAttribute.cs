@@ -5,10 +5,10 @@ using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
 {
   [ContextAction(Group = "C#", Name = "[AlexHelpers] Set Frozen AutoFixture attribute", Description = "Sets Frozen AutoFixture attribute.", Priority = short.MinValue)]
-  public class SetFrozenAttributeAction : AutoFixtureAttributeAction
+  public class SetFrozenAttribute : AutoFixtureAttributeActionBase
   {
-    public SetFrozenAttributeAction([NotNull] ICSharpContextActionDataProvider provider)
-      : base(provider, "Ploeh.AutoFixture.Xunit2.FrozenAttribute")
+    public SetFrozenAttribute([NotNull] ICSharpContextActionDataProvider provider)
+      : base(provider, AutoFixtureConstants.FrozenAttributeType)
     {
     }
 
