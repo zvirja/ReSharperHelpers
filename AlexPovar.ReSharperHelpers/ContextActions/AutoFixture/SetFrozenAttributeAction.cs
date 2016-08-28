@@ -15,24 +15,25 @@ using JetBrains.Util;
 namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
 {
   [ContextAction(Group = "C#", Name = "[AlexHelpers] Set Frozen AutoFixture attribute", Description = "Sets Frozen AutoFixture attribute.", Priority = short.MinValue)]
-  public class SetFrozenAttribute : AutoFixtureAttributeActionBase
+  public class SetFrozenAttributeAction : AutoFixtureAttributeActionBase
   {
-    [NotNull] private static readonly string[] MatchingFlags = new[]
-    {
-      "ExactType",
-      "DirectBaseType",
-      "ImplementedInterfaces",
-      "ParameterName",
-      "PropertyName",
-      "FieldName",
-      "MemberName"
-    };
+    [NotNull] private static readonly string[] MatchingFlags =
+      new[]
+      {
+        "ExactType",
+        "DirectBaseType",
+        "ImplementedInterfaces",
+        "ParameterName",
+        "PropertyName",
+        "FieldName",
+        "MemberName"
+      };
 
-    public SetFrozenAttribute([NotNull] ICSharpContextActionDataProvider provider) : this(provider, null)
+    public SetFrozenAttributeAction([NotNull] ICSharpContextActionDataProvider provider) : this(provider, null)
     {
     }
 
-    private SetFrozenAttribute([NotNull] ICSharpContextActionDataProvider provider, [CanBeNull] string matchingFlagName)
+    private SetFrozenAttributeAction([NotNull] ICSharpContextActionDataProvider provider, [CanBeNull] string matchingFlagName)
       : base(provider, AutoFixtureConstants.FrozenAttributeType)
     {
       this.MatchingFlagName = matchingFlagName;
@@ -64,7 +65,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
 
       foreach (var matchingFlag in MatchingFlags)
       {
-        yield return new SetFrozenAttribute(this.Provider, matchingFlag).ToHelpersContextActionIntention(anchor);
+        yield return new SetFrozenAttributeAction(this.Provider, matchingFlag).ToHelpersContextActionIntention(anchor);
       }
     }
   }

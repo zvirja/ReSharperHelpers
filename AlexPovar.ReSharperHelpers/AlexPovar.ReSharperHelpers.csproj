@@ -310,8 +310,8 @@
     <Compile Include="ContextActions\AssertAllParametersNotNullAction.cs" />
     <Compile Include="ContextActions\AssertParameterNotNullAction.cs" />
     <Compile Include="ContextActions\AutoFixture\AutoFixtureConstants.cs" />
-    <Compile Include="ContextActions\AutoFixture\RemoveGreedyAttribute.cs" />
-    <Compile Include="ContextActions\AutoFixture\RemoveFrozenAttribute.cs" />
+    <Compile Include="ContextActions\AutoFixture\RemoveGreedyAttributeAction.cs" />
+    <Compile Include="ContextActions\AutoFixture\RemoveFrozenAttributeAction.cs" />
     <Compile Include="ContextActions\CreateOrBrowseTestFileAction.cs" />
     <Compile Include="ContextActions\HelpersContextActionBase.cs" />
     <Compile Include="Helpers\AnnotationsUtil.cs" />
@@ -321,8 +321,8 @@
     <Compile Include="ContextActions\ChopInline\ChopMethodArgumentsAction.cs" />
     <Compile Include="ContextActions\CopyFullClassNameAction.cs" />
     <Compile Include="ContextActions\ChopInline\OnelineMethodArgumentsAction.cs" />
-    <Compile Include="ContextActions\AutoFixture\SetGreedyAttribute.cs" />
-    <Compile Include="ContextActions\AutoFixture\SetFrozenAttribute.cs" />
+    <Compile Include="ContextActions\AutoFixture\SetGreedyAttributeAction.cs" />
+    <Compile Include="ContextActions\AutoFixture\SetFrozenAttributeAction.cs" />
     <Compile Include="ContextActions\IntroduceGetOnlyAutoPropertyAction.cs" />
     <Compile Include="ContextActions\Pure\NotPureAttributeAction.cs" />
     <Compile Include="ContextActions\Pure\PureAttributeAction.cs" />
