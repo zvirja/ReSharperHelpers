@@ -31,7 +31,6 @@ using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
 using JetBrains.Util;
-using JetBrains.Util.Extension;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
 {
@@ -40,15 +39,24 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   {
     private const string TemplateDescription = "[AlexHelpers] TestFile";
 
-    [NotNull] private readonly ICSharpContextActionDataProvider _myProvider;
+    [NotNull] private static readonly string[] TestProjectSuffixes =
+      new[]
+        {
+          "Test",
+          "Tests",
+          "UnitTest",
+          "UnitTests"
+        }
+        .SelectMany(suffix => new[] {"", "."}.Select(delimiter => delimiter + suffix))
+        .ToArray();
+
+    [NotNull] private readonly ICSharpContextActionDataProvider _provider;
 
     public CreateOrBrowseTestFileAction([NotNull] ICSharpContextActionDataProvider provider)
     {
-      if (provider == null) throw new ArgumentNullException(nameof(provider));
+      this._provider = provider;
 
-      this._myProvider = provider;
-
-      this.IsEnabledForProject = ResolveIsEnabledForProvider(provider);
+      this.IsEnabledForProject = ResolveIsEnabledForProject(provider.Project);
     }
 
     private bool IsEnabledForProject { get; }
@@ -74,34 +82,21 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
         using (var cookie = solution.CreateTransactionCookie(DefaultAction.Rollback, this.Text, NullProgressIndicator.Instance))
         {
-          var declaration = this._myProvider.GetSelectedElement<ICSharpTypeDeclaration>();
+          var declaration = this._provider.GetSelectedElement<ICSharpTypeDeclaration>();
           var declaredType = declaration?.DeclaredElement;
           if (declaredType == null) return;
 
+
           var settingsStore = declaration.GetSettingsStore();
-
-          var helperSettings = settingsStore.GetKey<ReSharperHelperSettings>(SettingsOptimization.OptimizeDefault);
-
-          var projectName = helperSettings.TestsProjectName;
-          if (projectName.IsNullOrEmpty())
-          {
-            MessageBox.ShowError($"The test project value is not configured.{Environment.NewLine}Specify project name in configuration.", "ReSharper Helpers");
-            return;
-          }
-
-          var project = solution.GetProjectsByName(projectName).FirstOrDefault();
-          if (project == null)
-          {
-            MessageBox.ShowError($"Unable to find '{projectName}' project. Ensure project name is correct", "ReSharper Helpers");
-            return;
-          }
+          var testProject = this.ResolveTargetTestProject(declaration, solution, settingsStore);
+          if (testProject == null) return;
 
           var originalNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject(), declaredType.GetContainingNamespace().QualifiedName);
-          var testFolderLocation = originalNamespaceParts.Aggregate(project.Location, (current, part) => current.Combine(part));
+          var testFolderLocation = originalNamespaceParts.Aggregate(testProject.Location, (current, part) => current.Combine(part));
 
-          testNamespace = StringUtil.MakeFQName(project.GetDefaultNamespace(), StringUtil.MakeFQName(originalNamespaceParts));
+          testNamespace = StringUtil.MakeFQName(testProject.GetDefaultNamespace(), StringUtil.MakeFQName(originalNamespaceParts));
 
-          testFolder = project.GetOrCreateProjectFolder(testFolderLocation, cookie);
+          testFolder = testProject.GetOrCreateProjectFolder(testFolderLocation, cookie);
           if (testFolder == null) return;
 
           testClassName = MakeTestClassName(declaredType.ShortName);
@@ -156,7 +151,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       this.ExistingProjectFile = null;
       if (!this.IsEnabledForProject) return false;
 
-      var classDeclaration = this._myProvider.GetSelectedElement<ICSharpIdentifier>()?.Parent as IClassDeclaration;
+      var classDeclaration = ClassDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>());
       if (classDeclaration == null) return false;
 
       //Disable for nested classes
@@ -196,16 +191,47 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       return true;
     }
 
-    [NotNull]
+    [CanBeNull]
+    private IProject ResolveTargetTestProject([NotNull] ITreeNode contextNode, [NotNull] ISolution solution, [NotNull] IContextBoundSettingsStore settingsStore)
+    {
+      var helperSettings = settingsStore.GetKey<ReSharperHelperSettings>(SettingsOptimization.OptimizeDefault);
+
+      //Check whether we have configured value.
+      var projectName = helperSettings.TestsProjectName;
+      if (!string.IsNullOrEmpty(projectName))
+      {
+        var project = solution.GetProjectByName(projectName);
+        if (project == null)
+        {
+          MessageBox.ShowError($"Unable to find '{projectName}' project that is configured as tests project. Ensure project name is specified correctly in settings.", "ReSharper Helpers");
+          return null;
+        }
+      }
+
+      //Try to guess project name by suffix
+      var currentProjectName = contextNode.GetProject()?.Name;
+      if (currentProjectName != null)
+      {
+        var candidates = TestProjectSuffixes
+          .SelectMany(suffix => solution.GetProjectsByName(currentProjectName + suffix))
+          .WhereNotNull()
+          .ToArray();
+
+        if (candidates.Length == 1) return candidates[0];
+      }
+
+      MessageBox.ShowError($"Unable to resolve test file project for current class.{Environment.NewLine}Please specify project name in configuration.", "ReSharper Helpers");
+      return null;
+    }
+
+    [NotNull, Pure]
     private static string MakeTestClassName([NotNull] string className) => className + "Tests";
 
-    private static bool ResolveIsEnabledForProvider([NotNull] ICSharpContextActionDataProvider provider)
+    private static bool ResolveIsEnabledForProject([CanBeNull] IProject project)
     {
-      var project = provider.Project;
       if (project == null) return false;
 
-      var dataContext = project.ToDataContext();
-      var contextRange = ContextRange.Smart(dataContext);
+      var contextRange = ContextRange.Smart(project.ToDataContext());
 
       var settingsStore = Shell.Instance.GetComponent<SettingsStore>();
 
@@ -216,7 +242,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     }
 
 
-    [NotNull]
+    [NotNull, Pure]
     private static string[] TrimDefaultProjectNamespace([NotNull] IProject project, [NotNull] string classNamespace)
     {
       var namespaceParts = StringUtil.FullySplitFQName(classNamespace);
