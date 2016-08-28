@@ -57,6 +57,9 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     [CanBeNull]
     private IProjectFile ExistingProjectFile { get; set; }
 
+    [CanBeNull]
+    private IProject CachedTestProject { get; set; }
+
     public void Execute(ISolution solution, ITextControl textControl)
     {
       if (this.ExistingProjectFile != null)
@@ -81,7 +84,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
           if (declaredType == null) return;
 
           var settingsStore = declaration.GetSettingsStore();
-          var testProject = this.ResolveTargetTestProject(declaration, solution, settingsStore);
+          var testProject = this.CachedTestProject ?? this.ResolveTargetTestProject(declaration, solution, settingsStore);
           if (testProject == null) return;
 
           var classNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject().NotNull(), declaredType.GetContainingNamespace().QualifiedName);
@@ -142,6 +145,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     public bool IsAvailable(IUserDataHolder cache)
     {
       this.ExistingProjectFile = null;
+      this.CachedTestProject = null;
 
       var classDeclaration = ClassDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>());
       var declaredType = classDeclaration?.DeclaredElement;
@@ -151,7 +155,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       if (classDeclaration.GetContainingTypeDeclaration() != null) return false;
 
       //TRY RESOLVE EXISTING TEST
-      var testProject = this.ResolveTargetTestProject(classDeclaration, classDeclaration.GetSolution(), classDeclaration.GetSettingsStore());
+      var testProject = this.CachedTestProject = this.ResolveTargetTestProject(classDeclaration, classDeclaration.GetSolution(), classDeclaration.GetSettingsStore());
       if (testProject == null) return false;
 
       //Skip project if it's the same as current. This way we don't suggest to create tests in test projects.
@@ -200,13 +204,25 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         return solution.GetProjectByName(projectName);
       }
 
-      //Try to guess project name by suffix
+      //Try to guess project specific test project.
       var currentProjectName = contextNode.GetProject()?.Name;
       if (currentProjectName == null) return null;
 
       var candidates = TestProjectSuffixes
         .SelectMany(suffix => solution.GetProjectsByName(currentProjectName + suffix))
         .WhereNotNull()
+        .ToArray();
+
+      if (candidates.Length > 0)
+      {
+        if (candidates.Length == 1) return candidates[0];
+
+        return null;
+      }
+
+      //Try to guess global test project
+      candidates = solution.GetAllProjects()
+        .Where(proj => TestProjectSuffixes.Any(suffix => proj.Name.EndsWith(suffix, StringComparison.Ordinal)))
         .ToArray();
 
       if (candidates.Length == 1) return candidates[0];
