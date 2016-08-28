@@ -27,10 +27,13 @@
         <RowDefinition />
       </Grid.RowDefinitions>
 
-      <TextBlock>Tests project name:</TextBlock>
+      <TextBlock>Global tests project name:</TextBlock>
       <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding TestProjectName.Value}" />
 
-      <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource SettingDescription}">This settings is used to identify project where to create new unit tests.</TextBlock>
+      <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource SettingDescription}">
+          This settings is used to explicitly specify project where unit tests are located.<LineBreak />
+          Ensure to specify this setting in solution specific layer.
+      </TextBlock>
     </Grid>
   </StackPanel>
 </UserControl>
