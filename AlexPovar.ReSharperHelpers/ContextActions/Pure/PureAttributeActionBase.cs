@@ -25,10 +25,12 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.Pure
       this.Provider = provider;
     }
 
+    [NotNull]
     protected string PureAttributeShortName => PureAnnotationProvider.PureAttributeShortName;
 
     public override IEnumerable<IntentionAction> CreateBulbItems() => this.ToAnnotateActionIntentions();
 
+    [CanBeNull]
     protected IAttribute FindPureAttribute([NotNull] IMethodDeclaration methodDeclaration)
     {
       var pureProvider = methodDeclaration.GetPsiServices().GetCodeAnnotationsCache().GetProvider<PureAnnotationProvider>();
@@ -41,7 +43,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.Pure
     public override bool IsAvailable(IUserDataHolder cache)
     {
       var methodName = this.Provider.GetSelectedElement<ICSharpIdentifier>();
-      var methodDeclaration = methodName?.Parent as IMethodDeclaration;
+      var methodDeclaration = MethodDeclarationNavigator.GetByNameIdentifier(methodName);
 
       var declaredMethod = methodDeclaration?.DeclaredElement;
       if (declaredMethod == null) return false;
@@ -51,6 +53,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.Pure
       return this.ResolveIsAvailable(isAlreadyDeclared, declaredMethod);
     }
 
-    protected abstract bool ResolveIsAvailable(bool isAlreadyDeclared, IMethod method);
+    protected abstract bool ResolveIsAvailable(bool isAlreadyDeclared, [NotNull] IMethod method);
   }
 }

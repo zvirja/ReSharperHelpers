@@ -1,19 +1,12 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using JetBrains.Annotations;
 using JetBrains.Application.Settings;
 
 namespace AlexPovar.ReSharperHelpers.Settings
 {
-  [SettingsKey(typeof(EnvironmentSettings), "Alex Povar ReSharper Helper setting")]
+  [SettingsKey(typeof(EnvironmentSettings), "Alex Povar ReSharper Helper settings")]
   public class ReSharperHelperSettings
   {
-    [SettingsEntry("", "Tests project name")]
+    [CanBeNull, SettingsEntry("", "Tests project name")]
     public string TestsProjectName { get; set; }
-  }
-
-  public static class ReSharperHelperSettingsAccessor
-  {
-    public static readonly Expression<Func<ReSharperHelperSettings, string>>
-      TestsProjectName = settings => settings.TestsProjectName;
   }
 }

@@ -196,10 +196,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       return true;
     }
 
-    private static string MakeTestClassName(string className)
-    {
-      return className + "Tests";
-    }
+    [NotNull]
+    private static string MakeTestClassName([NotNull] string className) => className + "Tests";
 
     private static bool ResolveIsEnabledForProvider([NotNull] ICSharpContextActionDataProvider provider)
     {
@@ -239,7 +237,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       var editor = solution.GetComponent<IEditorManager>();
       var textControl = editor.OpenProjectFile(file, true);
 
-      if (caretPosition != null) textControl.Caret.MoveTo(caretPosition.Value, CaretVisualPlacement.DontScrollIfVisible);
+      if (caretPosition != null) textControl?.Caret.MoveTo(caretPosition.Value, CaretVisualPlacement.DontScrollIfVisible);
     }
   }
 }

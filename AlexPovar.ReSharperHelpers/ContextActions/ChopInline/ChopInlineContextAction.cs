@@ -16,7 +16,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
   {
     [NotNull] private readonly ICSharpContextActionDataProvider _myProvider;
 
-    public ChopInlineContextAction(ICSharpContextActionDataProvider provider)
+    public ChopInlineContextAction([NotNull] ICSharpContextActionDataProvider provider)
     {
       this._myProvider = provider;
     }

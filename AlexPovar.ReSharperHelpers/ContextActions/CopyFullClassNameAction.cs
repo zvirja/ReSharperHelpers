@@ -30,7 +30,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var classDeclaration = this._provider.GetSelectedElement<ICSharpIdentifier>()?.Parent as IClassDeclaration;
+      var classDeclaration = ClassDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>());
       var declaredClass = classDeclaration?.DeclaredElement;
 
       if (declaredClass == null) return null;
@@ -46,8 +46,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     public override bool IsAvailable(IUserDataHolder cache)
     {
-      var classDeclaration = this._provider.GetSelectedElement<ICSharpIdentifier>()?.Parent as IClassDeclaration;
-      return classDeclaration != null;
+      return ClassDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>()) != null;
     }
   }
 }
