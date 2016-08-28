@@ -27,7 +27,7 @@
         <RowDefinition />
       </Grid.RowDefinitions>
 
-      <TextBlock>Global tests project name:</TextBlock>
+      <TextBlock>Tests project name:</TextBlock>
       <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding TestProjectName.Value}" />
 
       <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource SettingDescription}">
