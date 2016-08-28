@@ -1,19 +1,27 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.UI.BulbMenu;
+using JetBrains.UI.Icons;
 
 namespace AlexPovar.ReSharperHelpers.Helpers
 {
   public static class HelpersExtensions
   {
-    [NotNull]
-    public static IntentionAction ToHelpersAnnotateAction([NotNull] this IBulbAction action, IAnchor anchor = null)
+    [NotNull, Pure]
+    public static IList<IntentionAction> ToHelpersContextActionIntentions([NotNull] this IBulbAction action, [CanBeNull] IAnchor customAnchor = null, [CanBeNull] IconId customIcon = null)
     {
-      var text = action.Text;
-      anchor = anchor ?? IntentionsAnchors.AnnotateActionsAnchor;
-      var iconId = MyIcons.EditIcon;
-      return new IntentionAction(action, text, iconId, anchor);
+      return new[]
+      {
+        action.ToHelpersContextActionIntention(customAnchor, customIcon)
+      };
+    }
+
+    [NotNull, Pure]
+    public static IntentionAction ToHelpersContextActionIntention([NotNull] this IBulbAction action, [CanBeNull] IAnchor customAnchor = null, [CanBeNull] IconId customIcon = null)
+    {
+      return action.ToContextActionIntention(customAnchor ?? HelperActionsConstants.ContextActionsAnchor, customIcon ?? MyIcons.ContextActionIcon);
     }
   }
 }

@@ -10,6 +10,8 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Impl;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Psi.Modules;
+using JetBrains.ReSharper.Psi.Util;
 using JetBrains.TextControl;
 using JetBrains.Util;
 
@@ -24,7 +26,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
     }
 
     [NotNull]
-    private ICSharpContextActionDataProvider Provider { get; }
+    protected ICSharpContextActionDataProvider Provider { get; }
 
     [NotNull]
     private IClrTypeName AttributeType { get; }
@@ -37,14 +39,13 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
       var parameter = this.Provider.GetSelectedElement<IRegularParameterDeclaration>()?.DeclaredElement;
       if (parameter == null || !parameter.IsValid()) return false;
 
-      var psiModule = this.Provider.PsiModule;
-
       //Check whether AF is present
-      this.ResolvedAttributeType = psiModule.GetPsiServices().Symbols.GetSymbolScope(psiModule, true, true).GetTypeElementByCLRName(this.AttributeType);
+      this.ResolvedAttributeType = TypeElementUtil.GetTypeElementByClrName(this.AttributeType, this.Provider.PsiModule);
       if (this.ResolvedAttributeType == null) return false;
 
       return this.IsAvailableWithAttributeInstances(parameter.GetAttributeInstances(this.AttributeType, false));
     }
+
 
     protected virtual bool IsAvailableWithAttributeInstances([NotNull] IList<IAttributeInstance> existingAttributes)
     {
@@ -65,7 +66,14 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
         parameterDeclaration.RemoveAttribute(existingAttribute);
       }
 
-      var attribute = this.CreateAttribute(CSharpElementFactory.GetInstance(parameterDeclaration));
+
+      var psiModule = this.Provider.PsiModule;
+
+      //Try resolve again. It could happen that IsAvailable method was not invoked (e.g. for Frozen(Matching..)).
+      this.ResolvedAttributeType = this.ResolvedAttributeType ?? TypeElementUtil.GetTypeElementByClrName(this.AttributeType, this.Provider.PsiModule);
+      if (this.ResolvedAttributeType == null) return null;
+
+      var attribute = this.CreateAttribute(this.ResolvedAttributeType, CSharpElementFactory.GetInstance(parameterDeclaration), psiModule);
       if (attribute != null)
       {
         parameterDeclaration.AddAttributeBefore(attribute, null);
@@ -75,10 +83,9 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
     }
 
     [CanBeNull]
-    protected virtual IAttribute CreateAttribute([NotNull] CSharpElementFactory factory)
+    protected virtual IAttribute CreateAttribute([NotNull] ITypeElement resolvedAttributeType, [NotNull] CSharpElementFactory factory, [NotNull] IPsiModule psiModule)
     {
-      if (this.ResolvedAttributeType == null) return null;
-      return factory.CreateAttribute(this.ResolvedAttributeType);
+      return factory.CreateAttribute(resolvedAttributeType);
     }
   }
 }

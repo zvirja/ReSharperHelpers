@@ -5,6 +5,7 @@ using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
@@ -25,6 +26,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
     }
 
     //Remove existing, but don't create a new one.
-    protected override IAttribute CreateAttribute(CSharpElementFactory factory) => null;
+    protected override IAttribute CreateAttribute(ITypeElement resolvedAttributeType, CSharpElementFactory factory, IPsiModule psiModule) => null;
   }
 }

@@ -9,5 +9,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
     [NotNull] public static readonly IClrTypeName FrozenAttributeType = new ClrTypeName("Ploeh.AutoFixture.Xunit2.FrozenAttribute");
 
     [NotNull] public static readonly IClrTypeName GreedyAttributeType = new ClrTypeName("Ploeh.AutoFixture.Xunit2.GreedyAttribute");
+
+    [NotNull] public static readonly IClrTypeName MathingEnumType = new ClrTypeName("Ploeh.AutoFixture.Xunit2.Matching");
   }
 }

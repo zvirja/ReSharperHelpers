@@ -1,19 +1,15 @@
 ﻿using System.Collections.Generic;
 using AlexPovar.ReSharperHelpers.Helpers;
-using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.Intentions;
-using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
 {
-  public abstract class HelpersContextActionBase : BulbActionBase, IContextAction
+  public abstract class HelpersContextActionBase : ContextActionBase
   {
-    public IEnumerable<IntentionAction> CreateBulbItems()
+    public override IEnumerable<IntentionAction> CreateBulbItems()
     {
-      return this.ToContextActionIntentions(HelperActionsConstants.ContextActionsAnchor, MyIcons.ContextActionIcon);
+      return this.ToHelpersContextActionIntentions();
     }
-
-    public abstract bool IsAvailable(IUserDataHolder cache);
   }
 }
