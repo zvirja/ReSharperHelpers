@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AlexPovar.ReSharperHelpers.Helpers;
 using AlexPovar.ReSharperHelpers.QuickFixes;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
