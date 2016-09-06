@@ -336,6 +336,8 @@
     <Compile Include="Helpers\MyUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeCleanup\StatusBarTextUpdater.cs" />
+    <Compile Include="QuickActionsMenu\BulbJetPopupMenuComposerPatched.cs" />
+    <Compile Include="QuickActionsMenu\JetPopupMenusPatched.cs" />
     <Compile Include="QuickFixes\IntroduceGetOnlyAutoPropertyFix.cs" />
     <Compile Include="Settings\ReSharperHelperSettings.cs" />
     <Compile Include="Settings\ReSharperHelpersOptionsPage.xaml.cs">
