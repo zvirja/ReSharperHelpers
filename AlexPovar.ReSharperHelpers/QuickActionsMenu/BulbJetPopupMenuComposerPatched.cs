@@ -23,16 +23,16 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
         switch (args.KeyCode)
         {
           case Keys.Down:
-            this.MoveToNextSection(TryFindNextSection);
+            this.MoveToSection(TryFindNextSection);
             break;
 
           case Keys.Up:
-            this.MoveToNextSection(TryFindPreviousSection);
+            this.MoveToSection(TryFindPreviousSection);
             break;
         }
     }
 
-    private void MoveToNextSection([NotNull] Func<JetPopupMenuDoc, int> indexFinder)
+    private void MoveToSection([NotNull] Func<JetPopupMenuDoc, int> indexFinder)
     {
       var newIndex = indexFinder.Invoke(this.MenuDocument);
       if (newIndex != -1)
