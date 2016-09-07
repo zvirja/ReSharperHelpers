@@ -38,12 +38,12 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     [NotNull] private static readonly string[] TestProjectSuffixes =
       new[]
-      {
-        "Test",
-        "Tests",
-        "UnitTest",
-        "UnitTests"
-      }
+        {
+          "Test",
+          "Tests",
+          "UnitTest",
+          "UnitTests"
+        }
         .SelectMany(suffix => new[] {"", "."}.Select(delimiter => delimiter + suffix))
         .ToArray();
 

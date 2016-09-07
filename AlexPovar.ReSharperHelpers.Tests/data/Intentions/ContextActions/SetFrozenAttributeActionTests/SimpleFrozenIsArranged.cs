@@ -8,7 +8,7 @@ namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.SetFro
 {
   public class SimpleFrozenIsArranged
   {
-    public void TestMethod(string some{caret:1}Arg) { }
+    public void TestMethod(string some{caret:Freeze}Arg) { }
   }
 }
 
