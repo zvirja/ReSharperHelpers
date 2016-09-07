@@ -35,7 +35,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.Pure
       return !isAlreadyDeclared && this.IsRelevantForReturnTypeMethod(method);
     }
 
-    private bool IsRelevantForReturnTypeMethod(IMethod method)
+    private bool IsRelevantForReturnTypeMethod([NotNull] IMethod method)
     {
       var retType = method.ReturnType;
 

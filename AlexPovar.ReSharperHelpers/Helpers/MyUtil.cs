@@ -1,8 +1,7 @@
-﻿using AlexPovar.ReSharperHelpers.Helpers;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using JetBrains.UI.BulbMenu;
 
-namespace AlexPovar.ReSharperHelpers
+namespace AlexPovar.ReSharperHelpers.Helpers
 {
   public static class MyUtil
   {

@@ -22,18 +22,18 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
   [QuickFix]
   public class IntroduceGetOnlyAutoPropertyFix : InitializeAutoPropertyFix, IQuickFix
   {
-    private string _myPattern;
+    [CanBeNull] private string _myPattern;
 
 
-    public IntroduceGetOnlyAutoPropertyFix(UnusedParameterGlobalWarning error) : base(error)
+    public IntroduceGetOnlyAutoPropertyFix([NotNull] UnusedParameterGlobalWarning error) : base(error)
     {
     }
 
-    public IntroduceGetOnlyAutoPropertyFix(UnusedParameterLocalWarning error) : base(error)
+    public IntroduceGetOnlyAutoPropertyFix([NotNull] UnusedParameterLocalWarning error) : base(error)
     {
     }
 
-    public IntroduceGetOnlyAutoPropertyFix(IParameter parameter, AccessRights desiredVisibility) : base(parameter)
+    public IntroduceGetOnlyAutoPropertyFix([NotNull] IParameter parameter, AccessRights desiredVisibility) : base(parameter)
     {
       this.DesiredVisibility = desiredVisibility;
     }
@@ -56,6 +56,7 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
       yield return createPrivateFix;
     }
 
+    [NotNull]
     public IntroduceGetOnlyAutoPropertyFix CreateAuxiliaryFix(AccessRights rights, [CanBeNull] string textFormat = null)
     {
       return new IntroduceGetOnlyAutoPropertyFix(this.myParameter, rights)
@@ -83,24 +84,32 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
 
     public override IMemberFromParameterExec CreateExec()
     {
+      if (this._myPattern == null) throw new InvalidOperationException($"Contract violation. {nameof(this._myPattern)} == null. Should be set in {nameof(this.IsAvailableEx)}.");
+
       Predicate<ITypeMember> anchorMembersFilter = member => (member as IProperty)?.Parameters.Count == 0;
-      return new IntroduceAndInitializeReadonlyPropertyExec(this.myParameter, this._myPattern, NamedElementKinds.MethodPropertyEvent, this.DesiredVisibility,
-        anchorMembersFilter, this.myLanguageHelper);
+
+      return new IntroduceAndInitializeReadonlyPropertyExec(
+        this.myParameter,
+        this._myPattern,
+        NamedElementKinds.MethodPropertyEvent,
+        this.DesiredVisibility,
+        anchorMembersFilter,
+        this.myLanguageHelper);
     }
 
     private class IntroduceAndInitializeReadonlyPropertyExec : IMemberFromParameterExec
     {
       private readonly AccessRights _desiredAccessRights;
 
-      private readonly Predicate<ITypeMember> _myAnchorMembersFilter;
+      [NotNull] private readonly Predicate<ITypeMember> _myAnchorMembersFilter;
 
       private readonly NamedElementKinds _myKind;
 
-      private readonly IIntroduceFromParameterLanguageHelper _myLanguageHelper;
+      [NotNull] private readonly IIntroduceFromParameterLanguageHelper _myLanguageHelper;
 
-      private readonly IParameter _myParameter;
+      [NotNull] private readonly IParameter _myParameter;
 
-      private readonly string _myPattern;
+      [NotNull] private readonly string _myPattern;
 
       public IntroduceAndInitializeReadonlyPropertyExec(
         [NotNull] IParameter parameter,
@@ -127,7 +136,7 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
         new InitializeMemberExecAfterAssertions(this._myParameter, member, this._myAnchorMembersFilter, this._myLanguageHelper).Execute();
       }
 
-      private void PostProcessProperty(ITypeMember typeMember)
+      private void PostProcessProperty([NotNull] ITypeMember typeMember)
       {
         var property = typeMember as IProperty;
         var propertyDeclarations = property?.GetDeclarations();
@@ -175,8 +184,8 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
 
     private class InitializeMemberExecAfterAssertions : MemberFromParameterExec
     {
-      private readonly ITypeMember myMember;
-      private readonly IParameter myParameter;
+      [NotNull] private readonly ITypeMember _member;
+      [NotNull] private readonly IParameter _parameter;
 
       public InitializeMemberExecAfterAssertions(
         [NotNull] IParameter parameter,
@@ -185,8 +194,8 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
         [NotNull] IIntroduceFromParameterLanguageHelper languageHelper)
         : base(parameter, anchorMembersFilter, languageHelper)
       {
-        this.myParameter = parameter;
-        this.myMember = member;
+        this._parameter = parameter;
+        this._member = member;
         this.myAnchorMembersFilter = anchorMembersFilter;
         this.myLanguageHelper = languageHelper;
       }
@@ -211,13 +220,13 @@ namespace AlexPovar.ReSharperHelpers.QuickFixes
           insertBefore = assignmentMatch.ParameterDeclaration.GetTreeStartOffset() > this.myParameterDeclaration.GetTreeStartOffset();
         }
 
-        this.myLanguageHelper.AddAssignmentToBody(this.myConstructorDeclaration, anchorStatement, insertBefore, this.myParameter, this.myMember);
+        this.myLanguageHelper.AddAssignmentToBody(this.myConstructorDeclaration, anchorStatement, insertBefore, this._parameter, this._member);
       }
 
       [CanBeNull]
       private IStatement FindLastAssertionStatement()
       {
-        var ctor = this.myParameter.ContainingParametersOwner as IConstructor;
+        var ctor = this._parameter.ContainingParametersOwner as IConstructor;
         var ctorDeclaration = ctor?.GetDeclarations().First() as IFunctionDeclaration;
 
         if (ctorDeclaration == null) return null;

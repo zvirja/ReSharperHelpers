@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using AlexPovar.ReSharperHelpers.Helpers;
 using AlexPovar.ReSharperHelpers.QuickFixes;
+using JetBrains.Annotations;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
@@ -15,11 +17,12 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   [ContextAction(Group = "C#", Name = "[AlexHelpers] Create and Initialize private get-only auto-property.", Description = "Creates and Initializes private get-only auto-property.")]
   public class IntroduceGetOnlyAutoPropertyAction : InitializeActionBase, IContextAction
   {
-    public IntroduceGetOnlyAutoPropertyAction(ICSharpContextActionDataProvider dataProvider)
+    public IntroduceGetOnlyAutoPropertyAction([NotNull] ICSharpContextActionDataProvider dataProvider)
       : base(dataProvider, CSharpLanguage.Instance)
     {
     }
 
+    [CanBeNull]
     private IntroduceGetOnlyAutoPropertyFix CachedFix { get; set; }
 
     public override string Text => "[AlexHelpers] // SHOULD BE INVISIBLE";
@@ -53,7 +56,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       return this.CachedFix ?? (this.CachedFix = this.MakeQuickFix(parameter, AccessRights.PRIVATE));
     }
 
-    private IntroduceGetOnlyAutoPropertyFix MakeQuickFix(IParameter parameter, AccessRights rights)
+    [NotNull]
+    private IntroduceGetOnlyAutoPropertyFix MakeQuickFix([NotNull] IParameter parameter, AccessRights rights)
     {
       return new IntroduceGetOnlyAutoPropertyFix(parameter, rights)
       {

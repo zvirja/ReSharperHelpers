@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
@@ -18,24 +19,24 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
 {
   public abstract class ChopInlineMethodActionBase : BulbActionBase
   {
-    private readonly ICSharpParametersOwnerDeclaration _methodDeclaration;
+    [NotNull] private readonly ICSharpParametersOwnerDeclaration _methodDeclaration;
 
-    protected ChopInlineMethodActionBase(ICSharpParametersOwnerDeclaration methodDeclaration)
+    protected ChopInlineMethodActionBase([NotNull] ICSharpParametersOwnerDeclaration methodDeclaration)
     {
       this._methodDeclaration = methodDeclaration;
     }
 
-    private static bool IsLineBreak(ITreeNode node)
+    private static bool IsLineBreak([NotNull] ITreeNode node)
     {
       return node.NodeType == CSharpTokenType.NEW_LINE;
     }
 
-    private void DoCleanupLineBreaks(ICSharpParametersOwnerDeclaration methodDeclaration, IFormalParameterList parameters)
+    private void DoCleanupLineBreaks([NotNull] ICSharpParametersOwnerDeclaration methodDeclaration, [NotNull] IFormalParameterList parameters)
     {
       var nodesToRemove = new List<ITokenNode>();
 
       //Remove line breaks between parenthesis and arguments.
-      for (var node = methodDeclaration.LPar; node != methodDeclaration.RPar; node = node.GetNextToken())
+      for (var node = methodDeclaration.LPar; node != null && node != methodDeclaration.RPar; node = node.GetNextToken())
       {
         if (IsLineBreak(node))
         {
@@ -52,7 +53,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
       nodesToRemove.ForEach(LowLevelModificationUtil.DeleteChild);
     }
 
-    protected virtual void DoPutNewIndents(IFormalParameterList parameters)
+    protected virtual void DoPutNewIndents([NotNull] IFormalParameterList parameters)
     {
       LowLevelModificationUtil.AddChildBefore(parameters, CreateLineBreakToken());
 
@@ -62,6 +63,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
       }
     }
 
+    [NotNull]
     private static LeafElementBase CreateLineBreakToken()
     {
       return CSharpTokenType.NEW_LINE.CreateLeafElement();
@@ -71,7 +73,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
     {
       var methodDeclaration = this._methodDeclaration;
 
-      var parameters = methodDeclaration?.Params;
+      var parameters = methodDeclaration.Params;
       if (parameters == null) return null;
 
       using (WriteLockCookie.Create())

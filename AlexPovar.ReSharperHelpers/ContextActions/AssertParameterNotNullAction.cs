@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
@@ -32,12 +34,18 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     public override string Text => "Assert parameter is not null";
 
-    protected static IAnchor AssertAnchor { get; } = new InvisibleAnchor(new SubmenuAnchor(IntentionsAnchors.ContextActionsAnchor, SubmenuBehavior.Executable));
+    [NotNull]
+    private static IAnchor AssertAnchor { get; } = new InvisibleAnchor(new SubmenuAnchor(IntentionsAnchors.ContextActionsAnchor, SubmenuBehavior.Executable));
 
     [CanBeNull]
     private IClrTypeName CachedAssertClassTypeName { get; set; }
 
     protected override IAnchor Anchor => AssertAnchor;
+
+    public override IEnumerable<IntentionAction> CreateBulbItems()
+    {
+      return this.ToHelpersContextActionIntentions(this.Anchor);
+    }
 
     protected override ICSharpStatement FindParameterCheckAnchor<TParameterDeclaration>(
       IBlock block,

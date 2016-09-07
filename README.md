@@ -15,8 +15,10 @@ Currently, the following features are implemented:
 * `Save ctor parameter to private get-only property` - Action like `Create and initialize property`, but created property is private and get-only. Also, action copies annotations, applied to the related argument.
 * `[Pure] annotation` - Quick actions to add/remove `Pure` annotation attribute.
 * `Chop/inline method` - Quick actions to chop or inline method arguments.
-* `AutoFixture: Freeze, Greedy` - Quick actions to quickly add [Frozen] or [Greedy] attributes.
+* `AutoFixture: Freeze, Greedy` - Quick actions to quickly add [Frozen] or [Greedy] attributes for [AutoFixture xunit integration](https://github.com/AutoFixture/AutoFixture).
 * `Create test/Go to test` - Class action to go to corresponding test file or create it. Test project name should be configured in settings.
+* `Navigate to next/prev section in bulb menu` - When bulb menu is opened (e.g. after you press `Alt+Enter`), you can use `Ctrl` + `Up/Down` to navigate to next section. Useful if quick actions menu becomes really large.
+  ![Preview](doc/NavigateToNextPrevSection.gif)
 
 
 ### Pre-release builds

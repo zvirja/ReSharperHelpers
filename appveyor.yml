@@ -10,7 +10,7 @@
   skip_non_tags: true
   
   #Don't forget to update version for DEV build too
-  version: 1.1.0.{build}
+  version: 2.0.0.{build}
   configuration: Release
   platform: Any CPU
   
@@ -94,7 +94,7 @@
     files:
       - '*.md'
   
-  version: 1.1.0.{build}
+  version: 2.0.0.{build}
   configuration: Release
   platform: Any CPU
   
