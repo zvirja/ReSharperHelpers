@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
@@ -39,6 +41,11 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     private IClrTypeName CachedAssertClassTypeName { get; set; }
 
     protected override IAnchor Anchor => AssertAnchor;
+
+    public override IEnumerable<IntentionAction> CreateBulbItems()
+    {
+      return this.ToHelpersContextActionIntentions(this.Anchor);
+    }
 
     protected override ICSharpStatement FindParameterCheckAnchor<TParameterDeclaration>(
       IBlock block,
