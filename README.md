@@ -18,6 +18,7 @@ Currently, the following features are implemented:
 * `AutoFixture: Freeze, Greedy` - Quick actions to quickly add [Frozen] or [Greedy] attributes for [AutoFixture xunit integration](https://github.com/AutoFixture/AutoFixture).
 * `Create test/Go to test` - Class action to go to corresponding test file or create it. Test project name should be configured in settings.
 * `Navigate to next/prev section in bulb menu` - When bulb menu is opened (e.g. after you press `Alt+Enter`), you can use `Ctrl` + `Up/Down` to navigate to next section. Useful if quick actions menu becomes really large.
+  ![Preview](doc/NavigateToNextPrevSection.gif)
 
 
 ### Pre-release builds
