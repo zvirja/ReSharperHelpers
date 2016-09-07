@@ -18,16 +18,15 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
   public class SetFrozenAttributeAction : AutoFixtureAttributeActionBase
   {
     [NotNull] private static readonly string[] MatchingFlags =
-      new[]
-      {
-        "ExactType",
-        "DirectBaseType",
-        "ImplementedInterfaces",
-        "ParameterName",
-        "PropertyName",
-        "FieldName",
-        "MemberName"
-      };
+    {
+      "ExactType",
+      "DirectBaseType",
+      "ImplementedInterfaces",
+      "ParameterName",
+      "PropertyName",
+      "FieldName",
+      "MemberName"
+    };
 
     public SetFrozenAttributeAction([NotNull] ICSharpContextActionDataProvider provider) : this(provider, null)
     {
@@ -47,7 +46,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
     protected override IAttribute CreateAttribute(ITypeElement resolvedAttributeType, CSharpElementFactory factory, IPsiModule psiModule)
     {
       if (this.MatchingFlagName == null) return base.CreateAttribute(resolvedAttributeType, factory, psiModule);
-
 
       var enumType = TypeElementUtil.GetTypeElementByClrName(AutoFixtureConstants.MathingEnumType, psiModule) as IEnum;
       var enumValue = enumType?.EnumMembers.FirstOrDefault(f => f.ShortName == this.MatchingFlagName)?.ConstantValue;
