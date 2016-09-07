@@ -14,6 +14,15 @@
     <dependencies>
       <dependency id="Wave" version="[6.0]" />
     </dependencies>
+    <releaseNotes>
+      New features:
+        - Use Ctrl + Up/Down to navigate to next section in Alt-Enter menu.
+        - [AutoFixture] Add freeze by criteria and actions to remove attributes.
+        
+      Improvements:
+        - Improve test project detection logic. No need to configure feature now.
+        - Change options position.
+    </releaseNotes>
   </metadata>
   <files>
     <!-- Plugin -->
