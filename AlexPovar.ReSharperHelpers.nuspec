@@ -4,8 +4,8 @@
     <id>AlexPovar.ReSharperHelpers</id>
     <title>Resharper Helpers by Alex Povar</title>
     <description>Set of custom actions for ReSharper. Refer to project site for more details.</description>
-    <!-- It will be replaced by CI -->
-    <version>0.0.0.0</version>
+    <!-- It could be patched by CI, by base version is taken from here -->
+    <version>2.0.0.0</version>
     <authors>Alex Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
     <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/develop/LICENSE</licenseUrl>
