@@ -18,10 +18,9 @@
     IS_PRERELASE_BUILD: false
   
   install:
+    - ps: .\build\ResolveVersionFromNuSpec.ps1
     - ps: >
         Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<";
-        
-        .\build\ResolveVersionFromNuSpec.ps1
         
         $env:SEMANTIC_BUILD_VERSION = $env:BUILD_VERSION;
         
@@ -104,10 +103,9 @@
     SKIP_DEPLOY: false
     
   install:
+    - ps: .\build\ResolveVersionFromNuSpec.ps1
     - ps: >
-        $env:SKIP_DEPLOY = [regex]::ismatch("$env:APPVEYOR_REPO_COMMIT_MESSAGE", "\[nodeploy\]")
-        
-        .\build\ResolveVersionFromNuSpec.ps1
+        $env:SKIP_DEPLOY = [regex]::ismatch("$env:APPVEYOR_REPO_COMMIT_MESSAGE", "\[nodeploy\]")        
         
         Write-Host ">>>>>>>>> RUN DEVELOP BUILD. BUILD VERSION: $env:BUILD_VERSION SKIP DEPLOY: $env:SKIP_DEPLOY <<<<<<<<<<<"
         
