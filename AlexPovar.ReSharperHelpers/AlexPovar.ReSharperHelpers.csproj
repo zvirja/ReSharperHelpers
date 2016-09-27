@@ -331,6 +331,8 @@
     <Compile Include="Helpers\HelperActionsConstants.cs" />
     <Compile Include="CodeCleanup\GitModificationsResolver.cs" />
     <Compile Include="Helpers\HelpersExtensions.cs" />
+    <Compile Include="Helpers\ThreadStack.cs" />
+    <Compile Include="Highlighting\SuppressingHighlightingSettingsManager.cs" />
     <Compile Include="MainIcons\ThemedIcons.Main.Generated.cs" />
     <Compile Include="MyIcons.cs" />
     <Compile Include="Helpers\MyUtil.cs" />
