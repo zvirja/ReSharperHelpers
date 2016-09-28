@@ -6,6 +6,8 @@ using JetBrains.Application;
 using JetBrains.Application.Environment;
 using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
+using JetBrains.Metadata.Reader.API;
+using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel.Settings.Cache;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
@@ -17,8 +19,7 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
   [ShellComponent]
   public class SuppressingHighlightingSettingsManager : HighlightingSettingsManagerImpl, IHighlightingSettingsManager
   {
-    private const string AttributeShortNameFull = "SuppressHighlightingAttribute";
-    private const string AttributeShortNameShort = "SuppressHighlighting";
+    [NotNull] private static readonly IClrTypeName SuppressAttributeName = new ClrTypeName("System.Diagnostics.CodeAnalysis.SuppressMessageAttribute");
 
     [NotNull] private static readonly Key<ISet<string>> SuppressedHighlightingKey = new Key<ISet<string>>("ReSharperHelpers.SuppressedHighlightings");
 
@@ -63,19 +64,23 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
       return module?.GetOrCreateData(SuppressedHighlightingKey, module, ResolveSuppressedHighlightingsByAssemblyAttributes);
     }
 
-    private static bool IsValidAttributeShortName([NotNull] string shortAttributeName)
+    private static bool IsValidAttributeInstance([NotNull] IAttributeInstance instance)
     {
-      return shortAttributeName == AttributeShortNameShort || shortAttributeName == AttributeShortNameFull;
+      if (instance.PositionParameterCount != 2) return false;
+
+      var categoryParam = instance.PositionParameter(0);
+      if (!categoryParam.IsConstant || !categoryParam.ConstantValue.IsString() || (string)categoryParam.ConstantValue.Value != "ReSharper") return false;
+
+      var idParam = instance.PositionParameter(1);
+      return idParam.IsConstant && idParam.ConstantValue.IsString();
     }
 
     [NotNull]
     private static ISet<string> ResolveSuppressedHighlightingsByAssemblyAttributes([NotNull] IPsiModule module)
     {
-      return module.GetPsiServices().Symbols.GetModuleAttributes(module).GetAttributeInstances(false)
-        .Where(inst => IsValidAttributeShortName(inst.GetClrName().ShortName) && inst.PositionParameterCount == 1)
-        .Select(inst => inst.PositionParameter(0))
-        .Where(p => p.IsConstant && p.ConstantValue.IsString())
-        .Select(p => (string)p.ConstantValue.Value)
+      return module.GetPsiServices().Symbols.GetModuleAttributes(module).GetAttributeInstances(SuppressAttributeName, false)
+        .Where(IsValidAttributeInstance)
+        .Select(inst => (string)inst.PositionParameter(1).ConstantValue.Value)
         .ToSet();
     }
   }
