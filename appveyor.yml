@@ -22,6 +22,8 @@
     - ps: >
         Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<";
         
+        $env:BUILD_VERSION = $env:BUILD_VERSION.Substring(0, $env:BUILD_VERSION.lastIndexOf('.'));
+        
         $env:SEMANTIC_BUILD_VERSION = $env:BUILD_VERSION;
         
         $tagSuffix = [regex]::Match($env:APPVEYOR_REPO_TAG_NAME, "\d(.\d)+-(?<suffix>(\w)+)").Groups['suffix'].value
@@ -32,6 +34,8 @@
           
           $env:IS_PRERELASE_BUILD = $true
         }
+        
+        
         
         Write-Host "BUILD VERSION: $env:BUILD_VERSION SEMANTIC VERSION: $env:SEMANTIC_BUILD_VERSION, PRE-RELEASE: $env:IS_PRERELASE_BUILD"
     
