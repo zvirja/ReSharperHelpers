@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace AlexPovar.ReSharperHelpers.Helpers
 {
@@ -9,9 +10,9 @@ namespace AlexPovar.ReSharperHelpers.Helpers
   /// </summary>
   public static class ThreadStack<TElementType>
   {
-    [ThreadStatic] private static Stack<TElementType> _stack;
+    [CanBeNull, ThreadStatic] private static Stack<TElementType> _stack;
 
-    private static readonly IDisposable DisposableCleaner = new StackCleaner();
+    [NotNull] private static readonly IDisposable DisposableCleaner = new StackCleaner();
 
     /// <summary>
     ///   Get the latest pushed data (context data) or default (null).
@@ -58,6 +59,7 @@ namespace AlexPovar.ReSharperHelpers.Helpers
     ///   Sets the context while the returned disposable is alive.
     ///   Wrap return value in using() context to ensure value is always popped.
     /// </summary>
+    [NotNull]
     public static IDisposable EnterScope(TElementType value)
     {
       PushValue(value);
