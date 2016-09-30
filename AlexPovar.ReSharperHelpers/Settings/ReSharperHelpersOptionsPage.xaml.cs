@@ -3,7 +3,6 @@ using JetBrains.DataFlow;
 using JetBrains.ReSharper.Feature.Services.OptionPages.CodeEditing;
 using JetBrains.UI.CrossFramework;
 using JetBrains.UI.Options;
-using JetBrains.UI.Options.OptionPages.ToolsPages;
 
 namespace AlexPovar.ReSharperHelpers.Settings
 {

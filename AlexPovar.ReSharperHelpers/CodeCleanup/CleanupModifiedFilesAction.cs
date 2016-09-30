@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.ActionManagement;
+using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.Application.CommandProcessing;
 using JetBrains.Application.DataContext;
@@ -31,7 +32,8 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       var solution = context.GetData(ProjectModelDataConstants.SOLUTION);
       if ((solution != null) && solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute"))
       {
-        var collector = CodeCleanupFilesCollector.TryCreate(context);
+        var collector = CodeCleanupFilesCollector.TryCreate(context).NotNull("collector != null");
+
         var actionScope = collector.GetActionScope();
         var profile = SelectProfileDialog(collector, false, context);
         if (profile != null)
@@ -87,8 +89,8 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
     }
 
     [CopyFromOriginal]
-    private static void FormatFiles(CodeCleanupFilesCollector context, CodeCleanupProfile profile,
-      /* START_MODIFICATION */ HashSet<FileSystemPath> filesToProcess, CleanupModificationsCounter modificationCounter /* END_MODIFICATION */)
+    private static void FormatFiles([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile,
+      /* START_MODIFICATION */ [NotNull] HashSet<FileSystemPath> filesToProcess, [NotNull] CleanupModificationsCounter modificationCounter /* END_MODIFICATION */)
     {
       ISolution solution = context.Solution;
       IList<IPsiSourceFile> files = context.GetFiles();
@@ -146,7 +148,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       }
     }
 
-    private void RunFilesFormat(CodeCleanupFilesCollector context, CodeCleanupProfile profile)
+    private void RunFilesFormat([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile)
     {
       HashSet<FileSystemPath> filesToProcess;
 

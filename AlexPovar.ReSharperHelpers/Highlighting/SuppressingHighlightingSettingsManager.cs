@@ -1,0 +1,87 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using AlexPovar.ReSharperHelpers.Helpers;
+using JetBrains.Annotations;
+using JetBrains.Application;
+using JetBrains.Application.Environment;
+using JetBrains.Application.Settings;
+using JetBrains.DataFlow;
+using JetBrains.Metadata.Reader.API;
+using JetBrains.Metadata.Reader.Impl;
+using JetBrains.ProjectModel.Settings.Cache;
+using JetBrains.ReSharper.Feature.Services.Daemon;
+using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Modules;
+using JetBrains.Util;
+
+namespace AlexPovar.ReSharperHelpers.Highlighting
+{
+  [ShellComponent]
+  public class SuppressingHighlightingSettingsManager : HighlightingSettingsManagerImpl, IHighlightingSettingsManager
+  {
+    [NotNull] private static readonly IClrTypeName SuppressAttributeName = new ClrTypeName("System.Diagnostics.CodeAnalysis.SuppressMessageAttribute");
+
+    [NotNull] private static readonly Key<ISet<string>> SuppressedHighlightingKey = new Key<ISet<string>>("ReSharperHelpers.SuppressedHighlightings");
+
+    [NotNull] private static readonly ConfigurableSeverityItem DisabledItem = new ConfigurableSeverityItem(null, null, null, null, null, Severity.DO_NOT_SHOW, false, false, null);
+
+    public SuppressingHighlightingSettingsManager(
+      [NotNull] Lifetime lifetime,
+      [NotNull] ShellPartCatalogSet partsCatalogSet,
+      [NotNull] ILanguages allLanguages,
+      [NotNull] ISettingsStore settingsStore,
+      [NotNull] IEnumerable<ICustomConfigurableSeverityItemProvider> customConfigurableSeverityItemProviders,
+      [NotNull] SettingsCacheManager cacheManger)
+      : base(lifetime, partsCatalogSet, allLanguages, settingsStore, customConfigurableSeverityItemProviders, cacheManger)
+    {
+    }
+
+    public new Severity GetSeverity(IHighlighting highlighting, IPsiSourceFile sourceFile)
+    {
+      using (ThreadStack<IPsiModule>.EnterScope(sourceFile?.PsiModule))
+      {
+        return base.GetSeverity(highlighting, sourceFile);
+      }
+    }
+
+    public override ConfigurableSeverityItem GetSeverityItem(string id)
+    {
+      var file = ThreadStack<IPsiModule>.Current;
+      var disabledHighlightingsForProject = GetSuppressedHighlightingSet(file);
+
+      if (disabledHighlightingsForProject?.Contains(id) == true)
+      {
+        return DisabledItem;
+      }
+
+      return base.GetSeverityItem(id);
+    }
+
+
+    [CanBeNull]
+    private static ISet<string> GetSuppressedHighlightingSet([CanBeNull] IPsiModule module)
+    {
+      return module?.GetOrCreateData(SuppressedHighlightingKey, module, ResolveSuppressedHighlightingsByAssemblyAttributes);
+    }
+
+    private static bool IsValidAttributeInstance([NotNull] IAttributeInstance instance)
+    {
+      if (instance.PositionParameterCount != 2) return false;
+
+      var categoryParam = instance.PositionParameter(0);
+      if (!categoryParam.IsConstant || !categoryParam.ConstantValue.IsString() || (string)categoryParam.ConstantValue.Value != "ReSharper") return false;
+
+      var idParam = instance.PositionParameter(1);
+      return idParam.IsConstant && idParam.ConstantValue.IsString();
+    }
+
+    [NotNull]
+    private static ISet<string> ResolveSuppressedHighlightingsByAssemblyAttributes([NotNull] IPsiModule module)
+    {
+      return module.GetPsiServices().Symbols.GetModuleAttributes(module).GetAttributeInstances(SuppressAttributeName, false)
+        .Where(IsValidAttributeInstance)
+        .Select(inst => (string)inst.PositionParameter(1).ConstantValue.Value)
+        .ToSet();
+    }
+  }
+}
