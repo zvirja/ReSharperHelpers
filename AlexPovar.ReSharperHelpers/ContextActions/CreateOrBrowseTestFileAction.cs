@@ -9,6 +9,7 @@ using JetBrains.Application.Settings;
 using JetBrains.DocumentManagers.impl;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.IDE;
+using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
@@ -35,6 +36,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   public class CreateOrBrowseTestFileAction : IBulbAction, IContextAction
   {
     private const string TemplateDescription = "[AlexHelpers] TestFile";
+
+    [NotNull] private static readonly ClrTypeName AssemblyMetadataAttributeName = new ClrTypeName("System.Reflection.AssemblyMetadataAttribute");
 
     [NotNull] private static readonly string[] TestProjectSuffixes =
       new[]
@@ -124,7 +127,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
             var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testNamespace);
             var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
 
-            var classLikeDeclaration = (IClassLikeDeclaration) elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
+            var classLikeDeclaration = (IClassLikeDeclaration)elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
             var addedTypeDeclaration = addedNs.AddTypeDeclarationAfter(classLikeDeclaration, null) as IClassDeclaration;
 
             caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
@@ -197,8 +200,20 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     {
       var helperSettings = settingsStore.GetKey<ReSharperHelperSettings>(SettingsOptimization.OptimizeDefault);
 
-      //Check whether we have configured value.
-      var projectName = helperSettings.TestsProjectName;
+
+      //Get project by assembly attribute (if present)
+      var projectName = solution.GetPsiServices().Symbols
+        .GetModuleAttributes(contextNode.GetPsiModule())
+        .GetAttributeInstances(AssemblyMetadataAttributeName, false)
+        .Select(TryExtractProjectNameFromAssemblyMetadataAttribute)
+        .FirstOrDefault(n => n != null);
+
+      //Check whether we have configured global test project.
+      if (string.IsNullOrEmpty(projectName))
+      {
+        projectName = helperSettings.TestsProjectName;
+      }
+
       if (!string.IsNullOrEmpty(projectName))
       {
         return solution.GetProjectByName(projectName);
@@ -226,6 +241,23 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         .ToArray();
 
       if (candidates.Length == 1) return candidates[0];
+
+      return null;
+    }
+
+    [CanBeNull]
+    private static string TryExtractProjectNameFromAssemblyMetadataAttribute([NotNull] IAttributeInstance attributeInstance)
+    {
+      const string testProjectKey = "ReSharperHelpers.TestProject";
+
+      if (attributeInstance.PositionParameterCount != 2) return null;
+
+      var key = attributeInstance.PositionParameter(0);
+      if (key.IsConstant && key.ConstantValue.IsString() && string.Equals((string)key.ConstantValue.Value, testProjectKey, StringComparison.Ordinal))
+      {
+        var value = attributeInstance.PositionParameter(1);
+        if (value.IsConstant && value.ConstantValue.IsString()) return (string)value.ConstantValue.Value;
+      }
 
       return null;
     }
