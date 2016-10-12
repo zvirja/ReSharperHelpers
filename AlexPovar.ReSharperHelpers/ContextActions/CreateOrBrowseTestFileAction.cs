@@ -5,7 +5,6 @@ using AlexPovar.ReSharperHelpers.Helpers;
 using AlexPovar.ReSharperHelpers.Settings;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
-using JetBrains.Application.Settings;
 using JetBrains.DocumentManagers.impl;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.IDE;
@@ -29,6 +28,7 @@ using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
 using JetBrains.Util;
+using JetBrains.Util.Extension;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
 {
@@ -87,7 +87,9 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
           if (declaredType == null) return;
 
           var settingsStore = declaration.GetSettingsStore();
-          var testProject = this.CachedTestProject ?? this.ResolveTargetTestProject(declaration, solution, settingsStore);
+          var helperSettings = ReSharperHelperSettings.GetSettings(settingsStore);
+
+          var testProject = this.CachedTestProject ?? this.ResolveTargetTestProject(declaration, solution, helperSettings);
           if (testProject == null) return;
 
           var classNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject().NotNull(), declaredType.GetContainingNamespace().QualifiedName);
@@ -98,7 +100,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
           testFolder = testProject.GetOrCreateProjectFolder(testFolderLocation, cookie);
           if (testFolder == null) return;
 
-          testClassName = MakeTestClassName(declaredType.ShortName);
+          testClassName = declaredType.ShortName + helperSettings.TestClassNameSuffix;
           testFileName = testClassName + ".cs";
 
           testFileTemplate = StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
@@ -109,32 +111,32 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         if (testFileTemplate != null)
         {
           FileTemplatesManager.Instance.CreateFileFromTemplate(testFileName, new ProjectFolderWithLocation(testFolder), testFileTemplate);
+          return;
         }
-        else
+
+        var newFile = AddNewItemUtil.AddFile(testFolder, testFileName);
+        if (newFile == null) return;
+
+        int? caretPosition = -1;
+        solution.GetPsiServices().Transactions.Execute(this.Text, () =>
         {
-          var newFile = AddNewItemUtil.AddFile(testFolder, testFileName);
-          int? caretPosition = -1;
+          var psiSourceFile = newFile.ToSourceFile();
 
-          solution.GetPsiServices().Transactions.Execute(this.Text, () =>
-          {
-            var psiSourceFile = newFile.ToSourceFile();
+          var csharpFile = psiSourceFile?.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
+          if (csharpFile == null) return;
 
-            var csharpFile = psiSourceFile?.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
-            if (csharpFile == null) return;
+          var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
 
-            var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
+          var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testNamespace);
+          var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
 
-            var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testNamespace);
-            var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
+          var classLikeDeclaration = (IClassLikeDeclaration)elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
+          var addedTypeDeclaration = addedNs.AddTypeDeclarationAfter(classLikeDeclaration, null) as IClassDeclaration;
 
-            var classLikeDeclaration = (IClassLikeDeclaration)elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
-            var addedTypeDeclaration = addedNs.AddTypeDeclarationAfter(classLikeDeclaration, null) as IClassDeclaration;
+          caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
+        });
 
-            caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
-          });
-
-          ShowProjectFile(solution, newFile, caretPosition);
-        }
+        ShowProjectFile(solution, newFile, caretPosition);
       }
     }
 
@@ -158,7 +160,9 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       if (classDeclaration.GetContainingTypeDeclaration() != null) return false;
 
       //TRY RESOLVE EXISTING TEST
-      var testProject = this.CachedTestProject = this.ResolveTargetTestProject(classDeclaration, classDeclaration.GetSolution(), classDeclaration.GetSettingsStore());
+      var helperSettings = ReSharperHelperSettings.GetSettings(classDeclaration.GetSettingsStore());
+
+      var testProject = this.CachedTestProject = this.ResolveTargetTestProject(classDeclaration, classDeclaration.GetSolution(), helperSettings);
       if (testProject == null) return false;
 
       //Skip project if it's the same as current. This way we don't suggest to create tests in test projects.
@@ -166,14 +170,23 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
       var testClassNamespaceParts = MakeTestClassNamespaceParts(classDeclaration, testProject);
       if (testClassNamespaceParts == null) return false;
+      var testNamespace = StringUtil.MakeFQName(testClassNamespaceParts);
 
-      var fullTestClassName = StringUtil.MakeFQName(StringUtil.MakeFQName(testClassNamespaceParts), MakeTestClassName(declaredType.ShortName));
+      //Resolve candidates for test classes
+      var validTestSuffixes = helperSettings.ValidTestClassNameSuffixes?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+        .Select(s => s.ToString())
+        .Concat(helperSettings.TestClassNameSuffix)
+        .Distinct();
+
+      var classTypeFqnCandidates = validTestSuffixes?.Select(suffix => StringUtil.MakeFQName(testNamespace, declaredType.ShortName + suffix));
+      if (classTypeFqnCandidates == null) return false;
 
       var symbolsService = classDeclaration.GetPsiServices().Symbols;
 
       var testClass = testProject.GetPsiModules()
-        .Select(module => symbolsService.GetSymbolScope(module, false, true).GetTypeElementByCLRName(fullTestClassName))
-        .FirstOrDefault();
+        .Select(m => symbolsService.GetSymbolScope(m, false, true))
+        .SelectMany(scope => classTypeFqnCandidates.Select(scope.GetTypeElementByCLRName))
+        .FirstNotNull();
 
       this.ExistingProjectFile = testClass?.GetSingleOrDefaultSourceFile()?.ToProjectFile();
 
@@ -196,11 +209,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     }
 
     [CanBeNull]
-    private IProject ResolveTargetTestProject([NotNull] ITreeNode contextNode, [NotNull] ISolution solution, [NotNull] IContextBoundSettingsStore settingsStore)
+    private IProject ResolveTargetTestProject([NotNull] ITreeNode contextNode, [NotNull] ISolution solution, [NotNull] ReSharperHelperSettings helperSettings)
     {
-      var helperSettings = settingsStore.GetKey<ReSharperHelperSettings>(SettingsOptimization.OptimizeDefault);
-
-
       //Get project by assembly attribute (if present)
       var projectName = solution.GetPsiServices().Symbols
         .GetModuleAttributes(contextNode.GetPsiModule())
@@ -261,9 +271,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
       return null;
     }
-
-    [NotNull, Pure]
-    private static string MakeTestClassName([NotNull] string className) => className + "Tests";
 
     [NotNull, Pure]
     private static string[] TrimDefaultProjectNamespace([NotNull] IProject project, [NotNull] string classNamespace)
