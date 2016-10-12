@@ -216,7 +216,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         .GetModuleAttributes(contextNode.GetPsiModule())
         .GetAttributeInstances(AssemblyMetadataAttributeName, false)
         .Select(TryExtractProjectNameFromAssemblyMetadataAttribute)
-        .FirstOrDefault(n => n != null);
+        .FirstNotNull();
 
       //Check whether we have configured global test project.
       if (string.IsNullOrEmpty(projectName))
