@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.Application.Environment;
@@ -23,8 +22,6 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
 
     [NotNull] private static readonly Key<ISet<string>> SuppressedHighlightingKey = new Key<ISet<string>>("ReSharperHelpers.SuppressedHighlightings");
 
-    [NotNull] private static readonly ConfigurableSeverityItem DisabledItem = new ConfigurableSeverityItem(null, null, null, null, null, Severity.DO_NOT_SHOW, false, false, null);
-
     public SuppressingHighlightingSettingsManager(
       [NotNull] Lifetime lifetime,
       [NotNull] ShellPartCatalogSet partsCatalogSet,
@@ -38,30 +35,24 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
 
     public new Severity GetSeverity(IHighlighting highlighting, IPsiSourceFile sourceFile)
     {
-      using (ThreadStack<IPsiModule>.EnterScope(sourceFile?.PsiModule))
+      var module = sourceFile?.PsiModule;
+      if (module != null)
       {
-        return base.GetSeverity(highlighting, sourceFile);
-      }
-    }
+        var configurableId = highlighting.GetConfigurableSeverityId(this.GetHighlightingAttribute(highlighting));
 
-    public override ConfigurableSeverityItem GetSeverityItem(string id)
-    {
-      var file = ThreadStack<IPsiModule>.Current;
-      var disabledHighlightingsForProject = GetSuppressedHighlightingSet(file);
-
-      if (disabledHighlightingsForProject?.Contains(id) == true)
-      {
-        return DisabledItem;
+        if (GetSuppressedHighlightingsForModule(module).Contains(configurableId))
+        {
+          return Severity.DO_NOT_SHOW;
+        }
       }
 
-      return base.GetSeverityItem(id);
+      return base.GetSeverity(highlighting, sourceFile);
     }
 
-
-    [CanBeNull]
-    private static ISet<string> GetSuppressedHighlightingSet([CanBeNull] IPsiModule module)
+    [NotNull]
+    private static ISet<string> GetSuppressedHighlightingsForModule([NotNull] IPsiModule module)
     {
-      return module?.GetOrCreateData(SuppressedHighlightingKey, module, ResolveSuppressedHighlightingsByAssemblyAttributes);
+      return module.GetOrCreateData(SuppressedHighlightingKey, module, ResolveSuppressedHighlightingsByAssemblyAttributes);
     }
 
     private static bool IsValidAttributeInstance([NotNull] IAttributeInstance instance)
