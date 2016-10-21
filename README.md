@@ -40,7 +40,7 @@ Quick actions to add/remove `[Frozen]` or `[Greedy]` attributes for [AutoFixture
 #### Create test file/Go to test file
 Quick action to go to corresponding test file or create it. Usually, test project name is detected automatically, but could be configured in plugin settings (in R# options dialog). 
 
-To specify individual test project for your projects, specify `[assembly: AssemblyMetadata("ReSharperHelpers.TestProject", "TEST_PROJECT_NAME")]` attribute. Define attribute conditionaly (e.g. `#if DEBUG .... #endif`) if you don't want to omin attributes in release assembly. Note, if condition is not satisfied, attribute is being detected by plugin.
+To specify individual test project for your projects, specify `[assembly: AssemblyMetadata("ReSharperHelpers.TestProject", "TEST_PROJECT_NAME")]` attribute. Define attribute conditionaly (e.g. `#if DEBUG .... #endif`) if you want to omit attributes in release assembly. Note, if condition is not satisfied, attribute might be not detected by plugin.
 
 #### Navigate to next/prev section in bulb menu
 When bulb menu is opened (e.g. after you press `Alt+Enter`), you can use `Ctrl` + `Up/Down` to navigate to next section. Useful if quick actions menu becomes really large.  
@@ -48,9 +48,9 @@ If section is very large, it jumps to the middle of the section before jumping t
 ![Preview](doc/NavigateToNextPrevSection.gif)
 
 #### "Build and run solution" build configuration
-Custom [R# Build Configuration](https://blog.jetbrains.com/dotnet/2015/10/15/introducing-resharper-build/) that builds solution and runs it. The difference comparing to default build configuration is that by default launch project (with all dependencies) is built rather than solution. If you have projects that you want ot be always build, they might be skipped if launch project doesn't depend on them.
+Custom [R# Build Configuration](https://blog.jetbrains.com/dotnet/2015/10/15/introducing-resharper-build/) that builds solution and runs it. The difference comparing to default build configuration (VS Startup) is that by default startup project (with all dependencies) is built rather than solution. If you have projects which you want to be always built, they might be skipped if your startup project doesn't depend on them.
 
-It might be useful when you develop a custom plugin that depends on startup project. You might want plugin to be always built and copied to main project output directory. In this scenario you:  
+It might be useful when you develop a custom plugin that depends on startup project. You might want the plugin to be always built and copied to startup project output directory. In this scenario you:  
 1. Mark plugin project as "Build always".
 2. Create and activate "Launch Solution" build configuration in `Build & Run` window.
 
