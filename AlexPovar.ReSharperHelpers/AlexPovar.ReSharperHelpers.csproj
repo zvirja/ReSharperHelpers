@@ -305,6 +305,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build\RunConfigProjectWithSolutionBulidProvider.cs" />
+    <Compile Include="Build\RunConfigProjectWithSolutionBuild.cs" />
     <Compile Include="CodeCleanup\CleanupModificationsCounter.cs" />
     <Compile Include="CodeCleanup\CleanupModifiedFilesAction.cs" />
     <Compile Include="ContextActions\AssertAllParametersNotNullAction.cs" />
