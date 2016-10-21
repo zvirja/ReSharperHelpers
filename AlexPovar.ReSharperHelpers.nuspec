@@ -5,7 +5,7 @@
     <title>Resharper Helpers</title>
     <description>Set of custom actions and tweaks for ReSharper to improve your productivity. Refer to project site for entire feature list.</description>
     <!-- It could be patched by CI, but base version is taken from here -->
-    <version>2.1.0.0</version>
+    <version>3.0.0.0</version>
     <authors>Alex Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
     <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/master/LICENSE</licenseUrl>
@@ -16,6 +16,20 @@
       <dependency id="Wave" version="[6.0]" />
     </dependencies>
     <releaseNotes>
+Version 3.0
+  The major change is that plugin has been renamed to have more friendly name.
+  
+  New features:
+    - Add "Launch Solution" build action that triggers a solution build before the startup project is run.
+      Useful, if you want to ensure that the "always build" projects are indeed always built before run.
+    - Use `[assembly: AssemblyMetadata("ReSharperHelpers.TestProject", "TEST_PROJECT_NAME")]` attribute to configure test project on project level.
+      Refer to the project site to find more detail.
+    - Allow to configure test suffix to use when a new test is created (see settings page).
+    - Allow to specify test suffixes to use when matching existing tests (see settings page).
+      
+  Improvements:
+    - Project warning suppression feature has been improved to suppress highlights even when you have solution specific settings for them. 
+    
 Version 2.1
   New features:
     - Section navigation (using Ctrl + Up/Down) now jumps in the middle of large sections.
