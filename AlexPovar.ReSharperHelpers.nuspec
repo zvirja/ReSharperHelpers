@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>AlexPovar.ReSharperHelpers</id>
-    <title>Resharper Helpers</title>
+    <title>ReSharper Helpers</title>
     <description>Set of custom actions and tweaks for ReSharper to improve your productivity. Refer to project site for entire feature list.</description>
     <!-- It could be patched by CI, but base version is taken from here -->
     <version>3.0.0.0</version>
