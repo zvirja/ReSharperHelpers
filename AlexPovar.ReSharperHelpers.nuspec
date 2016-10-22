@@ -5,7 +5,7 @@
     <title>ReSharper Helpers</title>
     <description>Set of custom actions and tweaks for ReSharper to improve your productivity. Refer to project site for entire feature list.</description>
     <!-- It could be patched by CI, but base version is taken from here -->
-    <version>3.0.0.0</version>
+    <version>3.0.1.0</version>
     <authors>Alex Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
     <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/master/LICENSE</licenseUrl>
@@ -16,6 +16,9 @@
       <dependency id="Wave" version="[6.0]" />
     </dependencies>
     <releaseNotes>
+Version 3.0.1
+  Fix capitalization typo in name.
+    
 Version 3.0
   The major change is that plugin has been renamed to have more friendly name.
   
