@@ -19,9 +19,9 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
 {
   public abstract class ChopInlineMethodActionBase : BulbActionBase
   {
-    [NotNull] private readonly ICSharpParametersOwnerDeclaration _methodDeclaration;
+    [NotNull] private readonly IMethodDeclaration _methodDeclaration;
 
-    protected ChopInlineMethodActionBase([NotNull] ICSharpParametersOwnerDeclaration methodDeclaration)
+    protected ChopInlineMethodActionBase([NotNull] IMethodDeclaration methodDeclaration)
     {
       this._methodDeclaration = methodDeclaration;
     }

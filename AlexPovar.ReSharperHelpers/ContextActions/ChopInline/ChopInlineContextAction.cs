@@ -22,7 +22,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
     }
 
     [CanBeNull]
-    private ICSharpParametersOwnerDeclaration ContextMethodDeclaration { get; set; }
+    private IMethodDeclaration ContextMethodDeclaration { get; set; }
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
@@ -40,8 +40,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
     public bool IsAvailable(IUserDataHolder cache)
     {
       var methodName = this._myProvider.GetSelectedElement<ICSharpIdentifier>();
-
-      var methodDeclaration = methodName?.Parent as ICSharpParametersOwnerDeclaration;
+      var methodDeclaration = MethodDeclarationNavigator.GetByNameIdentifier(methodName);
 
       if (methodDeclaration == null) return false;
       if (methodDeclaration.ParameterDeclarations.IsEmpty) return false;

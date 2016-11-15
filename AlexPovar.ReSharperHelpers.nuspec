@@ -13,7 +13,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>resharper helpers productivity actions plugin alex povar</tags>
     <dependencies>
-      <dependency id="Wave" version="[6.0]" />
+      <dependency id="Wave" version="[7.0,)" />
     </dependencies>
     <releaseNotes>
 Version 3.0.1
