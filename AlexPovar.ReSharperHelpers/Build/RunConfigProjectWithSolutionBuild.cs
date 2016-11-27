@@ -1,8 +1,8 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using JetBrains.DataFlow;
 using JetBrains.IDE.RunConfig;
 using JetBrains.ProjectModel;
-using JetBrains.VsIntegration.IDE.RunConfig;
 
 namespace AlexPovar.ReSharperHelpers.Build
 {
@@ -20,10 +20,15 @@ namespace AlexPovar.ReSharperHelpers.Build
       commonEditor.WholeSolutionVisibility.Value = Visibility.Collapsed;
       commonEditor.IsSpecificProjectChecked.Value = false;
 
-      var casted = commonEditor as RunConfigCommonAutomation;
-      if (casted != null)
+      //Use reflection to set field to avoid reference to VS specific stuff.
+      var projectVisibilityProp = commonEditor.GetType().GetProperty("ProjectRequiredVisibility", BindingFlags.Instance | BindingFlags.Public);
+      if (projectVisibilityProp != null)
       {
-        casted.ProjectRequiredVisibility.Value = Visibility.Collapsed;
+        var visibility = projectVisibilityProp.GetValue(commonEditor) as Property<Visibility>;
+        if (visibility != null)
+        {
+          visibility.Value = Visibility.Collapsed;
+        }
       }
 
       return null;
