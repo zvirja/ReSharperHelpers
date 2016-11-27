@@ -22,16 +22,19 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
     }
 
     [CanBeNull]
-    private IMethodDeclaration ContextMethodDeclaration { get; set; }
+    private ICSharpParametersOwnerDeclaration ParametersOwnerDeclaration { get; set; }
+
+    [CanBeNull]
+    private IFormalParameterList FormalParameterList { get; set; }
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
-      if (this.ContextMethodDeclaration == null) yield break;
+      if (this.ParametersOwnerDeclaration == null || this.FormalParameterList == null) yield break;
 
       var anchor = new SubmenuAnchor(HelperActionsConstants.ContextActionsAnchor, SubmenuBehavior.Executable);
 
-      var chopAction = new ChopMethodArgumentsAction(this.ContextMethodDeclaration).ToContextActionIntention(anchor, MyIcons.ContextActionIcon);
-      var oneLineAction = new OnelineMethodArgumentsAction(this.ContextMethodDeclaration).ToContextActionIntention(anchor, MyIcons.ContextActionIcon);
+      var chopAction = new ChopMethodArgumentsAction(this.ParametersOwnerDeclaration, this.FormalParameterList).ToContextActionIntention(anchor, MyIcons.ContextActionIcon);
+      var oneLineAction = new OnelineMethodArgumentsAction(this.ParametersOwnerDeclaration, this.FormalParameterList).ToContextActionIntention(anchor, MyIcons.ContextActionIcon);
 
       yield return chopAction;
       yield return oneLineAction;
@@ -40,12 +43,26 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
     public bool IsAvailable(IUserDataHolder cache)
     {
       var methodName = this._myProvider.GetSelectedElement<ICSharpIdentifier>();
+
       var methodDeclaration = MethodDeclarationNavigator.GetByNameIdentifier(methodName);
 
-      if (methodDeclaration == null) return false;
-      if (methodDeclaration.ParameterDeclarations.IsEmpty) return false;
+      ICSharpParametersOwnerDeclaration paramsOwnerDeclaration = methodDeclaration;
+      IFormalParameterList paramsList = methodDeclaration?.Params;
 
-      this.ContextMethodDeclaration = methodDeclaration;
+      //If unable to resolve by method declaration, try to resolve for ctor.
+      if (paramsOwnerDeclaration == null)
+      {
+        var constructorDeclaration = ConstructorDeclarationNavigator.GetByName(methodName);
+        paramsOwnerDeclaration = constructorDeclaration;
+        paramsList = constructorDeclaration?.Params;
+      }
+
+      if (paramsOwnerDeclaration == null) return false;
+      if (paramsOwnerDeclaration.ParameterDeclarations.IsEmpty) return false;
+
+      this.ParametersOwnerDeclaration = paramsOwnerDeclaration;
+      this.FormalParameterList = paramsList;
+
       return true;
     }
   }

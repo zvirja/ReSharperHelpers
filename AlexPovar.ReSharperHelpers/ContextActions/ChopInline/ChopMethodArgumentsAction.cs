@@ -5,10 +5,11 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
 {
   public class ChopMethodArgumentsAction : ChopInlineMethodActionBase
   {
-    public ChopMethodArgumentsAction([NotNull] IMethodDeclaration methodDeclaration)
-      : base(methodDeclaration)
+    public ChopMethodArgumentsAction([NotNull] ICSharpParametersOwnerDeclaration parametersOwnerDeclaration, [NotNull] IFormalParameterList paramList)
+      : base(parametersOwnerDeclaration, paramList)
     {
     }
+
 
     public override string Text => "Chop method arguments";
   }

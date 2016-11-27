@@ -1,5 +1,6 @@
 ﻿using JetBrains.Application;
 using JetBrains.IDE.RunConfig;
+using JetBrains.UI.Icons;
 
 namespace AlexPovar.ReSharperHelpers.Build
 {
@@ -10,7 +11,7 @@ namespace AlexPovar.ReSharperHelpers.Build
 
     public override string Type => "launch solution";
 
-    /*public override IconId IconId => RunConfigThemedIcons.RunConfigProject.Id;*/
+    public override IconId IconId => MainThemedIcons.HelpersContextAction.Id;
 
     public override IRunConfig CreateNew()
     {
