@@ -15,6 +15,7 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
       this.MenuView = menuView;
     }
 
+    [NotNull]
     private JetPopupMenuView MenuView { get; }
 
     public static void ConfigureMenuView([NotNull] JetPopupMenuView menuView)

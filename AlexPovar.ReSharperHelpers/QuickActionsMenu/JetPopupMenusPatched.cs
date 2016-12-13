@@ -48,7 +48,7 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
 
         JetPopupMenuDoc document = menu.Document;
         IJetPopupMenuOverlordView overlordView = this.CreateView(viewLifetimeDefinition, menu, parentView);
-        document.ItemsContainer.IncomingExpand.Advise(lifeShow, delegate(JetPopupMenuItem item) { this.CreateSubmenu(lifeShow, menu, overlordView, item); });
+        document?.ItemsContainer.IncomingExpand.Advise(lifeShow, delegate(JetPopupMenuItem item) { this.CreateSubmenu(lifeShow, menu, overlordView, item); });
         overlordView.Show(isModal);
         return;
       }
@@ -59,7 +59,8 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
       }
     }
 
-    private IJetPopupMenuOverlordView CreateView(LifetimeDefinition defShowView, JetPopupMenu menu, IJetPopupMenuOverlordView parentView = null)
+    [NotNull]
+    private IJetPopupMenuOverlordView CreateView([NotNull] LifetimeDefinition defShowView, [NotNull] JetPopupMenu menu, [CanBeNull] IJetPopupMenuOverlordView parentView = null)
     {
       var view = this._createViewInvoker.Invoke(this, defShowView, menu, parentView);
 
@@ -72,6 +73,6 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
       return view;
     }
 
-    private delegate IJetPopupMenuOverlordView CreateViewInvokerDelegate(JetPopupMenus @this, LifetimeDefinition defShowView, JetPopupMenu menu, IJetPopupMenuOverlordView parentView);
+    private delegate IJetPopupMenuOverlordView CreateViewInvokerDelegate([NotNull] JetPopupMenus @this, [NotNull] LifetimeDefinition defShowView, [NotNull] JetPopupMenu menu, [CanBeNull] IJetPopupMenuOverlordView parentView);
   }
 }
