@@ -22,11 +22,6 @@ Note, you might need to reload solution and re-analyze files to apply changes.
 Quick action for method argument to insert assertion statement. Allows to assert all nullable argument using `Assert all` action.
 If annotation attributes are available and relevalt for argument, they are arranged.
 
-#### Save ctor parameter to private get-only property
-Quick action like `Create and initialize property`, but created property is private and get-only. Also, action copies annotations, applied to the related argument.
-
-It's recommended to be used after `Assert parameter not null` action which arranges nullability attributes.
-
 #### [Pure] annotation
 Quick actions to add/remove `Pure` annotation attribute.
 
