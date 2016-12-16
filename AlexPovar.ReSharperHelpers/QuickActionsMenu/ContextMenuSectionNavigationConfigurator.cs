@@ -1,20 +1,30 @@
 ﻿using System;
 using System.Windows.Forms;
 using JetBrains.Annotations;
-using JetBrains.DataFlow;
-using JetBrains.UI.Controls.JetPopupMenu.Impl;
 using JetBrains.UI.PopupMenu.Impl;
 
 namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
 {
-  public class BulbJetPopupMenuComposerPatched : BulbJetPopupMenuComposer
+  public class ContextMenuSectionNavigationConfigurator
   {
     private const int MiddleJumpThreshold = 6;
 
-    public override void InitUiPart(LifetimeDefinition viewLifetimeDefinition)
-    {
-      base.InitUiPart(viewLifetimeDefinition);
 
+    private ContextMenuSectionNavigationConfigurator([NotNull] JetPopupMenuView menuView)
+    {
+      this.MenuView = menuView;
+    }
+
+    [NotNull]
+    private JetPopupMenuView MenuView { get; }
+
+    public static void ConfigureMenuView([NotNull] JetPopupMenuView menuView)
+    {
+      new ContextMenuSectionNavigationConfigurator(menuView).Configure();
+    }
+
+    private void Configure()
+    {
       this.MenuView.KeyDown += this.MenuViewOnKeyDown;
     }
 
@@ -35,10 +45,11 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
 
     private void MoveToSection([NotNull] Func<JetPopupMenuDoc, int> indexFinder)
     {
-      var newIndex = indexFinder.Invoke(this.MenuDocument);
+      var doc = this.MenuView.Document;
+      var newIndex = indexFinder.Invoke(doc);
       if (newIndex != -1)
       {
-        this.MenuDocument.SelectedIndex.Value = newIndex;
+        doc.SelectedIndex.Value = newIndex;
       }
     }
 

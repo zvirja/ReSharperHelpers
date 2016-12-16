@@ -19,11 +19,13 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
 {
   public abstract class ChopInlineMethodActionBase : BulbActionBase
   {
-    [NotNull] private readonly ICSharpParametersOwnerDeclaration _methodDeclaration;
+    [NotNull] private readonly ICSharpParametersOwnerDeclaration _parametersOwnerDeclaration;
+    [NotNull] private readonly IFormalParameterList _paramList;
 
-    protected ChopInlineMethodActionBase([NotNull] ICSharpParametersOwnerDeclaration methodDeclaration)
+    protected ChopInlineMethodActionBase([NotNull] ICSharpParametersOwnerDeclaration parametersOwnerDeclaration, [NotNull] IFormalParameterList paramList)
     {
-      this._methodDeclaration = methodDeclaration;
+      this._parametersOwnerDeclaration = parametersOwnerDeclaration;
+      this._paramList = paramList;
     }
 
     private static bool IsLineBreak([NotNull] ITreeNode node)
@@ -31,12 +33,12 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
       return node.NodeType == CSharpTokenType.NEW_LINE;
     }
 
-    private void DoCleanupLineBreaks([NotNull] ICSharpParametersOwnerDeclaration methodDeclaration, [NotNull] IFormalParameterList parameters)
+    private void DoCleanupLineBreaks([NotNull] ICSharpParametersOwnerDeclaration parametersOwnerDeclaration, [NotNull] IFormalParameterList parameters)
     {
       var nodesToRemove = new List<ITokenNode>();
 
       //Remove line breaks between parenthesis and arguments.
-      for (var node = methodDeclaration.LPar; node != null && node != methodDeclaration.RPar; node = node.GetNextToken())
+      for (var node = parametersOwnerDeclaration.LPar; node != null && node != parametersOwnerDeclaration.RPar; node = node.GetNextToken())
       {
         if (IsLineBreak(node))
         {
@@ -71,18 +73,13 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var methodDeclaration = this._methodDeclaration;
-
-      var parameters = methodDeclaration.Params;
-      if (parameters == null) return null;
-
       using (WriteLockCookie.Create())
       {
-        this.DoCleanupLineBreaks(methodDeclaration, parameters);
-        this.DoPutNewIndents(parameters);
+        this.DoCleanupLineBreaks(this._parametersOwnerDeclaration, this._paramList);
+        this.DoPutNewIndents(this._paramList);
       }
 
-      parameters.Language.LanguageService()?.CodeFormatter?.Format(parameters, CodeFormatProfile.DEFAULT, progress);
+      this._paramList.Language.LanguageService()?.CodeFormatter?.Format(this._paramList, CodeFormatProfile.DEFAULT, progress);
       return null;
     }
   }

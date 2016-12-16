@@ -114,7 +114,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
           return;
         }
 
-        var newFile = AddNewItemUtil.AddFile(testFolder, testFileName);
+        var newFile = AddNewItemHelper.AddFile(testFolder, testFileName);
         if (newFile == null) return;
 
         int? caretPosition = -1;

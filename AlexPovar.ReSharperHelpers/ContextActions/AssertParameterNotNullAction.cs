@@ -83,11 +83,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         .FirstOrDefault(statement => IsAssertionInvocation(statement, parameterToMatch));
     }
 
-    public static bool IsAssertStatement([NotNull] IExpressionStatement statement)
-    {
-      return IsAssertionInvocation(statement, null);
-    }
-
     protected override ICSharpStatement CreateCheckStatement(CSharpElementFactory factory, IParameter parameter, ICSharpExpression parameterName, IPsiModule psiModule)
     {
       if (this.AssertionAlreadyPresent) return null;

@@ -90,7 +90,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
 
     [CopyFromOriginal]
     private static void FormatFiles([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile,
-      /* START_MODIFICATION */ [NotNull] HashSet<FileSystemPath> filesToProcess, [NotNull] CleanupModificationsCounter modificationCounter /* END_MODIFICATION */)
+      /* START_MODIFICATION */ [NotNull] HashSet<FileSystemPath> filesToProcess /* END_MODIFICATION */)
     {
       ISolution solution = context.Solution;
       IList<IPsiSourceFile> files = context.GetFiles();
@@ -123,7 +123,6 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
                     continue;
                   }
 
-                  modificationCounter.Increment();
                   /* END_MODIFICATION */
 
                   progress.CurrentItemText = file.DisplayName;
@@ -171,19 +170,12 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
         return;
       }
 
-      var statusBarUpdater = Shell.Instance.GetComponent<StatusBarTextUpdater>();
-
       if (filesToProcess.Count == 0)
       {
-        statusBarUpdater.SetText("Cleanup Modified - No modified files");
         return;
       }
 
-      var modificationCounter = new CleanupModificationsCounter();
-
-      FormatFiles(context, profile, filesToProcess, modificationCounter);
-
-      statusBarUpdater.SetText($"Cleanup Modified - Processed files: {modificationCounter.Count}");
+      FormatFiles(context, profile, filesToProcess);
     }
   }
 }

@@ -8,7 +8,7 @@ namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.ChopIn
 {
   class MethodInlinedCorrectly
   {
-    void Mixed {caret:One:line:method:arguments}Arguments(      int arg1,
+    void Mixed{caret:One:line:method:arguments}Arguments(      int arg1,
  byte arg2,            string arg3,
          long arg4      )
     {
