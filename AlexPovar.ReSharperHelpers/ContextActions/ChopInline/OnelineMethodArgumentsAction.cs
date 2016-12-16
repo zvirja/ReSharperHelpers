@@ -5,17 +5,17 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
 {
   public class OnelineMethodArgumentsAction : ChopInlineMethodActionBase
   {
-    public OnelineMethodArgumentsAction([NotNull] ICSharpParametersOwnerDeclaration methodDeclaration)
-      : base(methodDeclaration)
+    public OnelineMethodArgumentsAction([NotNull] ICSharpParametersOwnerDeclaration parametersOwnerDeclaration, [NotNull] IFormalParameterList paramList)
+      : base(parametersOwnerDeclaration, paramList)
     {
-      //see ChangeModifierAction 
     }
+
 
     public override string Text => "One line method arguments";
 
     protected override void DoPutNewIndents(IFormalParameterList parameters)
     {
-      //Do nothing
+      //Indentations were removed. We just not put the new ones.
     }
   }
 }
