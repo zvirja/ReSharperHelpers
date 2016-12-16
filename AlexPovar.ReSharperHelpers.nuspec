@@ -5,7 +5,7 @@
     <title>ReSharper Helpers</title>
     <description>Set of custom actions and tweaks for ReSharper to improve your productivity. Refer to project site for entire feature list.</description>
     <!-- It could be patched by CI, but base version is taken from here -->
-    <version>3.0.1.0</version>
+    <version>4.0.0.0</version>
     <authors>Alex Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
     <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/master/LICENSE</licenseUrl>
@@ -13,9 +13,20 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>resharper helpers productivity actions plugin alex povar</tags>
     <dependencies>
-      <dependency id="Wave" version="[7.0,)" />
+      <dependency id="Wave" version="[7.0]" />
     </dependencies>
     <releaseNotes>
+Version 4.0
+  Add support for R# 2016.3.
+  
+  Removed features:
+    - Save ctor parameter to private get-only property
+      Now it's a part of R#, no need to support it separately.
+      
+  Changed features:
+    - Cleanup modified files
+      Removed status bar update with number of processed items. That was done to not bind to VS specific API.
+    
 Version 3.0.1
   Fix capitalization typo in name.
     
