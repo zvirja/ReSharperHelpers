@@ -446,6 +446,7 @@
     <None Include="data\Intentions\ContextActions\RemoveFrozenAttributeActionTests\Availability.cs" />
     <None Include="data\Intentions\ContextActions\SetFrozenAttributeActionTests\Availability2.cs" />
     <None Include="data\Intentions\ContextActions\SetFrozenAttributeActionTests\Availability1.cs" />
+    <None Include="data\Intentions\ContextActions\CopyFullClassNameActionTests\InterfaceNameIsCopied.cs" />
     <Compile Include="Highlighting\FixForSuppressingHighlightingSettingsManager.cs" />
     <Compile Include="PathedContextActionExecuteTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -465,7 +466,9 @@
       <Name>AlexPovar.ReSharperHelpers</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="data\Intentions\ContextActions\CopyFullClassNameActionTests\InterfaceNameIsCopied.cs.gold" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

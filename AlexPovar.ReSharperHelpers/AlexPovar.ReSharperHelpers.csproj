@@ -463,7 +463,7 @@
   </Target>
   -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <HostFullIdentifier>ReSharperPlatformVs14Eap</HostFullIdentifier>
+    <HostFullIdentifier>ReSharperPlatformVs14Plugins</HostFullIdentifier>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
