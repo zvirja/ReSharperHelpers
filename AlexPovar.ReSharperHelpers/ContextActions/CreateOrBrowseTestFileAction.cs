@@ -45,7 +45,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
           "Test",
           "Tests",
           "UnitTest",
-          "UnitTests"
+          "UnitTests",
+          "Tests.Unit"
         }
         .SelectMany(suffix => new[] {"", "."}.Select(delimiter => delimiter + suffix))
         .ToArray();

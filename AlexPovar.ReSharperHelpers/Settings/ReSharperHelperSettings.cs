@@ -12,7 +12,7 @@ namespace AlexPovar.ReSharperHelpers.Settings
     [CanBeNull, SettingsEntry("Tests", "Test class name suffix")]
     public string TestClassNameSuffix { get; set; }
 
-    [CanBeNull, SettingsEntry("Test", "Valid test class name suffixes")]
+    [CanBeNull, SettingsEntry("Test, Fixture", "Valid test class name suffixes")]
     public string ValidTestClassNameSuffixes { get; set; }
 
     [NotNull]
