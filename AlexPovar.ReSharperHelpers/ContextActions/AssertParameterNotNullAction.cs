@@ -9,6 +9,7 @@ using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.ReSharper.Intentions.CSharp.ContextActions;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
+using JetBrains.ReSharper.Psi.CSharp.Impl;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Resolve;
@@ -89,7 +90,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
       var assertionMethodName = parameter.Type.IsString() ? ArgumentNotNullOrEmptyAssetionMethod : ArgumentNotNullAssetionMethod;
 
-      var assertionMethod = this.FindAssertionMethod(assertionMethodName, psiModule);
+      var assertionMethod = this.FindAssertionMethod(assertionMethodName, parameter.Type, psiModule);
 
       if (assertionMethod != null)
       {
@@ -150,7 +151,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     }
 
     [CanBeNull]
-    private IMethod FindAssertionMethod([NotNull] string assertionMethodName, [NotNull] IPsiModule module)
+    private IMethod FindAssertionMethod([NotNull] string assertionMethodName, [NotNull] IExpressionType parameterType, [NotNull] IPsiModule module)
     {
       var symbolScope = module.GetPsiServices().Symbols.GetSymbolScope(module, true, true);
 
@@ -166,7 +167,10 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         if (typeDecl != null) this.CachedAssertClassTypeName = typeDecl.GetClrName();
       }
 
-      return typeDecl?.EnumerateMembers(assertionMethodName, true).OfType<IMethod>().FirstOrDefault();
+      return typeDecl?
+        .EnumerateMembers(assertionMethodName, true)
+        .OfType<IMethod>()
+        .FirstOrDefault(m => m.Parameters.Count > 1 && (m.Parameters[0].Type.IsOpenType || parameterType.IsImplicitlyConvertibleTo(m.Parameters[0].Type, module.GetTypeConversionRule())));
     }
   }
 }

@@ -447,6 +447,7 @@
     <None Include="data\Intentions\ContextActions\SetFrozenAttributeActionTests\Availability2.cs" />
     <None Include="data\Intentions\ContextActions\SetFrozenAttributeActionTests\Availability1.cs" />
     <None Include="data\Intentions\ContextActions\CopyFullClassNameActionTests\InterfaceNameIsCopied.cs" />
+    <None Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\CorrectOverloadIsSelected.cs" />
     <Compile Include="Highlighting\FixForSuppressingHighlightingSettingsManager.cs" />
     <Compile Include="PathedContextActionExecuteTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -467,6 +468,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="data\Intentions\ContextActions\AssertParameterNotNullActionTests\CorrectOverloadIsSelected.cs.gold" />
     <Content Include="data\Intentions\ContextActions\CopyFullClassNameActionTests\InterfaceNameIsCopied.cs.gold" />
   </ItemGroup>
   <Choose>

@@ -1,0 +1,20 @@
+﻿using JetBrains.Annotations;
+
+namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.AssertParametersNotNullActionTests
+{
+  public class CorrectOverloadIsSelected
+  {
+    void Method([NotNull] object ar{caret}g)
+    {
+      Assert.ArgumentNotNull(arg, nameof(arg));
+    }
+  }
+
+  public static class Assert
+  {
+    public static void ArgumentNotNull(int value, string name);
+    public static void ArgumentNotNull(string value, string name);
+    public static void ArgumentNotNull(double value, string name);
+    public static void ArgumentNotNull(object value, string name);
+  }
+}
