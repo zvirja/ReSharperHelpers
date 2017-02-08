@@ -46,6 +46,7 @@ If section is very large, it jumps to the middle of the section before jumping t
 Custom [R# Build Configuration](https://blog.jetbrains.com/dotnet/2015/10/15/introducing-resharper-build/) that builds solution and runs it. The difference comparing to default build configuration (VS Startup) is that by default startup project (with all dependencies) is built rather than solution. If you have projects which you want to be always built, they might be skipped if your startup project doesn't depend on them.
 
 It might be useful when you develop a custom plugin that depends on startup project. You might want the plugin to be always built and copied to startup project output directory. In this scenario you:  
+
 1. Mark plugin project as "Build always".
 2. Create and activate "Launch Solution" build configuration in `Build & Run` window.
 
