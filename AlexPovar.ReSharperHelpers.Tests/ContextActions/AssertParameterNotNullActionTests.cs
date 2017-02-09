@@ -6,13 +6,15 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
 {
   public class AssertParameterNotNullActionTests : PathedContextActionExecuteTestBase<AssertParameterNotNullAction>
   {
-    [Test] public void AssertionPositionIsCorrect() { this.DoNamedTest(); }
+    [Test] public void TestAssertionPositionIsCorrect() { this.DoNamedTest2(); }
 
-    [Test] public void AssertStatementAndAnnotationAdded() { this.DoNamedTest(); }
+    [Test] public void TestAssertStatementAndAnnotationAdded() { this.DoNamedTest2(); }
 
-    [Test] public void NamespaceIsImported() { this.DoNamedTest(); }
+    [Test] public void TestNamespaceIsImported() { this.DoNamedTest2(); }
 
-    [Test] public void StringsAssertedCorrectly() { this.DoNamedTest(); }
+    [Test] public void TestStringsAssertedCorrectly() { this.DoNamedTest2(); }
+
+    [Test] public void TestCorrectOverloadIsSelected() { this.DoNamedTest2(); }
   }
 
   public class AssertParametersNotNullActionAvailabilityTests : CSharpContextActionAvailabilityTestBase<AssertParameterNotNullAction>

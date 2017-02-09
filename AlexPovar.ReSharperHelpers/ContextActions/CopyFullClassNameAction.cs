@@ -4,6 +4,7 @@ using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
+using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
@@ -17,6 +18,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   {
     [NotNull] private readonly Clipboard _clipboard;
     [NotNull] private readonly ICSharpContextActionDataProvider _provider;
+    [CanBeNull] private IClassLikeDeclaration Declaration { get; set; }
 
     public CopyFullClassNameAction([NotNull] ICSharpContextActionDataProvider provider)
     {
@@ -26,17 +28,28 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       this._clipboard = Shell.Instance.GetComponent<Clipboard>().NotNull("Unable to resolve clipboard service.");
     }
 
-    public override string Text => "[Helpers] Copy full class name";
+    public override string Text
+    {
+      get
+      {
+        var type = "";
+        var declaredElement = this.Declaration?.DeclaredElement;
+        if (declaredElement != null)
+        {
+          type = DeclaredElementPresenter.Format(this.Declaration.Language, DeclaredElementPresenter.KIND_PRESENTER, declaredElement);
+        }
+
+        return $"[Helpers] Copy full {type} name";
+      }
+    }
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-      var classDeclaration = ClassDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>());
-      var declaredClass = classDeclaration?.DeclaredElement;
+      var declaredElement = this.Declaration?.DeclaredElement;
+      if (declaredElement == null) return null;
 
-      if (declaredClass == null) return null;
-
-      var typeName = declaredClass.GetClrName().FullName;
-      var moduleName = declaredClass.Module.Name;
+      var typeName = declaredElement.GetClrName().FullName;
+      var moduleName = declaredElement.Module.Name;
 
       var fullName = $"{typeName}, {moduleName}";
       this._clipboard.SetText(fullName);
@@ -46,7 +59,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     public override bool IsAvailable(IUserDataHolder cache)
     {
-      return ClassDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>()) != null;
+      this.Declaration = ClassLikeDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>());
+      return this.Declaration != null;
     }
   }
 }
