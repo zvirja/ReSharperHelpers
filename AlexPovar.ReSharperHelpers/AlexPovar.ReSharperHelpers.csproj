@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-    <AssemblyVersion>2.5.0.0</AssemblyVersion>
-    <Version>2.5.0</Version>
-    <Description>Some test package description</Description>
+    <Authors></Authors>
+    <Company>Alex Povar</Company>
+    <Description></Description>
+    <Copyright>Copyright 2017 Alex Povar</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

@@ -60,7 +60,7 @@
     
   assembly_info:
     patch: true
-    file: AlexPovar.ReSharperHelpers\Properties\AssemblyInfo.cs
+    file: AlexPovar.ReSharperHelpers.WpfUI\Properties\AssemblyInfo.cs
     assembly_version: $(BUILD_VERSION)
     assembly_file_version: $(BUILD_VERSION)
     assembly_informational_version: $(BUILD_VERSION)
@@ -112,6 +112,7 @@
     
   install:
     - ps: .\build\ResolveVersionFromNuSpec.ps1
+    - ps: .\build\PatchProjectVersions.ps1 -projectFiles "AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj"
     - ps: >
         $env:SKIP_DEPLOY = [regex]::ismatch("$env:APPVEYOR_REPO_COMMIT_MESSAGE", "\[nodeploy\]")        
         
@@ -138,7 +139,7 @@
       
   assembly_info:
     patch: true
-    file: AlexPovar.ReSharperHelpers\Properties\AssemblyInfo.cs
+    file: AlexPovar.ReSharperHelpers.WpfUI\Properties\AssemblyInfo.cs
     assembly_version: $(BUILD_VERSION)
     assembly_file_version: $(BUILD_VERSION)
     assembly_informational_version: $(BUILD_VERSION)
