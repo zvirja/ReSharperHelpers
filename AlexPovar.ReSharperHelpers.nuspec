@@ -72,7 +72,7 @@ Version 2.0
   <files>
     <!-- Plugin -->
     <file src="AlexPovar.ReSharperHelpers.dll" target="DotFiles" />
-    <file src="AlexPovar.ReSharperHelpers.WpfUI.dll" target="DotFiles" />
+    <file src="AlexPovar.ReSharperHelpers.UI.dll" target="DotFiles" />
     <file src="LibGit2Sharp.dll" target="DotFiles" />
     <file src="lib\win32\x86\git2-a5cf255.dll" target="DotFiles" />
   </files>
