@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using AlexPovar.ReSharperHelpers.WpfUI;
+using JetBrains.Annotations;
 using JetBrains.DataFlow;
 using JetBrains.ReSharper.Feature.Services.OptionPages.CodeEditing;
 using JetBrains.UI.CrossFramework;
@@ -7,15 +8,13 @@ using JetBrains.UI.Options;
 namespace AlexPovar.ReSharperHelpers.Settings
 {
   [OptionsPage(PID, "Alex Povar ReSharper Helpers", typeof(MainThemedIcons.HelpersContextAction), ParentId = CodeEditingPage.PID)]
-  public partial class ReSharperHelpersOptionsPage : IOptionsPage
+  public class ReSharperHelpersOptionsPage : ReSharperHelpersOptionsPageMarkup, IOptionsPage
   {
     // ReSharper disable once InconsistentNaming
     private const string PID = "AlexPovarReSharperHelpers";
 
     public ReSharperHelpersOptionsPage([NotNull] Lifetime lifetime, [NotNull] OptionsSettingsSmartContext settingsSmart)
     {
-      this.InitializeComponent();
-
       this.DataContext = new ReSharperHelpersOptionsPageViewModel(lifetime, settingsSmart);
 
       this.Control = this;

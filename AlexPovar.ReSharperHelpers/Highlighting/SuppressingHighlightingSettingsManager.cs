@@ -69,7 +69,9 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
     [NotNull]
     private static ISet<string> ResolveSuppressedHighlightingsByAssemblyAttributes([NotNull] IPsiModule module)
     {
-      return module.GetPsiServices().Symbols.GetModuleAttributes(module).GetAttributeInstances(SuppressAttributeName, false)
+      return module.GetPsiServices()
+        .Symbols.GetModuleAttributes(module)
+        .GetAttributeInstances(SuppressAttributeName, false)
         .Where(IsValidAttributeInstance)
         .Select(inst => (string)inst.PositionParameter(1).ConstantValue.Value)
         .ToSet();

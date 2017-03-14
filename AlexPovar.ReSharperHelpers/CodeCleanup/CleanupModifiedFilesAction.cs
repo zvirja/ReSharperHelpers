@@ -89,8 +89,8 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
     }
 
     [CopyFromOriginal]
-    private static void FormatFiles([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile,
-      /* START_MODIFICATION */ [NotNull] HashSet<FileSystemPath> filesToProcess /* END_MODIFICATION */)
+    private static void FormatFiles([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile, /* START_MODIFICATION */
+      [NotNull] HashSet<FileSystemPath> filesToProcess /* END_MODIFICATION */)
     {
       ISolution solution = context.Solution;
       IList<IPsiSourceFile> files = context.GetFiles();
@@ -98,49 +98,50 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup codeCleanup = JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup.GetInstance(solution);
       try
       {
-        Shell.Instance.GetComponent<UITaskExecutor>().SingleThreaded.ExecuteTask( /*START_MOD*/ "Cleanup MODIFIED Code" /*END_MOD*/, TaskCancelable.Yes, delegate(IProgressIndicator progress)
-        {
-          ICommandProcessor component = Shell.Instance.GetComponent<ICommandProcessor>();
-          SolutionDocumentTransactionManager component2 = solution.GetComponent<SolutionDocumentTransactionManager>();
-          using (component.UsingBatchTextChange("Code Cleanup"))
+        Shell.Instance.GetComponent<UITaskExecutor>()
+          .SingleThreaded.ExecuteTask( /*START_MOD*/ "Cleanup MODIFIED Code" /*END_MOD*/, TaskCancelable.Yes, delegate(IProgressIndicator progress)
           {
-            using (ITransactionCookie transactionCookie = component2.CreateTransactionCookie(DefaultAction.Commit, "Code Cleanup"))
+            ICommandProcessor component = Shell.Instance.GetComponent<ICommandProcessor>();
+            SolutionDocumentTransactionManager component2 = solution.GetComponent<SolutionDocumentTransactionManager>();
+            using (component.UsingBatchTextChange("Code Cleanup"))
             {
-              try
+              using (ITransactionCookie transactionCookie = component2.CreateTransactionCookie(DefaultAction.Commit, "Code Cleanup"))
               {
-                progress.TaskName = profile.Name;
-                progress.Start(files.Count);
-                psiFiles.AssertAllDocumentAreCommitted();
-                foreach (IPsiSourceFile file in files)
+                try
                 {
-                  InterruptableActivityCookie.CheckAndThrow(progress);
-
-                  /* START_MODIFICATION */
-                  var fileLocation = file.GetLocation();
-                  if (fileLocation.IsEmpty || !filesToProcess.Contains(fileLocation))
+                  progress.TaskName = profile.Name;
+                  progress.Start(files.Count);
+                  psiFiles.AssertAllDocumentAreCommitted();
+                  foreach (IPsiSourceFile file in files)
                   {
-                    progress.Advance(1.0);
-                    continue;
-                  }
+                    InterruptableActivityCookie.CheckAndThrow(progress);
 
-                  /* END_MODIFICATION */
+                    /* START_MODIFICATION */
+                    var fileLocation = file.GetLocation();
+                    if (fileLocation.IsEmpty || !filesToProcess.Contains(fileLocation))
+                    {
+                      progress.Advance(1.0);
+                      continue;
+                    }
 
-                  progress.CurrentItemText = file.DisplayName;
-                  int caret = -1;
-                  using (SubProgressIndicator subProgressIndicator = new SubProgressIndicator(progress, 1.0))
-                  {
-                    codeCleanup.Run(file, DocumentRange.InvalidRange, ref caret, profile, subProgressIndicator);
+                    /* END_MODIFICATION */
+
+                    progress.CurrentItemText = file.DisplayName;
+                    int caret = -1;
+                    using (SubProgressIndicator subProgressIndicator = new SubProgressIndicator(progress, 1.0))
+                    {
+                      codeCleanup.Run(file, DocumentRange.InvalidRange, ref caret, profile, subProgressIndicator);
+                    }
                   }
                 }
-              }
-              catch (Exception)
-              {
-                transactionCookie.Rollback();
-                throw;
+                catch (Exception)
+                {
+                  transactionCookie.Rollback();
+                  throw;
+                }
               }
             }
-          }
-        });
+          });
       }
       catch (ProcessCancelledException)
       {

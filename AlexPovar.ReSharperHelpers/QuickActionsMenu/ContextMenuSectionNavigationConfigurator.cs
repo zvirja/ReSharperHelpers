@@ -128,7 +128,7 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
 
     private static int GetMiddleJumpIndex(int sectionStartInd, int sectionEndInd)
     {
-      return GetSectionLength(sectionStartInd, sectionEndInd)/2 + sectionStartInd;
+      return GetSectionLength(sectionStartInd, sectionEndInd) / 2 + sectionStartInd;
     }
 
     private static int GetSectionLength(int sectionStartInd, int sectionEndInd)

@@ -1,36 +1,32 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexPovar.ReSharperHelpers", "AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj", "{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexPovar.ReSharperHelpers", "AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj", "{C851F234-453D-415F-A395-C55A455BA830}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexPovar.ReSharperHelpers.Tests", "AlexPovar.ReSharperHelpers.Tests\AlexPovar.ReSharperHelpers.Tests.csproj", "{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexPovar.ReSharperHelpers.WpfUI", "AlexPovar.ReSharperHelpers.WpfUI\AlexPovar.ReSharperHelpers.WpfUI.csproj", "{035CF401-3B1E-4795-B221-8381215D5999}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexPovar.ReSharperHelpers.Tests", "AlexPovar.ReSharperHelpers.Tests\AlexPovar.ReSharperHelpers.Tests.csproj", "{2D7B1F9F-4C71-4920-B5E7-432EC5742081}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Debug|x86.ActiveCfg = Debug|x86
-		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Debug|x86.Build.0 = Debug|x86
-		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Release|x86.ActiveCfg = Release|x86
-		{D68E87C7-A508-4F81-8A01-1E31FCE2BF80}.Release|x86.Build.0 = Release|x86
-		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Debug|x86.ActiveCfg = Debug|x86
-		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Debug|x86.Build.0 = Debug|x86
-		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Release|x86.ActiveCfg = Release|x86
-		{0B51CA2F-6AA8-4430-ABE0-D755F86404D0}.Release|x86.Build.0 = Release|x86
+		{C851F234-453D-415F-A395-C55A455BA830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C851F234-453D-415F-A395-C55A455BA830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C851F234-453D-415F-A395-C55A455BA830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C851F234-453D-415F-A395-C55A455BA830}.Release|Any CPU.Build.0 = Release|Any CPU
+		{035CF401-3B1E-4795-B221-8381215D5999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{035CF401-3B1E-4795-B221-8381215D5999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{035CF401-3B1E-4795-B221-8381215D5999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{035CF401-3B1E-4795-B221-8381215D5999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D7B1F9F-4C71-4920-B5E7-432EC5742081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D7B1F9F-4C71-4920-B5E7-432EC5742081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D7B1F9F-4C71-4920-B5E7-432EC5742081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D7B1F9F-4C71-4920-B5E7-432EC5742081}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,11 +10,11 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
 
     [Test] public void TestAssertStatementAndAnnotationAdded() { this.DoNamedTest2(); }
 
+    [Test] public void TestCorrectOverloadIsSelected() { this.DoNamedTest2(); }
+
     [Test] public void TestNamespaceIsImported() { this.DoNamedTest2(); }
 
     [Test] public void TestStringsAssertedCorrectly() { this.DoNamedTest2(); }
-
-    [Test] public void TestCorrectOverloadIsSelected() { this.DoNamedTest2(); }
   }
 
   public class AssertParametersNotNullActionAvailabilityTests : CSharpContextActionAvailabilityTestBase<AssertParameterNotNullAction>

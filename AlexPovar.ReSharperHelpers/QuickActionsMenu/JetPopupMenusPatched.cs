@@ -36,7 +36,8 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
       this._createViewInvoker = (CreateViewInvokerDelegate)Delegate.CreateDelegate(typeof(CreateViewInvokerDelegate), methodInfo);
     }
 
-    protected override void ShowCore(JetPopupMenu menu, JetPopupMenu.ShowWhen when, bool isModal, LifetimeDefinition lifetimeDefinitionOptional = null, IJetPopupMenuOverlordView parentView = null)
+    protected override void ShowCore(JetPopupMenu menu, JetPopupMenu.ShowWhen when, bool isModal, LifetimeDefinition lifetimeDefinitionOptional = null,
+      IJetPopupMenuOverlordView parentView = null)
     {
       JetPopupMenuStatusAndViewDef jetPopupMenuStatusAndViewDef = menu.InitViewModel(when, lifetimeDefinitionOptional);
       JetPopupMenuStatus status = jetPopupMenuStatusAndViewDef.Status;
@@ -73,6 +74,7 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
       return view;
     }
 
-    private delegate IJetPopupMenuOverlordView CreateViewInvokerDelegate([NotNull] JetPopupMenus @this, [NotNull] LifetimeDefinition defShowView, [NotNull] JetPopupMenu menu, [CanBeNull] IJetPopupMenuOverlordView parentView);
+    private delegate IJetPopupMenuOverlordView CreateViewInvokerDelegate([NotNull] JetPopupMenus @this, [NotNull] LifetimeDefinition defShowView, [NotNull] JetPopupMenu menu,
+      [CanBeNull] IJetPopupMenuOverlordView parentView);
   }
 }

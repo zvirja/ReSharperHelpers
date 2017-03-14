@@ -119,23 +119,24 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         if (newFile == null) return;
 
         int? caretPosition = -1;
-        solution.GetPsiServices().Transactions.Execute(this.Text, () =>
-        {
-          var psiSourceFile = newFile.ToSourceFile();
+        solution.GetPsiServices()
+          .Transactions.Execute(this.Text, () =>
+          {
+            var psiSourceFile = newFile.ToSourceFile();
 
-          var csharpFile = psiSourceFile?.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
-          if (csharpFile == null) return;
+            var csharpFile = psiSourceFile?.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
+            if (csharpFile == null) return;
 
-          var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
+            var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
 
-          var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testNamespace);
-          var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
+            var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testNamespace);
+            var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
 
-          var classLikeDeclaration = (IClassLikeDeclaration)elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
-          var addedTypeDeclaration = addedNs.AddTypeDeclarationAfter(classLikeDeclaration, null) as IClassDeclaration;
+            var classLikeDeclaration = (IClassLikeDeclaration)elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
+            var addedTypeDeclaration = addedNs.AddTypeDeclarationAfter(classLikeDeclaration, null) as IClassDeclaration;
 
-          caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
-        });
+            caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
+          });
 
         ShowProjectFile(solution, newFile, caretPosition);
       }
@@ -213,7 +214,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     private IProject ResolveTargetTestProject([NotNull] ITreeNode contextNode, [NotNull] ISolution solution, [NotNull] ReSharperHelperSettings helperSettings)
     {
       //Get project by assembly attribute (if present)
-      var projectName = solution.GetPsiServices().Symbols
+      var projectName = solution.GetPsiServices()
+        .Symbols
         .GetModuleAttributes(contextNode.GetPsiModule())
         .GetAttributeInstances(AssemblyMetadataAttributeName, false)
         .Select(TryExtractProjectNameFromAssemblyMetadataAttribute)

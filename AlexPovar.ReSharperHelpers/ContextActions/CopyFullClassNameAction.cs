@@ -18,7 +18,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   {
     [NotNull] private readonly Clipboard _clipboard;
     [NotNull] private readonly ICSharpContextActionDataProvider _provider;
-    [CanBeNull] private IClassLikeDeclaration Declaration { get; set; }
 
     public CopyFullClassNameAction([NotNull] ICSharpContextActionDataProvider provider)
     {
@@ -27,6 +26,9 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       this._provider = provider;
       this._clipboard = Shell.Instance.GetComponent<Clipboard>().NotNull("Unable to resolve clipboard service.");
     }
+
+    [CanBeNull]
+    private IClassLikeDeclaration Declaration { get; set; }
 
     public override string Text
     {
