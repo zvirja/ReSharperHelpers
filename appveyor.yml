@@ -106,6 +106,8 @@
     BUILD_VERSION: '0.0.0.0'
     SKIP_DEPLOY: false
     
+  image: Visual Studio 2017
+    
   install:
     - ps: .\build\ResolveVersionFromNuSpec.ps1
     - ps: >
