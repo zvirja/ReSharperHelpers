@@ -12,11 +12,11 @@ foreach($proj in $projectFiles) {
     $propertyGroup = $xml.Project.PropertyGroup
 
     # Patch versions
-    $propertyGroup.Version = $buildVersion
-    $propertyGroup.AssemblyVersion = $buildVersion
-    $propertyGroup.FileVersion = $buildVersion
+    if($propertyGroup.Version) { $propertyGroup.Version = $buildVersion }
+    if($propertyGroup.AssemblyVersion) { $propertyGroup.AssemblyVersion = $buildVersion }
+    if($propertyGroup.FileVersion) { $propertyGroup.FileVersion = $buildVersion }
 
     $xml.Save($fullProjPath)
 
-    Write-Host "Patched version for project. Path: $fullProjPath, Version: $buildVersion"
+    Write-Host "Patched version for core project. `nPath: $fullProjPath`nVersion: $buildVersion`n" -ForegroundColor "Green"
 }
