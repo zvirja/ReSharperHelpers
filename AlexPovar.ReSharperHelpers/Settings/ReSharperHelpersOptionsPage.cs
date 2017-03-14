@@ -1,4 +1,4 @@
-﻿using AlexPovar.ReSharperHelpers.WpfUI;
+﻿using AlexPovar.ReSharperHelpers.UI;
 using JetBrains.Annotations;
 using JetBrains.DataFlow;
 using JetBrains.ReSharper.Feature.Services.OptionPages.CodeEditing;

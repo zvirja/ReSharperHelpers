@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AlexPovar.ReSharperHelpers.WpfUI
+namespace AlexPovar.ReSharperHelpers.UI
 {
   /// <summary>
   ///   Interaction logic for ReSharperHelpersOptionsPage.xaml
@@ -9,7 +9,7 @@ namespace AlexPovar.ReSharperHelpers.WpfUI
   {
     public ReSharperHelpersOptionsPageMarkup()
     {
-      InitializeComponent();
+      this.InitializeComponent();
     }
   }
 }

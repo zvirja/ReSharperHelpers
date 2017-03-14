@@ -7,8 +7,8 @@
     <ProjectGuid>{035CF401-3B1E-4795-B221-8381215D5999}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AlexPovar.ReSharperHelpers.WpfUI</RootNamespace>
-    <AssemblyName>AlexPovar.ReSharperHelpers.WpfUI</AssemblyName>
+    <RootNamespace>AlexPovar.ReSharperHelpers.UI</RootNamespace>
+    <AssemblyName>AlexPovar.ReSharperHelpers.UI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

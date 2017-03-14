@@ -2,9 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-    <Authors></Authors>
     <Company>Alex Povar</Company>
-    <Description></Description>
     <Copyright>Copyright 2017 Alex Povar</Copyright>
   </PropertyGroup>
 
@@ -14,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AlexPovar.ReSharperHelpers.WpfUI\AlexPovar.ReSharperHelpers.WpfUI.csproj" />
+    <ProjectReference Include="..\AlexPovar.ReSharperHelpers.UI\AlexPovar.ReSharperHelpers.UI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
