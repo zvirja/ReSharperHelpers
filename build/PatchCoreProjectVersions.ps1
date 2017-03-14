@@ -18,5 +18,5 @@ foreach($proj in $projectFiles) {
 
     $xml.Save($fullProjPath)
 
-    Write-Host "Patched version for core project. `nPath: $fullProjPath`nVersion: $buildVersion`n" -ForegroundColor "Green"
+    Write-Host "Patched version for core project:`n    Path: $fullProjPath`n    Version: $buildVersion`n" -ForegroundColor "Green"
 }
