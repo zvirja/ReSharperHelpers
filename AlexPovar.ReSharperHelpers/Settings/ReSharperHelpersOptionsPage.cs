@@ -8,16 +8,19 @@ using JetBrains.UI.Options;
 namespace AlexPovar.ReSharperHelpers.Settings
 {
   [OptionsPage(PID, "Alex Povar ReSharper Helpers", typeof(MainThemedIcons.HelpersContextAction), ParentId = CodeEditingPage.PID)]
-  public class ReSharperHelpersOptionsPage : ReSharperHelpersOptionsPageMarkup, IOptionsPage
+  public class ReSharperHelpersOptionsPage : IOptionsPage
   {
     // ReSharper disable once InconsistentNaming
     private const string PID = "AlexPovarReSharperHelpers";
 
     public ReSharperHelpersOptionsPage([NotNull] Lifetime lifetime, [NotNull] OptionsSettingsSmartContext settingsSmart)
     {
-      this.DataContext = new ReSharperHelpersOptionsPageViewModel(lifetime, settingsSmart);
+      var control = new ReSharperHelpersOptionsPageMarkup
+      {
+        DataContext = new ReSharperHelpersOptionsPageViewModel(lifetime, settingsSmart)
+      };
 
-      this.Control = this;
+      this.Control = control;
     }
 
     public bool OnOk() => true;
