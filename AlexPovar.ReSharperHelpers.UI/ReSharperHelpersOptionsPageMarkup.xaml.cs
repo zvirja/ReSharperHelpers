@@ -1,15 +1,15 @@
 ﻿using System.Windows.Controls;
 
-namespace AlexPovar.ReSharperHelpers.WpfUI
+namespace AlexPovar.ReSharperHelpers.UI
 {
   /// <summary>
   ///   Interaction logic for ReSharperHelpersOptionsPage.xaml
   /// </summary>
-  public partial class ReSharperHelpersOptionsPageMarkup : UserControl
+  public sealed partial class ReSharperHelpersOptionsPageMarkup : UserControl
   {
     public ReSharperHelpersOptionsPageMarkup()
     {
-      InitializeComponent();
+      this.InitializeComponent();
     }
   }
 }

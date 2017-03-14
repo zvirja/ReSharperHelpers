@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("AlexPovar.ReSharperHelpers.WpfUI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("AlexPovar.ReSharperHelpers.UI")]
+[assembly: AssemblyDescription("Library with UI components for extension")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Alex Povar")]
 [assembly: AssemblyProduct("AlexPovar.ReSharperHelpers.WpfUI")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
