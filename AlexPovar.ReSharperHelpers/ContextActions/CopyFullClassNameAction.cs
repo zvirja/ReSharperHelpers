@@ -21,12 +21,10 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
     public CopyFullClassNameAction([NotNull] ICSharpContextActionDataProvider provider)
     {
-      if (provider == null) throw new ArgumentNullException(nameof(provider));
-
-      this._provider = provider;
+      this._provider = provider ?? throw new ArgumentNullException(nameof(provider));
       this._clipboard = Shell.Instance.GetComponent<Clipboard>().NotNull("Unable to resolve clipboard service.");
     }
-
+    
     [CanBeNull]
     private IClassLikeDeclaration Declaration { get; set; }
 
@@ -51,7 +49,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       if (declaredElement == null) return null;
 
       var typeName = declaredElement.GetClrName().FullName;
-      var moduleName = declaredElement.Module.Name;
+      var moduleName = declaredElement.Module.DisplayName;
 
       var fullName = $"{typeName}, {moduleName}";
       this._clipboard.SetText(fullName);
