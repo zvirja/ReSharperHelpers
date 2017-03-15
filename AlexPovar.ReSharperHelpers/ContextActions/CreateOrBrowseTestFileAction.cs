@@ -80,7 +80,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         IProjectFolder testFolder;
         Template testFileTemplate;
 
-        using (var cookie = solution.CreateTransactionCookie(DefaultAction.Rollback, this.Text, NullProgressIndicator.Instance))
+        using (var cookie = solution.CreateTransactionCookie(DefaultAction.Rollback, this.Text, NullProgressIndicator.Create()))
         {
           var declaration = this._provider.GetSelectedElement<ICSharpTypeDeclaration>();
 
@@ -106,7 +106,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
           testFileTemplate = StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
 
-          cookie.Commit(NullProgressIndicator.Instance);
+          cookie.Commit(NullProgressIndicator.Create());
         }
 
         if (testFileTemplate != null)
