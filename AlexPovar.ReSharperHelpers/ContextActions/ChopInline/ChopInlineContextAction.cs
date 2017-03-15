@@ -52,7 +52,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
       //If unable to resolve by method declaration, try to resolve for ctor.
       if (paramsOwnerDeclaration == null)
       {
-        var constructorDeclaration = ConstructorDeclarationNavigator.GetByName(methodName);
+        var constructorDeclaration = ConstructorDeclarationNavigator.GetByTypeName(methodName);
         paramsOwnerDeclaration = constructorDeclaration;
         paramsList = constructorDeclaration?.Params;
       }

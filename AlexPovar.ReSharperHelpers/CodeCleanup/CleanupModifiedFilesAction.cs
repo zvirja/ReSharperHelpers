@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.ActionManagement;
 using JetBrains.Annotations;
@@ -30,12 +31,12 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
     void IExecutableAction.Execute(IDataContext context, DelegateExecute nextExecute)
     {
       var solution = context.GetData(ProjectModelDataConstants.SOLUTION);
-      if ((solution != null) && solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute"))
+      if (solution != null && solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute"))
       {
         var collector = CodeCleanupFilesCollector.TryCreate(context).NotNull("collector != null");
 
         var actionScope = collector.GetActionScope();
-        var profile = SelectProfileDialog(collector, false, context);
+        var profile = this.GetProfile(collector, context);
         if (profile != null)
         {
           switch (actionScope)
@@ -52,6 +53,19 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
           }
         }
       }
+    }
+
+    protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector cleanupFilesCollector, IDataContext context)
+    {
+      return (CodeCleanupProfile)this.GetType()
+        .Assembly.GetType("JetBrains.ReSharper.Features.Altering.CodeCleanup.InteractiveProfileSelector")
+        .InvokeMember("SelectProfileWithWpfDialog", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod, Type.DefaultBinder, null,
+          new object[]
+          {
+            cleanupFilesCollector,
+            false,
+            context
+          });
     }
 
     bool IExecutableAction.Update(IDataContext dataContext, ActionPresentation presentation, DelegateUpdate nextUpdate)
@@ -83,29 +97,23 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       return false;
     }
 
-    protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector collector, IDataContext context)
-    {
-      throw new NotSupportedException();
-    }
-
     [CopyFromOriginal]
-    private static void FormatFiles([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile, /* START_MODIFICATION */
-      [NotNull] HashSet<FileSystemPath> filesToProcess /* END_MODIFICATION */)
+    private static void FormatFiles([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile,
+      /* START_MOD */ [NotNull] ISet<FileSystemPath> filesToProcess /* END_MOD */)
     {
-      ISolution solution = context.Solution;
-      IList<IPsiSourceFile> files = context.GetFiles();
-      IPsiFiles psiFiles = solution.GetPsiServices().Files;
-      JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup codeCleanup = JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup.GetInstance(solution);
       try
       {
         Shell.Instance.GetComponent<UITaskExecutor>()
           .SingleThreaded.ExecuteTask( /*START_MOD*/ "Cleanup MODIFIED Code" /*END_MOD*/, TaskCancelable.Yes, delegate(IProgressIndicator progress)
           {
-            ICommandProcessor component = Shell.Instance.GetComponent<ICommandProcessor>();
-            SolutionDocumentTransactionManager component2 = solution.GetComponent<SolutionDocumentTransactionManager>();
-            using (component.UsingBatchTextChange("Code Cleanup"))
+            ISolution solution = context.Solution;
+            IList<IPsiSourceFile> files = context.GetFiles();
+            IPsiFiles psiFiles = solution.GetPsiServices().Files;
+            JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup codeCleanup = JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup.GetInstance(solution);
+
+            using (Shell.Instance.GetComponent<ICommandProcessor>().UsingBatchTextChange("Code Cleanup"))
             {
-              using (ITransactionCookie transactionCookie = component2.CreateTransactionCookie(DefaultAction.Commit, "Code Cleanup"))
+              using (ITransactionCookie transactionCookie = solution.GetComponent<SolutionDocumentTransactionManager>().CreateTransactionCookie(DefaultAction.Commit, "Code Cleanup"))
               {
                 try
                 {
@@ -116,23 +124,23 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
                   {
                     InterruptableActivityCookie.CheckAndThrow(progress);
 
-                    /* START_MODIFICATION */
+                    /* START_MOD */
                     var fileLocation = file.GetLocation();
                     if (fileLocation.IsEmpty || !filesToProcess.Contains(fileLocation))
                     {
                       progress.Advance(1.0);
                       continue;
                     }
-
-                    /* END_MODIFICATION */
+                    /* END_MOD */
 
                     progress.CurrentItemText = file.DisplayName;
-                    int caret = -1;
                     using (SubProgressIndicator subProgressIndicator = new SubProgressIndicator(progress, 1.0))
                     {
+                      int caret = -1;
                       codeCleanup.Run(file, DocumentRange.InvalidRange, ref caret, profile, subProgressIndicator);
                     }
                   }
+                  progress.Stop();
                 }
                 catch (Exception)
                 {
@@ -150,7 +158,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
 
     private void RunFilesFormat([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile)
     {
-      HashSet<FileSystemPath> filesToProcess;
+      ISet<FileSystemPath> filesToProcess;
 
       try
       {
@@ -163,7 +171,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
           return;
         }
 
-        filesToProcess = new HashSet<FileSystemPath>(gitModificationResolver.GetModifiedFiles().Select(FileSystemPath.CreateByCanonicalPath));
+        filesToProcess = gitModificationResolver.GetModifiedFiles().Select(FileSystemPath.CreateByCanonicalPath).ToSet();
       }
       catch (Exception ex)
       {
