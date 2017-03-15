@@ -46,7 +46,7 @@
     - nuget restore
 
   build:
-    project: AlexPovar.ReSharperHelpers.sln
+    project: code\AlexPovar.ReSharperHelpers.sln
     verbosity: minimal
   
   after_build:
@@ -123,7 +123,7 @@
     - nuget restore
     
   build:
-    project: AlexPovar.ReSharperHelpers.sln
+    project: code\AlexPovar.ReSharperHelpers.sln
     verbosity: minimal
     
   after_build:
