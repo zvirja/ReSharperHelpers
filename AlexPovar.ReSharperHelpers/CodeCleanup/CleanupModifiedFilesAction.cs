@@ -55,19 +55,6 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       }
     }
 
-    protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector cleanupFilesCollector, IDataContext context)
-    {
-      return (CodeCleanupProfile)this.GetType()
-        .Assembly.GetType("JetBrains.ReSharper.Features.Altering.CodeCleanup.InteractiveProfileSelector")
-        .InvokeMember("SelectProfileWithWpfDialog", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod, Type.DefaultBinder, null,
-          new object[]
-          {
-            cleanupFilesCollector,
-            false,
-            context
-          });
-    }
-
     bool IExecutableAction.Update(IDataContext dataContext, ActionPresentation presentation, DelegateUpdate nextUpdate)
     {
       var collector = CodeCleanupFilesCollector.TryCreate(dataContext);
@@ -95,6 +82,21 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       }
 
       return false;
+    }
+
+    public static MethodInfo GetSelectProfileWithWpfDialogMethod() => typeof(CodeCleanupRunner)
+      .Assembly.GetType("JetBrains.ReSharper.Features.Altering.CodeCleanup.InteractiveProfileSelector")
+      .GetMethod("SelectProfileWithWpfDialog", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+    protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector cleanupFilesCollector, IDataContext context)
+    {
+      return (CodeCleanupProfile)GetSelectProfileWithWpfDialogMethod()
+        .Invoke(null, new object[]
+        {
+          cleanupFilesCollector,
+          false,
+          context
+        });
     }
 
     [CopyFromOriginal]
