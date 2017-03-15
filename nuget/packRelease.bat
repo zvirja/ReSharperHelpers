@@ -1,2 +1,2 @@
-"c:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe" ..\AlexPovar.ReSharperHelpers.sln  /t:Build /p:Configuration=Release
-nuget pack ..\AlexPovar.ReSharperHelpers.nuspec -BasePath ..\AlexPovar.ReSharperHelpers\bin\Release\net45
+"c:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe" ..\code\AlexPovar.ReSharperHelpers.sln  /t:Build /p:Configuration=Release
+nuget pack ..\code\AlexPovar.ReSharperHelpers.nuspec -BasePath ..\code\AlexPovar.ReSharperHelpers\bin\Release\net45

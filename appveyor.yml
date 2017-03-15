@@ -21,7 +21,7 @@
   
   install:
     - ps: .\build\ResolveVersionFromNuSpec.ps1
-    - ps: .\build\PatchCoreProjectVersions.ps1 -projectFiles "AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj"
+    - ps: .\build\PatchCoreProjectVersions.ps1 -projectFiles "code\AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj"
     - ps: >
         Write-Host ">>>>>>>>> RUN RELEASE BUILD WITH DEPLOY <<<<<<<<<<<";
         
@@ -50,7 +50,7 @@
     verbosity: minimal
   
   after_build:
-    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %SEMANTIC_BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release\net45
+    - nuget pack code\AlexPovar.ReSharperHelpers.nuspec -Version %SEMANTIC_BUILD_VERSION% -BasePath code\AlexPovar.ReSharperHelpers\bin\Release\net45
    
   test:
     assemblies:
@@ -61,7 +61,7 @@
     
   assembly_info:
     patch: true
-    file: AlexPovar.ReSharperHelpers.UI\Properties\AssemblyInfo.cs
+    file: code\AlexPovar.ReSharperHelpers.UI\Properties\AssemblyInfo.cs
     assembly_version: $(BUILD_VERSION)
     assembly_file_version: $(BUILD_VERSION)
     assembly_informational_version: $(BUILD_VERSION)
@@ -113,7 +113,7 @@
     
   install:
     - ps: .\build\ResolveVersionFromNuSpec.ps1
-    - ps: .\build\PatchCoreProjectVersions.ps1 -projectFiles "AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj"
+    - ps: .\build\PatchCoreProjectVersions.ps1 -projectFiles "code\AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj"
     - ps: >
         $env:SKIP_DEPLOY = [regex]::ismatch("$env:APPVEYOR_REPO_COMMIT_MESSAGE", "\[nodeploy\]")        
         
@@ -127,7 +127,7 @@
     verbosity: minimal
     
   after_build:
-    - nuget pack AlexPovar.ReSharperHelpers.nuspec -Version %BUILD_VERSION% -BasePath AlexPovar.ReSharperHelpers\bin\Release\net45
+    - nuget pack code\AlexPovar.ReSharperHelpers.nuspec -Version %BUILD_VERSION% -BasePath code\AlexPovar.ReSharperHelpers\bin\Release\net45
     
   test: off
   
@@ -137,7 +137,7 @@
       
   assembly_info:
     patch: true
-    file: AlexPovar.ReSharperHelpers.UI\Properties\AssemblyInfo.cs
+    file: code\AlexPovar.ReSharperHelpers.UI\Properties\AssemblyInfo.cs
     assembly_version: $(BUILD_VERSION)
     assembly_file_version: $(BUILD_VERSION)
     assembly_informational_version: $(BUILD_VERSION)
