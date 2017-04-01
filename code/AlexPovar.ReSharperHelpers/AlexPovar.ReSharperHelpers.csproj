@@ -7,10 +7,11 @@
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <Version>1.0.0.0</Version>
+    <CodeAnalysisRuleSet>..\AlexPovar.ReSharperHelpers.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2017.1.20170328.151810-eap07" />
+    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2017.1.20170330.130956-eap08" />
     <PackageReference Include="JetBrains.Build.Platform.Tasks.ThemedIconsPacker" Version="2.0.20151217.1" />
     <PackageReference Include="LibGit2Sharp" Version="0.23.1" />
   </ItemGroup>

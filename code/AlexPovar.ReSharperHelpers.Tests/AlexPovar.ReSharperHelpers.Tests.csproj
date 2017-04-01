@@ -2,6 +2,7 @@
 
   <PropertyGroup>    
     <TargetFramework>net45</TargetFramework>
+    <CodeAnalysisRuleSet>..\AlexPovar.ReSharperHelpers.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,11 +11,13 @@
     <None Remove="Packages\**" />
     <Compile Remove="Packages\**" />
     <EmbeddedResource Remove="Packages\**" />
+
     <None Remove="AlexPovar.ReSharperHelpers.Tests.csproj.DotSettings" />
+    
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="2017.1.20170328.151810-eap07" />
+    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="2017.1.20170330.130956-eap08" />
   </ItemGroup>
 
   <ItemGroup>
