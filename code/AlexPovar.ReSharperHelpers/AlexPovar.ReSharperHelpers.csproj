@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.ReSharper.SDK" Version="2017.1.20170403.131543" />
-    <PackageReference Include="JetBrains.Build.Platform.Tasks.ThemedIconsPacker" Version="2.0.20151217.1" />
     <PackageReference Include="LibGit2Sharp" Version="0.23.1" />
   </ItemGroup>
 
