@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net45</TargetFramework>
+    <Company>Alex Povar</Company>
+    <Copyright>Copyright 2017 Alex Povar</Copyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.0.0</Version>
+    <CodeAnalysisRuleSet>..\AlexPovar.ReSharperHelpers.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2017.1.20170403.131543" />
+    <PackageReference Include="LibGit2Sharp" Version="0.23.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AlexPovar.ReSharperHelpers.UI\AlexPovar.ReSharperHelpers.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ThemedIconsXamlV3 Include="MainIcons\ContextActions.Icons.xaml">
+      <ThemeColumns>Gray</ThemeColumns>
+      <RemoveBackgroundElement>True</RemoveBackgroundElement>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ThemedIconsXamlV3>
+    <ThemedIconPng Include="MainIcons\clearIcon.png" />
+  </ItemGroup>
+
+</Project>

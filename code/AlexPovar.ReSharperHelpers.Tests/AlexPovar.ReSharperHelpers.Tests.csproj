@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
+    <TargetFramework>net45</TargetFramework>
+    <CodeAnalysisRuleSet>..\AlexPovar.ReSharperHelpers.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="data\**" />
+    <None Include="data\**" />
+    <None Remove="Packages\**" />
+    <Compile Remove="Packages\**" />
+    <EmbeddedResource Remove="Packages\**" />
+
+    <None Remove="AlexPovar.ReSharperHelpers.Tests.csproj.DotSettings" />
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="2017.1.20170403.131543" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="AlexPovar.ReSharperHelpers.UI.ReSharperHelpersOptionsPageMarkup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="SettingDescription" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="DimGray" />
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Vertical" Margin="4, 15" Grid.IsSharedSizeScope="True">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="SettingName" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock>Tests project name:</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding TestProjectName.Value}" />
+
+            <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource SettingDescription}">
+                This setting is used to explicitly specify single in solution project where all unit tests are located.<LineBreak />
+                The setting has less priority than <Italic>[assembly: AssemblyMetadata("ReSharperHelpers.TestProject", "&lt;name&gt;")]</Italic> project attribute.<LineBreak />
+                <Bold>Ensure to save this setting to solution specific layer.</Bold>
+            </TextBlock>
+        </Grid>
+
+        <Grid Margin="0 10 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="SettingName" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock>Test class name suffix:</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding TestClassNameSuffix.Value}" />
+
+            <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource SettingDescription}">
+                This setting specifies test class name suffix that should be used for the new tests.<LineBreak />
+                <Italic>Consider saving this setting to solution specific layer.</Italic>
+            </TextBlock>
+        </Grid>
+
+        <Grid Margin="0 10 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="SettingName" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock>Valid test class name suffixes:</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding ValidTestClassNameSuffixes.Value}" />
+
+            <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource SettingDescription}">
+                This setting defines additional test suffixes valid for discovering the existing test classes.<LineBreak />
+                Suffixes should be delimited by comma (e.g. value1,value2).<LineBreak />
+                <Italic>Consider saving this setting to solution specific layer.</Italic>
+            </TextBlock>
+        </Grid>
+    </StackPanel>
+</UserControl>
