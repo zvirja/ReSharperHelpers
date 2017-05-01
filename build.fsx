@@ -107,7 +107,7 @@ Target "CompleteBuild" (fun _ ->
 "Clean"
     ==> "NuGetRestore"
     ==> "Build"
-    ==> "Tests"
+    =?> ("Tests", (getBuildParamOrDefault "RunTests" "true") = "true" )
     ==> "NuGetPack"
     ==> "CompleteBuild"
 
