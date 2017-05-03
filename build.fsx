@@ -95,20 +95,37 @@ Target "NuGetPack" (fun _ ->
                                    OutputPath   = nugetOutputDir })
 )
 
-let publishNuget feed key =
-    NuGetPublish (fun p -> {p with PublishUrl = feed
-                                   AccessKey = key
-                                   })
+Target "CompleteBuild" ignore
 
-Target "CompleteBuild" (fun _ ->
-    printfn "I'm here"
-)
+let publishNuget feed key =
+    !! (nugetOutputDir @@ "*.nupkg")
+    |> Seq.map GetMetaDataFromPackageFile
+    |> Seq.iter (fun meta -> NuGetPublish (fun p -> {p with Project = meta.Id
+                                                            Version = meta.Version
+                                                            OutputPath = nugetOutputDir
+                                                            WorkingDir = nugetOutputDir
+                                                            PublishUrl = feed
+                                                            AccessKey = key })
+    )
+
+
+Target "PublishNuGetPublic" (fun _ -> publishNuget 
+                                         "https://resharper-plugins.jetbrains.com" 
+                                         (getBuildParam "NuGetKeyPublic") )
+                                         
+Target "PublishNuGetPrivate" (fun _ -> publishNuget 
+                                         "https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/package" 
+                                         (getBuildParam "NuGetKeyPrivate") )
+
 
 "Clean"
     ==> "NuGetRestore"
     ==> "Build"
-    =?> ("Tests", (getBuildParamOrDefault "RunTests" "true") = "true" )
+    =?> ("Tests", (getBuildParamOrDefault "RunTests" "true") <> "false" )
     ==> "NuGetPack"
     ==> "CompleteBuild"
+
+"CompleteBuild" ==> "PublishNuGetPublic"
+"CompleteBuild" ==> "PublishNuGetPrivate"
 
 RunTargetOrDefault "CompleteBuild"
