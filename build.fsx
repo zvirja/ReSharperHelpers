@@ -1,6 +1,7 @@
 #r @"build/tools/FAKE.Core/tools/FakeLib.dll"
 
 open Fake
+open System
 open System.Text.RegularExpressions
 
 let solutionPath =  @"code\AlexPovar.ReSharperHelpers.sln" |> FullName
@@ -85,7 +86,8 @@ Target "Tests" (fun _ ->
     setEnvironVar "JetProductHomeDir" testsProjectDir
 
     !! (buildOutDir @@ testsAssemblyName)
-    |> NUnit (fun p -> {p with OutputFile = tmpBuildDir @@ "TestResult.xml" })
+    |> NUnit (fun p -> {p with OutputFile = tmpBuildDir @@ "TestResult.xml"
+                               TimeOut = TimeSpan.FromMinutes 30.0 })
 )
 
 Target "NuGetPack" (fun _ ->
