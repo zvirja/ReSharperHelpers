@@ -1,102 +1,20 @@
 image: Visual Studio 2017
 
-environment:
-  RESHARPER_GALLERY_KEY:
-    secure: n7O2pQ5KhsdnT2DhKmiU40gCt3Tl3/T/zxnclsYxgYwgxpNK2iZvK9apawWFMpCO
-  MYGET_KEY:
-    secure: 4p4wi7VlIH54Ue2IKX5E8FW30mZeHihIevL9l+nKol4w4UWRmIWbBhnGs1iflu4F
+#environment:
+  #RESHARPER_GALLERY_KEY:
+  #  secure: n7O2pQ5KhsdnT2DhKmiU40gCt3Tl3/T/zxnclsYxgYwgxpNK2iZvK9apawWFMpCO
+  #MYGET_KEY:
+  #  secure: 4p4wi7VlIH54Ue2IKX5E8FW30mZeHihIevL9l+nKol4w4UWRmIWbBhnGs1iflu4F
 
 pull_requests:
   do_not_increment_build_number: true
 
 build_script:
 - ps: |
-    # A trick to test if variable is defined. Number could never be null.
-    $isPullRequest = -not ($Env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null)
-    $isTagBuild = $Env:APPVEYOR_REPO_TAG -eq "true"
-    $branchName = $Env:APPVEYOR_REPO_BRANCH
-    $tagName = $Env:APPVEYOR_REPO_TAG_NAME
+    & .\build.cmd AppVeyor NuGetPublicKey="$($Env:RESHARPER_GALLERY_KEY)" NuGetPrivateKey="$($Env:MYGET_KEY)" BuildVersion=git BuildNumber=$($Env:APPVEYOR_BUILD_NUMBER) 
 
-    Write-Host "[BUILD CONTEXT INFO] Is PR: $isPullRequest, is tag: $isTagBuild, branch name: '$branchName', tag name: '$tagName'" -ForegroundColor Green
-
-    # ===== FAKE Actions =====
-    function BuildOnly {
-      & .\build.cmd CompleteBuild BuildVersion=git BuildNumber=$($Env:APPVEYOR_BUILD_NUMBER)
-    }
-
-    function PublishPublic {
-      & .\build.cmd PublishNuGetPublic NuGetPublicKey="$($Env:RESHARPER_GALLERY_KEY)" BuildVersion=git BuildNumber=$($Env:APPVEYOR_BUILD_NUMBER) 
-    }
-    
-    function PublishPrivate {
-      & .\build.cmd PublishNuGetPrivate NuGetPrivateKey="$($Env:MYGET_KEY)" BuildVersion=git BuildNumber=$($Env:APPVEYOR_BUILD_NUMBER) 
-    }
-
-    # ===== Event handlers =====
-    # A workaround for the https://github.com/appveyor/ci/issues/1090. Otherwise, exit could be used.
-    $handled = $false
-
-    function HandleTagIsNotSemVer {
-      $isSemVerTag = $tagName -match '^v[\d\.]+.*'
-      if($isTagBuild -and (-not $isSemVerTag)) {
-        Write-Host "[Tag] Trigger build only - this is not a SemVer tag" -ForegroundColor Green
-        BuildOnly
-
-        $script:handled = $true
-      }
-    }
-
-    function HandleTagRegular {
-      if($isTagBuild) {
-        Write-Host "[Tag] Trigger build & push to public feed" -ForegroundColor Green
-        PublishPublic
-
-        $script:handled = $true
-      }
-    }
-
-    function HandlePullRequest {
-      if($isPullRequest) {
-        Write-Host "[PR] Trigger build only" -ForegroundColor Green
-        BuildOnly
-
-        $script:handled = $true
-      }
-    }
-
-    function HandleDevBranch {
-      if($branchName -eq "develop") {
-        Write-Host "[Develop branch] Trigger build & push to private feed" -ForegroundColor Green
-        PublishPrivate
-
-        $script:handled = $true
-      }
-    }
-
-    function HandleOtherBranch {
-        # If this is a custom branch - just build the code without publishing the artifacts somewhere.
-        Write-Host "[Other branch] Trigger build only" -ForegroundColor Green
-        BuildOnly
-
-        $script:handled = $true
-    }
-
-    # ==== DISPATCH HANDLERS ONE BY ONE TILL FIRST MATCHING. SCRIPT STOPS ON FIRST MATCHING ====
-    HandleTagIsNotSemVer                   ;if($handled) { return; }
-    HandleTagRegular                       ;if($handled) { return; }
-    # Should be checked _before_ branch name, because branch name is set to "base" branch for Pull Requests
-    HandlePullRequest                      ;if($handled) { return; }
-    HandleDevBranch                        ;if($handled) { return; }
-    HandleOtherBranch                      ;if($handled) { return; }
-
-test_script:
-- ps: |
-    function Publish-TestResults ($testRunner, $testResultsPath)
-    {
-        $client = New-Object System.Net.WebClient
-        $client.UploadFile("https://ci.appveyor.com/api/testresults/$testRunner/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $testResultsPath))
-    }
-    Publish-TestResults nunit build\TestResult.xml
+test: off
+deploy: off
 
 cache:
   - build\packages\ -> **\*.csproj
@@ -104,5 +22,3 @@ cache:
 
 artifacts:
   - path: 'build\NuGetPackages\*.nupkg'
-
-deploy: off

@@ -1,6 +1,7 @@
 #r @"build/tools/FAKE.Core/tools/FakeLib.dll"
 
 open Fake
+open Fake.AppVeyor
 open System
 open System.Text.RegularExpressions
 
@@ -12,6 +13,7 @@ let tmpBuildDir = "build"
 let nugetRestoreDir = tmpBuildDir @@ "packages" |> FullName
 let nugetOutputDir = tmpBuildDir @@ "NuGetPackages" |> FullName
 let buildOutDir = tmpBuildDir @@ "Artifacts" |> FullName
+let testResultFile = tmpBuildDir @@ "TestResult.xml"
 
 
 type BuildVersionInfo = { assemblyVersion:string; fileVersion:string; infoVersion:string; nugetVersion:string }
@@ -86,8 +88,8 @@ Target "Tests" (fun _ ->
     setEnvironVar "JetProductHomeDir" testsProjectDir
 
     !! (buildOutDir @@ testsAssemblyName)
-    |> NUnit (fun p -> {p with OutputFile = tmpBuildDir @@ "TestResult.xml"
-                               TimeOut = TimeSpan.FromMinutes 30.0 })
+    |> Fake.NUnitSequential.NUnit (fun p -> {p with OutputFile = testResultFile
+                                                    TimeOut = TimeSpan.FromMinutes 30.0 })
 )
 
 Target "NuGetPack" (fun _ ->
@@ -97,7 +99,7 @@ Target "NuGetPack" (fun _ ->
                                    OutputPath   = nugetOutputDir })
 )
 
-Target "CompleteBuild" ignore
+Target "CompleteBuild" DoNothing
 
 let publishNuget feed key =
     !! (nugetOutputDir @@ "*.nupkg")
@@ -119,6 +121,40 @@ Target "PublishNuGetPrivate" (fun _ -> publishNuget
                                          "https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/package" 
                                          (getBuildParam "NuGetKeyPrivate") )
 
+type AppVeyorTrigger = Invalid | SemVerTag | PR | DevelopBranch | UnknownBranchOrTag
+let appVeyorTrigger =
+    if buildServer <> BuildServer.AppVeyor then
+        Invalid
+    else
+        let isPR = isNotNullOrEmpty AppVeyorEnvironment.PullRequestNumber
+        let isTag = AppVeyorEnvironment.RepoTag
+        let isSemVerTag = isTag && "^v[\d\.]+" >** AppVeyorEnvironment.RepoTagName
+        let branchName = AppVeyorEnvironment.RepoBranch
+
+        match isTag, isSemVerTag, isPR, branchName with
+        | true, true, _, _       -> SemVerTag
+        | _, _, true, _          -> PR
+        | false, _, _, "develop" -> DevelopBranch
+        | _                      -> UnknownBranchOrTag
+
+
+Target "AppVeyor_PublishTestResults" (fun _ ->
+    if TestFile testResultFile then UploadTestResultsFile NUnit testResultFile
+)
+
+Target "AppVeyor_DescribeState" (fun _ ->
+   logfn "[AppVeyor state] Is AppVeyor: %b, is tag: %b, tag name: '%s', is PR: %b, branch name: '%s', trigger: %A"
+         (buildServer = BuildServer.AppVeyor)
+         AppVeyorEnvironment.RepoTag
+         AppVeyorEnvironment.RepoTagName
+         (isNotNullOrEmpty AppVeyorEnvironment.PullRequestNumber)
+         AppVeyorEnvironment.RepoBranch
+         appVeyorTrigger
+)
+
+Target "AppVeyor_InvalidTrigger" (fun _ -> traceError "Unable to resolve AppVeyor trigger")
+
+Target "AppVeyor" DoNothing
 
 "Clean"
     ==> "NuGetRestore"
@@ -129,5 +165,21 @@ Target "PublishNuGetPrivate" (fun _ -> publishNuget
 
 "CompleteBuild" ==> "PublishNuGetPublic"
 "CompleteBuild" ==> "PublishNuGetPrivate"
+
+// AppVeyor CI
+dependency "AppVeyor" <| match appVeyorTrigger with
+                         | SemVerTag          -> "PublishNuGetPublic"
+                         | DevelopBranch      -> "PublishNuGetPrivate"
+                         | PR                 -> "CompleteBuild"
+                         | UnknownBranchOrTag -> "Build"
+                         | _                  -> "AppVeyor_InvalidTrigger"
+
+"Tests"
+    ?=> "AppVeyor_PublishTestResults"
+    ==> "AppVeyor"
+
+"AppVeyor_DescribeState" ?=> "Clean"
+"AppVeyor_DescribeState" ?=> "AppVeyor_InvalidTrigger"
+"AppVeyor_DescribeState" ==> "AppVeyor"
 
 RunTargetOrDefault "CompleteBuild"
