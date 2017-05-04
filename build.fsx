@@ -111,7 +111,6 @@ let publishNuget feed key =
                                                             AccessKey = key })
     )
 
-
 Target "PublishNuGetPublic" (fun _ -> publishNuget 
                                          "https://resharper-plugins.jetbrains.com" 
                                          (getBuildParam "NuGetKeyPublic") )
@@ -137,10 +136,6 @@ let appVeyorTrigger =
         | _                      -> UnknownBranchOrTag
 
 
-Target "AppVeyor_PublishTestResults" (fun _ ->
-    if TestFile testResultFile then UploadTestResultsFile NUnit testResultFile
-)
-
 Target "AppVeyor_DescribeState" (fun _ ->
    logfn "[AppVeyor state] Is AppVeyor: %b, is tag: %b, tag name: '%s', is PR: %b, branch name: '%s', trigger: %A"
          (buildServer = BuildServer.AppVeyor)
@@ -152,6 +147,10 @@ Target "AppVeyor_DescribeState" (fun _ ->
 )
 
 Target "AppVeyor_InvalidTrigger" (fun _ -> traceError "Unable to resolve AppVeyor trigger")
+
+Target "AppVeyor_PublishTestResults" (fun _ ->
+    if TestFile testResultFile then UploadTestResultsFile NUnit testResultFile
+)
 
 Target "AppVeyor" DoNothing
 

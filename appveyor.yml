@@ -1,10 +1,10 @@
 image: Visual Studio 2017
 
-#environment:
-  #RESHARPER_GALLERY_KEY:
-  #  secure: n7O2pQ5KhsdnT2DhKmiU40gCt3Tl3/T/zxnclsYxgYwgxpNK2iZvK9apawWFMpCO
-  #MYGET_KEY:
-  #  secure: 4p4wi7VlIH54Ue2IKX5E8FW30mZeHihIevL9l+nKol4w4UWRmIWbBhnGs1iflu4F
+environment:
+  RESHARPER_GALLERY_KEY:
+    secure: n7O2pQ5KhsdnT2DhKmiU40gCt3Tl3/T/zxnclsYxgYwgxpNK2iZvK9apawWFMpCO
+  MYGET_KEY:
+    secure: 4p4wi7VlIH54Ue2IKX5E8FW30mZeHihIevL9l+nKol4w4UWRmIWbBhnGs1iflu4F
 
 pull_requests:
   do_not_increment_build_number: true
