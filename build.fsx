@@ -113,11 +113,11 @@ let publishNuget feed key =
 
 Target "PublishNuGetPublic" (fun _ -> publishNuget 
                                          "https://resharper-plugins.jetbrains.com" 
-                                         (getBuildParam "NuGetKeyPublic") )
+                                         (getBuildParam "NuGetPublicKey") )
                                          
 Target "PublishNuGetPrivate" (fun _ -> publishNuget 
                                          "https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/package" 
-                                         (getBuildParam "NuGetKeyPrivate") )
+                                         (getBuildParam "NuGetPrivateKey") )
 
 type AppVeyorTrigger = Invalid | SemVerTag | PR | DevelopBranch | UnknownBranchOrTag
 let appVeyorTrigger =
