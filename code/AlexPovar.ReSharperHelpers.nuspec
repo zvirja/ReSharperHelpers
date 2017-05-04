@@ -4,8 +4,7 @@
     <id>AlexPovar.ReSharperHelpers</id>
     <title>ReSharper Helpers</title>
     <description>Set of custom actions and tweaks for ReSharper to improve your productivity. Refer to project site for entire feature list.</description>
-    <!-- It could be patched by CI, but base version is taken from here -->
-    <version>4.2.0.0</version>
+    <version>@build.number@</version>
     <authors>Alex Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
     <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/master/LICENSE</licenseUrl>

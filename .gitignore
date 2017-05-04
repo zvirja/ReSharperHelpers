@@ -258,3 +258,6 @@ paket-files/
 
 # VS Code
 .vscode/
+
+# Build tools and artifacts
+build/
