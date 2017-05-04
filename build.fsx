@@ -40,9 +40,8 @@ let calculateVersionFromGit buildNumber =
     // If number of commits since last tag is greater than zero, we append another identifier with number of commits.
     // The produced version is larger than the last tag version.
     // If we are on a tag, we use version specified modification.
-    let nugetVersion = match commitsNum, revision with
-                       | 0, 0 -> sprintf "%d.%d%s" major minor optPreReleaseSuffix
-                       | 0, _ -> sprintf "%d.%d.%d%s" major minor revision optPreReleaseSuffix
+    let nugetVersion = match commitsNum with
+                       | 0 -> sprintf "%d.%d.%d%s" major minor revision optPreReleaseSuffix
                        | _ -> sprintf "%d.%d.%d%s.%d" major minor revision optPreReleaseSuffix commitsNum
 
     let infoVersion = match commitsNum with
