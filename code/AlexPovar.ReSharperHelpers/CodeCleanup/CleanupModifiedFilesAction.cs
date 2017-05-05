@@ -36,7 +36,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
         var collector = CodeCleanupFilesCollector.TryCreate(context).NotNull("collector != null");
 
         var actionScope = collector.GetActionScope();
-        var profile = this.GetProfile(collector, context);
+        var profile = this.GetProfile(collector);
         if (profile != null)
         {
           switch (actionScope)
@@ -58,27 +58,23 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
     bool IExecutableAction.Update(IDataContext dataContext, ActionPresentation presentation, DelegateUpdate nextUpdate)
     {
       var collector = CodeCleanupFilesCollector.TryCreate(dataContext);
-      if (collector != null)
+      if (collector == null) return false;
+
+      var psiServices = collector.Solution.GetPsiServices();
+      if (!psiServices.Files.AllDocumentsAreCommitted || !psiServices.CachesState.IsInitialUpdateFinished.Value) return false;
+
+      switch (collector.GetActionScope())
       {
-        var psiServices = collector.Solution.GetPsiServices();
-        if (!psiServices.Files.AllDocumentsAreCommitted || !psiServices.CachesState.IsInitialUpdateFinished.Value)
-        {
+        case ActionScope.NONE:
+        case ActionScope.SELECTION:
+        case ActionScope.FILE:
+        case ActionScope.MULTIPLE_FILES:
+        case ActionScope.DIRECTORY:
           return false;
-        }
 
-        switch (collector.GetActionScope())
-        {
-          case ActionScope.NONE:
-          case ActionScope.SELECTION:
-          case ActionScope.FILE:
-          case ActionScope.MULTIPLE_FILES:
-          case ActionScope.DIRECTORY:
-            return false;
-
-          //Support solution only
-          case ActionScope.SOLUTION:
-            return true;
-        }
+        //Support solution only
+        case ActionScope.SOLUTION:
+          return true;
       }
 
       return false;
@@ -91,14 +87,13 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
         .GetMethod("SelectProfileWithWpfDialog", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
     }
 
-    protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector cleanupFilesCollector, IDataContext context)
+    protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector cleanupFilesCollector)
     {
       return (CodeCleanupProfile)GetSelectProfileWithWpfDialogMethod()
         .Invoke(null, new object[]
         {
           cleanupFilesCollector,
           false,
-          context
         });
     }
 
