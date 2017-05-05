@@ -43,11 +43,11 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
           {
             case ActionScope.SELECTION:
             case ActionScope.FILE:
-            case ActionScope.MULTIPLE_FILES:
-            case ActionScope.DIRECTORY:
               return;
 
+            case ActionScope.MULTIPLE_FILES:
             case ActionScope.SOLUTION:
+            case ActionScope.DIRECTORY:
               this.RunFilesFormat(collector, profile);
               return;
           }
@@ -68,12 +68,11 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
         case ActionScope.NONE:
         case ActionScope.SELECTION:
         case ActionScope.FILE:
-        case ActionScope.MULTIPLE_FILES:
-        case ActionScope.DIRECTORY:
           return false;
 
-        //Support solution only
+        case ActionScope.MULTIPLE_FILES:
         case ActionScope.SOLUTION:
+        case ActionScope.DIRECTORY:
           return true;
       }
 
@@ -97,14 +96,14 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
         });
     }
 
-    [CopyFromOriginal]
+    [CopyFromOriginal("JetBrains.ReSharper.Features.Altering.CodeCleanup.CodeCleanupRunner.CleanupFilesWithProgress()")]
     private static void FormatFiles([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile,
       /* START_MOD */ [NotNull] ISet<FileSystemPath> filesToProcess /* END_MOD */)
     {
       try
       {
         Shell.Instance.GetComponent<UITaskExecutor>()
-          .SingleThreaded.ExecuteTask( /*START_MOD*/ "Cleanup MODIFIED Code" /*END_MOD*/, TaskCancelable.Yes, delegate(IProgressIndicator progress)
+          .SingleThreaded.ExecuteTask( /*START_MOD*/ "Cleanup MODIFIED Code" /*END_MOD*/, TaskCancelable.Yes, delegate (IProgressIndicator progress)
           {
             ISolution solution = context.Solution;
             IList<IPsiSourceFile> files = context.GetFiles();
@@ -162,16 +161,16 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
 
       try
       {
-        var solutionDir = context.Solution.SolutionFilePath.Directory;
-        var gitModificationResolver = new GitModificationsResolver(solutionDir.FullPath);
+        var solutionDir = context.Solution.SolutionFilePath.Directory.FullPath;
+        var gitModificationResolver = new GitModificationsResolver(solutionDir);
 
         if (!gitModificationResolver.IsValidRepository)
         {
-          MessageBox.ShowError($"Unable to resolve solution path as a git repository:{Environment.NewLine}{solutionDir.FullPath}");
+          MessageBox.ShowError($"Unable to resolve solution path as a git repository:{Environment.NewLine}{solutionDir}");
           return;
         }
 
-        filesToProcess = gitModificationResolver.GetModifiedFiles().Select(FileSystemPath.CreateByCanonicalPath).ToSet();
+        filesToProcess = gitModificationResolver.GetModifiedFiles().Select(FileSystemPath.Parse).ToSet();
       }
       catch (Exception ex)
       {
