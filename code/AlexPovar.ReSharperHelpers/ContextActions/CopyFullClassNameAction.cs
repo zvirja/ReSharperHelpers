@@ -6,6 +6,7 @@ using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
 using JetBrains.UI;
@@ -24,7 +25,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       this._provider = provider ?? throw new ArgumentNullException(nameof(provider));
       this._clipboard = Shell.Instance.GetComponent<Clipboard>().NotNull("Unable to resolve clipboard service.");
     }
-    
+
     [CanBeNull]
     private IClassLikeDeclaration Declaration { get; set; }
 
@@ -50,6 +51,12 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
       var typeName = declaredElement.GetClrName().FullName;
       var moduleName = declaredElement.Module.DisplayName;
+
+      if (declaredElement.Module is IProjectPsiModule projectModule)
+      {
+        var proj = projectModule.Project;
+        moduleName = proj.GetOutputAssemblyName(proj.GetCurrentTargetFrameworkId());
+      }
 
       var fullName = $"{typeName}, {moduleName}";
       this._clipboard.SetText(fullName);

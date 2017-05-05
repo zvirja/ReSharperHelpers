@@ -4,8 +4,7 @@
     <id>AlexPovar.ReSharperHelpers</id>
     <title>ReSharper Helpers</title>
     <description>Set of custom actions and tweaks for ReSharper to improve your productivity. Refer to project site for entire feature list.</description>
-    <!-- It could be patched by CI, but base version is taken from here -->
-    <version>4.2.0.0</version>
+    <version>@build.number@</version>
     <authors>Alex Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
     <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/master/LICENSE</licenseUrl>
@@ -16,9 +15,18 @@
       <dependency id="Wave" version="[8.0]" />
     </dependencies>
     <releaseNotes>
+Version 4.3
+  Add support for R# 2017.1.2. Notice, the "Cleanup modified files" feature will no longer work for the previous R# versions.
+
+  New features:
+    - Extend the "Cleanup modified files" feature to support Project and Directory items.
+
+  Improvements:
+    - Enhance the "Copy full class name" action to resolve assembly name more accurately.
+
 Version 4.2
-  Add support for R# 2017.1	
-	
+  Add support for R# 2017.1
+  
 Version 4.1
   Improvements:
     - Allow to copy full interface type using quick action.
