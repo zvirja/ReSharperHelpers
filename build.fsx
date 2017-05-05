@@ -69,6 +69,8 @@ Target "NuGetRestore" (fun _ ->
 
 Target "Build" (fun _ ->
     let buildConfig = getBuildParamOrDefault "BuildConfig" "Release"
+    let hostIdentifier = getBuildParamOrDefault "DevHostId" ""
+
     let properties = 
         [
             "Configuration",        buildConfig
@@ -76,6 +78,7 @@ Target "Build" (fun _ ->
             "AssemblyVersion",      currentBuildVersion.assemblyVersion
             "FileVersion",          currentBuildVersion.fileVersion
             "InformationalVersion", currentBuildVersion.infoVersion
+            "DevHostId",            hostIdentifier
         ]
     
     !! solutionPath

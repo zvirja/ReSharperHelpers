@@ -261,3 +261,6 @@ paket-files/
 
 # Build tools and artifacts
 build/
+
+#Deploy host
+deploy.host
