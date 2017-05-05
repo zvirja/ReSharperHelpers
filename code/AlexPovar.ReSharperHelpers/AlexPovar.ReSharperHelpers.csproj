@@ -7,6 +7,10 @@
     <CodeAnalysisRuleSet>..\AlexPovar.ReSharperHelpers.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <HostFullIdentifier>ReSharperPlatformVs14Plugins</HostFullIdentifier>
+  </PropertyGroup>
+
   <PropertyGroup Condition="$(DevHostId)!=''">
     <HostFullIdentifier>$(DevHostId)</HostFullIdentifier>
   </PropertyGroup>
