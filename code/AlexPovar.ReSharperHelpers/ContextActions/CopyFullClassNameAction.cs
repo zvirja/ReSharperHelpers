@@ -1,6 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
+using JetBrains.Application.UI.Components;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
@@ -9,7 +10,6 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
-using JetBrains.UI;
 using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions

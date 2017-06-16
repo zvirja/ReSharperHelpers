@@ -1,9 +1,9 @@
 ﻿using AlexPovar.ReSharperHelpers.UI;
 using JetBrains.Annotations;
+using JetBrains.Application.UI.Options;
+using JetBrains.Application.UI.UIAutomation;
 using JetBrains.DataFlow;
 using JetBrains.ReSharper.Feature.Services.OptionPages.CodeEditing;
-using JetBrains.UI.CrossFramework;
-using JetBrains.UI.Options;
 
 namespace AlexPovar.ReSharperHelpers.Settings
 {

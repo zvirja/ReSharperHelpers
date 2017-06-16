@@ -2,6 +2,7 @@
 using System.Linq;
 using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
+using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
@@ -15,7 +16,6 @@ using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
-using JetBrains.UI.BulbMenu;
 using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions

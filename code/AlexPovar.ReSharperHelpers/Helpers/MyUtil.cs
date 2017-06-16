@@ -1,5 +1,5 @@
 ﻿using JetBrains.Annotations;
-using JetBrains.UI.BulbMenu;
+using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 
 namespace AlexPovar.ReSharperHelpers.Helpers
 {

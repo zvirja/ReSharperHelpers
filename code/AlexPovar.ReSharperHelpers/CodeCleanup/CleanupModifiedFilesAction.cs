@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AlexPovar.ReSharperHelpers.Helpers;
-using JetBrains.ActionManagement;
 using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.Application.CommandProcessing;
 using JetBrains.Application.DataContext;
 using JetBrains.Application.Progress;
+using JetBrains.Application.UI.Actions;
+using JetBrains.Application.UI.ActionsRevised.Menu;
+using JetBrains.Application.UI.ActionSystem.ActionsRevised.Menu;
+using JetBrains.Application.UI.Progress;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
@@ -19,8 +22,6 @@ using JetBrains.ReSharper.Features.Altering.CodeCleanup;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Resources.Shell;
-using JetBrains.UI.ActionsRevised;
-using JetBrains.UI.Application.Progress;
 using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.CodeCleanup
