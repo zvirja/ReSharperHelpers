@@ -5,8 +5,10 @@ using JetBrains.Application;
 using JetBrains.Application.Environment;
 using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
+using JetBrains.DocumentManagers;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
+using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Settings.Cache;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
@@ -36,17 +38,27 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
     public new Severity GetSeverity(IHighlighting highlighting, IPsiSourceFile sourceFile)
     {
       var module = sourceFile?.PsiModule;
-      if (module != null)
-      {
-        var configurableId = highlighting.GetConfigurableSeverityId(this.GetHighlightingAttribute(highlighting));
+      return this.TryGetHighlightingSeverity(highlighting, module) ?? base.GetSeverity(highlighting, sourceFile);
+    }
 
-        if (GetSuppressedHighlightingsForModule(module).Contains(configurableId))
-        {
-          return Severity.DO_NOT_SHOW;
-        }
+    public new Severity GetSeverity(IHighlighting highlighting, ISolution solution)
+    {
+      var module = solution?.GetComponent<DocumentManager>().TryGetProjectFile(highlighting.CalculateRange().Document)?.GetPsiModule();
+      return this.TryGetHighlightingSeverity(highlighting, module) ?? base.GetSeverity(highlighting, solution);
+    }
+
+    private Severity? TryGetHighlightingSeverity([NotNull] IHighlighting highlighting, [CanBeNull] IPsiModule module)
+    {
+      if (module == null) return null;
+
+      var configurableId = highlighting.GetConfigurableSeverityId(this.GetHighlightingAttribute(highlighting));
+
+      if (GetSuppressedHighlightingsForModule(module).Contains(configurableId))
+      {
+        return Severity.DO_NOT_SHOW;
       }
 
-      return base.GetSeverity(highlighting, sourceFile);
+      return null;
     }
 
     [NotNull]
