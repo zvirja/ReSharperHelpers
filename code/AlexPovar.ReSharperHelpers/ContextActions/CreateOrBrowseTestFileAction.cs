@@ -294,7 +294,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     private static void ShowProjectFile([NotNull] ISolution solution, [NotNull] IProjectFile file, int? caretPosition)
     {
       var editor = solution.GetComponent<IEditorManager>();
-      var textControl = editor.OpenProjectFile(file, true);
+      var textControl = editor.OpenProjectFile(file, OpenFileOptions.DefaultActivate);
 
       if (caretPosition != null) textControl?.Caret.MoveTo(caretPosition.Value, CaretVisualPlacement.DontScrollIfVisible);
     }

@@ -4,6 +4,7 @@ using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 using JetBrains.Metadata.Reader.API;
+using JetBrains.Metadata.Utils;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 using JetBrains.ReSharper.Feature.Services.Intentions;
@@ -162,7 +163,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       }
       else
       {
-        var candidates = symbolScope.GetElementsByShortName(AssertTypeName).OfType<IClass>().Where(c => (c.Module as IAssemblyPsiModule)?.Assembly.IsMscorlib != true).ToArray();
+        var candidates = symbolScope.GetElementsByShortName(AssertTypeName).OfType<IClass>().Where(c => (c.Module as IAssemblyPsiModule)?.Assembly.AssemblyName.IsMscorlib() != true).ToArray();
         if (candidates.Length == 1) typeDecl = candidates[0];
         if (typeDecl != null) this.CachedAssertClassTypeName = typeDecl.GetClrName();
       }

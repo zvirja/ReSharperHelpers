@@ -8,6 +8,7 @@ using JetBrains.Application;
 using JetBrains.Application.CommandProcessing;
 using JetBrains.Application.DataContext;
 using JetBrains.Application.Progress;
+using JetBrains.Application.Threading;
 using JetBrains.Application.UI.Actions;
 using JetBrains.Application.UI.ActionsRevised.Menu;
 using JetBrains.Application.UI.ActionSystem.ActionsRevised.Menu;
@@ -27,7 +28,7 @@ using JetBrains.Util;
 namespace AlexPovar.ReSharperHelpers.CodeCleanup
 {
   [Action("Cleanup modified code...", Icon = typeof(MainThemedIcons.ClearIcon))]
-  public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
+  public class CleanupModifiedFilesAction: CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
   {
     void IExecutableAction.Execute(IDataContext context, DelegateExecute nextExecute)
     {
@@ -96,6 +97,8 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
           false,
         });
     }
+
+    protected override bool SaveProfileAsRecentlyUsed => true;
 
     [CopyFromOriginal("JetBrains.ReSharper.Features.Altering.CodeCleanup.CodeCleanupRunner.CleanupFilesWithProgress()")]
     private static void FormatFiles([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile,
