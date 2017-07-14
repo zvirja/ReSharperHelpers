@@ -163,7 +163,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       }
       else
       {
-        var candidates = symbolScope.GetElementsByShortName(AssertTypeName).OfType<IClass>().Where(c => (c.Module as IAssemblyPsiModule)?.Assembly.AssemblyName.IsMscorlib() != true).ToArray();
+        var candidates = symbolScope.GetElementsByShortName(AssertTypeName).OfType<IClass>().Where(c => c.CanBeVisibleToSolution()).ToArray();
         if (candidates.Length == 1) typeDecl = candidates[0];
         if (typeDecl != null) this.CachedAssertClassTypeName = typeDecl.GetClrName();
       }
