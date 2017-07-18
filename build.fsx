@@ -10,10 +10,10 @@ let testsProjectDir = @"code\AlexPovar.ReSharperHelpers.Tests" |> FullName
 let testsAssemblyName = "AlexPovar.ReSharperHelpers.Tests.dll"
 let nuspecFilePath = @"code\AlexPovar.ReSharperHelpers.nuspec" |> FullName
 let tmpBuildDir = "build"
-let nugetRestoreDir = tmpBuildDir @@ "packages" |> FullName
-let nugetOutputDir = tmpBuildDir @@ "NuGetPackages" |> FullName
-let buildOutDir = tmpBuildDir @@ "Artifacts" |> FullName
-let testResultFile = tmpBuildDir @@ "TestResult.xml"
+let nugetRestoreDir = tmpBuildDir </> "packages" |> FullName
+let nugetOutputDir = tmpBuildDir </> "NuGetPackages" |> FullName
+let buildOutDir = tmpBuildDir </> "Artifacts" |> FullName
+let testResultFile = tmpBuildDir </> "TestResult.xml"
 
 
 type BuildVersionInfo = { assemblyVersion:string; fileVersion:string; infoVersion:string; nugetVersion:string }
@@ -89,7 +89,7 @@ Target "Build" (fun _ ->
 Target "Tests" (fun _ ->
     setEnvironVar "JetProductHomeDir" testsProjectDir
 
-    !! (buildOutDir @@ testsAssemblyName)
+    !! (buildOutDir </> testsAssemblyName)
     |> Fake.NUnitSequential.NUnit (fun p -> {p with OutputFile = testResultFile
                                                     TimeOut = TimeSpan.FromMinutes 30.0 })
 )
@@ -104,7 +104,7 @@ Target "NuGetPack" (fun _ ->
 Target "CompleteBuild" DoNothing
 
 let publishNuget feed key =
-    !! (nugetOutputDir @@ "*.nupkg")
+    !! (nugetOutputDir </> "*.nupkg")
     |> Seq.map GetMetaDataFromPackageFile
     |> Seq.iter (fun meta -> NuGetPublish (fun p -> {p with Project = meta.Id
                                                             Version = meta.Version
@@ -121,13 +121,20 @@ Target "PublishNuGetPublic" (fun _ -> publishNuget
 Target "PublishNuGetPrivate" (fun _ -> publishNuget 
                                          "https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/package" 
                                          (getBuildParam "NuGetPrivateKey") )
+// ==============================================
+// ================== AppVeyor ==================
+// ==============================================
+
+// Add helper to identify whether current trigger is PR
+type AppVeyorEnvironment with
+    static member IsPullRequest = isNotNullOrEmpty AppVeyorEnvironment.PullRequestNumber
 
 type AppVeyorTrigger = Invalid | SemVerTag | PR | DevelopBranch | UnknownBranchOrTag
 let appVeyorTrigger =
     if buildServer <> BuildServer.AppVeyor then
         Invalid
     else
-        let isPR = isNotNullOrEmpty AppVeyorEnvironment.PullRequestNumber
+        let isPR = AppVeyorEnvironment.IsPullRequest
         let isTag = AppVeyorEnvironment.RepoTag
         let isSemVerTag = isTag && "^v[\d\.]+" >** AppVeyorEnvironment.RepoTagName
         let branchName = AppVeyorEnvironment.RepoBranch
@@ -155,7 +162,9 @@ Target "AppVeyor_PublishTestResults" (fun _ ->
     if TestFile testResultFile then UploadTestResultsFile NUnit testResultFile
 )
 
-Target "AppVeyor" DoNothing
+Target "AppVeyor" (fun _ ->
+    if not AppVeyorEnvironment.IsPullRequest then UpdateBuildVersion currentBuildVersion.fileVersion
+)
 
 "Clean"
     ==> "NuGetRestore"
@@ -183,4 +192,5 @@ dependency "AppVeyor" <| match appVeyorTrigger with
 "AppVeyor_DescribeState" ?=> "AppVeyor_InvalidTrigger"
 "AppVeyor_DescribeState" ==> "AppVeyor"
 
+// ========= ENTRY POINT =========
 RunTargetOrDefault "CompleteBuild"
