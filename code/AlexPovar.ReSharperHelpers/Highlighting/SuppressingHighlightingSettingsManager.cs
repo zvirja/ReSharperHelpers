@@ -35,16 +35,10 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
     {
     }
 
-    public new Severity GetSeverity(IHighlighting highlighting, IPsiSourceFile sourceFile)
+    public new Severity GetSeverity(IHighlighting highlighting, IPsiSourceFile sourceFile, ISolution solution)
     {
       var module = sourceFile?.PsiModule;
-      return this.TryGetHighlightingSeverity(highlighting, module) ?? base.GetSeverity(highlighting, sourceFile);
-    }
-
-    public new Severity GetSeverity(IHighlighting highlighting, ISolution solution)
-    {
-      var module = solution?.GetComponent<DocumentManager>().TryGetProjectFile(highlighting.CalculateRange().Document)?.GetPsiModule();
-      return this.TryGetHighlightingSeverity(highlighting, module) ?? base.GetSeverity(highlighting, solution);
+      return this.TryGetHighlightingSeverity(highlighting, module) ?? base.GetSeverity(highlighting, sourceFile, solution);
     }
 
     private Severity? TryGetHighlightingSeverity([NotNull] IHighlighting highlighting, [CanBeNull] IPsiModule module)
