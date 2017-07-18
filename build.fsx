@@ -10,10 +10,10 @@ let testsProjectDir = @"code\AlexPovar.ReSharperHelpers.Tests" |> FullName
 let testsAssemblyName = "AlexPovar.ReSharperHelpers.Tests.dll"
 let nuspecFilePath = @"code\AlexPovar.ReSharperHelpers.nuspec" |> FullName
 let tmpBuildDir = "build"
-let nugetRestoreDir = tmpBuildDir @@ "packages" |> FullName
-let nugetOutputDir = tmpBuildDir @@ "NuGetPackages" |> FullName
-let buildOutDir = tmpBuildDir @@ "Artifacts" |> FullName
-let testResultFile = tmpBuildDir @@ "TestResult.xml"
+let nugetRestoreDir = tmpBuildDir </> "packages" |> FullName
+let nugetOutputDir = tmpBuildDir </> "NuGetPackages" |> FullName
+let buildOutDir = tmpBuildDir </> "Artifacts" |> FullName
+let testResultFile = tmpBuildDir </> "TestResult.xml"
 
 
 type BuildVersionInfo = { assemblyVersion:string; fileVersion:string; infoVersion:string; nugetVersion:string }
@@ -89,7 +89,7 @@ Target "Build" (fun _ ->
 Target "Tests" (fun _ ->
     setEnvironVar "JetProductHomeDir" testsProjectDir
 
-    !! (buildOutDir @@ testsAssemblyName)
+    !! (buildOutDir </> testsAssemblyName)
     |> Fake.NUnitSequential.NUnit (fun p -> {p with OutputFile = testResultFile
                                                     TimeOut = TimeSpan.FromMinutes 30.0 })
 )
@@ -104,7 +104,7 @@ Target "NuGetPack" (fun _ ->
 Target "CompleteBuild" DoNothing
 
 let publishNuget feed key =
-    !! (nugetOutputDir @@ "*.nupkg")
+    !! (nugetOutputDir </> "*.nupkg")
     |> Seq.map GetMetaDataFromPackageFile
     |> Seq.iter (fun meta -> NuGetPublish (fun p -> {p with Project = meta.Id
                                                             Version = meta.Version
