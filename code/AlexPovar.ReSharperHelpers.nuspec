@@ -15,6 +15,9 @@
       <dependency id="Wave" version="[8.0]" />
     </dependencies>
     <releaseNotes>
+Version 4.3.1
+  Fix suppression of warnings for the project is no longer working.
+
 Version 4.3
   Add support for R# 2017.1.2. Notice, the "Cleanup modified files" feature will no longer work for the previous R# versions.
 
