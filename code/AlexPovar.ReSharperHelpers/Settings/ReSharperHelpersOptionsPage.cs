@@ -1,13 +1,13 @@
 ﻿using AlexPovar.ReSharperHelpers.UI;
 using JetBrains.Annotations;
 using JetBrains.Application.UI.Options;
+using JetBrains.Application.UI.Options.OptionPages;
 using JetBrains.Application.UI.UIAutomation;
 using JetBrains.DataFlow;
-using JetBrains.ReSharper.Feature.Services.OptionPages.CodeEditing;
 
 namespace AlexPovar.ReSharperHelpers.Settings
 {
-  [OptionsPage(PID, "Alex Povar ReSharper Helpers", typeof(MainThemedIcons.HelpersContextAction), ParentId = CodeEditingPage.PID)]
+  [OptionsPage(PID, "Alex Povar ReSharper Helpers", typeof(MainThemedIcons.HelpersContextAction), ParentId = ToolsPage.PID)]
   public class ReSharperHelpersOptionsPage : IOptionsPage
   {
     // ReSharper disable once InconsistentNaming
@@ -24,8 +24,6 @@ namespace AlexPovar.ReSharperHelpers.Settings
     }
 
     public bool OnOk() => true;
-
-    public bool ValidatePage() => true;
 
     public EitherControl Control { get; }
 
