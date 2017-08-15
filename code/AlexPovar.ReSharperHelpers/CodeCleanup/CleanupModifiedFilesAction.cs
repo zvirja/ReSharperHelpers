@@ -28,7 +28,7 @@ using JetBrains.Util;
 namespace AlexPovar.ReSharperHelpers.CodeCleanup
 {
   [Action("Cleanup modified code...", Icon = typeof(MainThemedIcons.ClearIcon))]
-  public class CleanupModifiedFilesAction: CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
+  public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
   {
     void IExecutableAction.Execute(IDataContext context, DelegateExecute nextExecute)
     {
@@ -107,7 +107,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       try
       {
         Shell.Instance.GetComponent<UITaskExecutor>()
-          .SingleThreaded.ExecuteTask( /*START_MOD*/ "Cleanup MODIFIED Code" /*END_MOD*/, TaskCancelable.Yes, delegate (IProgressIndicator progress)
+          .SingleThreaded.ExecuteTask( /*START_MOD*/ "Cleanup MODIFIED Code" /*END_MOD*/, TaskCancelable.Yes, delegate(IProgressIndicator progress)
           {
             ISolution solution = context.Solution;
             IList<IPsiSourceFile> files = context.GetFiles();
@@ -174,7 +174,10 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
           return;
         }
 
-        filesToProcess = gitModificationResolver.GetModifiedFiles().Select(FileSystemPath.Parse).ToSet();
+        filesToProcess = gitModificationResolver
+          .GetModifiedFiles()
+          .Select(f => FileSystemPath.Parse(f, FileSystemPathInternStrategy.TRY_GET_INTERNED_BUT_DO_NOT_INTERN))
+          .ToSet();
       }
       catch (Exception ex)
       {
