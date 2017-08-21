@@ -2,26 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
-using JetBrains.Application;
-using JetBrains.Application.CommandProcessing;
 using JetBrains.Application.DataContext;
-using JetBrains.Application.Progress;
+using JetBrains.Application.Settings;
+using JetBrains.Application.Threading;
 using JetBrains.Application.UI.Actions;
 using JetBrains.Application.UI.ActionsRevised.Menu;
 using JetBrains.Application.UI.ActionSystem.ActionsRevised.Menu;
-using JetBrains.Application.UI.Progress;
-using JetBrains.DocumentManagers.Transactions;
-using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.DataContext;
 using JetBrains.ReSharper.Feature.Services.Actions;
 using JetBrains.ReSharper.Feature.Services.CodeCleanup;
 using JetBrains.ReSharper.Features.Altering.CodeCleanup;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.Files;
-using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.CodeCleanup
@@ -32,28 +25,50 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
     void IExecutableAction.Execute(IDataContext context, DelegateExecute nextExecute)
     {
       var solution = context.GetData(ProjectModelDataConstants.SOLUTION);
-      if (solution != null && solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute"))
-      {
-        var collector = CodeCleanupFilesCollector.TryCreate(context).NotNull("collector != null");
+      if (solution == null || !solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute")) return;
 
-        var actionScope = collector.GetActionScope();
-        var profile = this.GetProfile(collector);
-        if (profile != null)
+      var collector = CodeCleanupFilesCollector.TryCreate(context).NotNull("collector != null");
+
+      context.GetComponent<IShellLocks>().ExecuteOrQueueReadLock(
+        "CodeCleanupActionBase.Execute",
+        () =>
         {
+          if (!solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute")) return;
+
+          var actionScope = collector.GetActionScope();
+
+          var profile = this.GetProfile(collector);
+          if (profile == null) return;
+
+          if (this.SaveProfileAsRecentlyUsed)
+          {
+            solution.GetComponent<CodeCleanupSettingsComponent>().SetRecentlyUsedProfileName(
+              solution.GetComponent<ISettingsStore>().BindToContextTransient(ContextRange.Smart(collector.GetContext())),
+              profile.Name);
+          }
+
           switch (actionScope)
           {
+            case ActionScope.MultipleFiles:
+            case ActionScope.Solution:
+            case ActionScope.Directory:
+              var filteredProvider = this.TryGetFilteredProvider(collector);
+              if (filteredProvider != null)
+              {
+                CodeCleanupRunner.CleanupFiles(filteredProvider, profile);
+              }
+
+              return;
+
+            case ActionScope.None:
             case ActionScope.Selection:
             case ActionScope.File:
               return;
 
-            case ActionScope.MultipleFiles:
-            case ActionScope.Solution:
-            case ActionScope.Directory:
-              this.RunFilesFormat(collector, profile);
+            default:
               return;
           }
-        }
-      }
+        });
     }
 
     bool IExecutableAction.Update(IDataContext dataContext, ActionPresentation presentation, DelegateUpdate nextUpdate)
@@ -93,103 +108,68 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
         .Invoke(null, new object[]
         {
           cleanupFilesCollector,
-          false,
+          false
         });
     }
 
     protected override bool SaveProfileAsRecentlyUsed => true;
 
-    [CopyFromOriginal("JetBrains.ReSharper.Features.Altering.CodeCleanup.CodeCleanupRunner.CleanupFilesWithProgress()")]
-    private static void FormatFiles([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile,
-      /* START_MOD */ [NotNull] ISet<FileSystemPath> filesToProcess /* END_MOD */)
+    [CanBeNull]
+    private ICodeCleanupFilesProvider TryGetFilteredProvider([NotNull] ICodeCleanupFilesProvider originalProvider)
     {
       try
       {
-        Shell.Instance.GetComponent<UITaskExecutor>()
-          .SingleThreaded.ExecuteTask( /*START_MOD*/ "Cleanup MODIFIED Code" /*END_MOD*/, TaskCancelable.Yes, delegate(IProgressIndicator progress)
-          {
-            ISolution solution = context.Solution;
-            IList<IPsiSourceFile> files = context.GetFiles();
-            IPsiFiles psiFiles = solution.GetPsiServices().Files;
-            JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup codeCleanup = JetBrains.ReSharper.Feature.Services.CodeCleanup.CodeCleanup.GetInstance(solution);
-
-            using (Shell.Instance.GetComponent<ICommandProcessor>().UsingBatchTextChange("Code Cleanup"))
-            {
-              using (ITransactionCookie transactionCookie = solution.GetComponent<SolutionDocumentTransactionManager>().CreateTransactionCookie(DefaultAction.Commit, "Code Cleanup"))
-              {
-                try
-                {
-                  progress.TaskName = profile.Name;
-                  progress.Start(files.Count);
-                  psiFiles.AssertAllDocumentAreCommitted();
-                  foreach (IPsiSourceFile file in files)
-                  {
-                    InterruptableActivityCookie.CheckAndThrow(progress);
-
-                    /* START_MOD */
-                    var fileLocation = file.GetLocation();
-                    if (fileLocation.IsEmpty || !filesToProcess.Contains(fileLocation))
-                    {
-                      progress.Advance(1.0);
-                      continue;
-                    }
-                    /* END_MOD */
-
-                    progress.CurrentItemText = file.DisplayName;
-                    using (SubProgressIndicator subProgressIndicator = new SubProgressIndicator(progress, 1.0))
-                    {
-                      int caret = -1;
-                      codeCleanup.Run(file, DocumentRange.InvalidRange, ref caret, profile, subProgressIndicator);
-                    }
-                  }
-                  progress.Stop();
-                }
-                catch (Exception)
-                {
-                  transactionCookie.Rollback();
-                  throw;
-                }
-              }
-            }
-          });
-      }
-      catch (ProcessCancelledException)
-      {
-      }
-    }
-
-    private void RunFilesFormat([NotNull] CodeCleanupFilesCollector context, [NotNull] CodeCleanupProfile profile)
-    {
-      ISet<FileSystemPath> filesToProcess;
-
-      try
-      {
-        var solutionDir = context.Solution.SolutionFilePath.Directory.FullPath;
+        var solutionDir = originalProvider.Solution.SolutionFilePath.Directory.FullPath;
         var gitModificationResolver = new GitModificationsResolver(solutionDir);
 
         if (!gitModificationResolver.IsValidRepository)
         {
-          MessageBox.ShowError($"Unable to resolve solution path as a git repository:{Environment.NewLine}{solutionDir}");
-          return;
+          MessageBox.ShowError($"[ReSharper Helpers] Unable to resolve solution path as a git repository:{Environment.NewLine}{solutionDir}");
+          return null;
         }
 
-        filesToProcess = gitModificationResolver
+        var modifiedFiles = gitModificationResolver
           .GetModifiedFiles()
           .Select(f => FileSystemPath.Parse(f, FileSystemPathInternStrategy.TRY_GET_INTERNED_BUT_DO_NOT_INTERN))
           .ToSet();
+
+        var filteredFiles = originalProvider.GetFiles()
+          .Where(file =>
+          {
+            var loc = file.GetLocation();
+            return !loc.IsEmpty && modifiedFiles.Contains(loc);
+          })
+          .ToArray();
+
+        return new FilteredCodeCleanupProvider(originalProvider, filteredFiles);
       }
       catch (Exception ex)
       {
-        MessageBox.ShowError($"Unexpected error in cleanup:{Environment.NewLine}{ex}");
-        return;
+        MessageBox.ShowError($"[ReSharper Helpers] Unexpected error in code cleanup initialization:{Environment.NewLine}{ex}");
+        return null;
       }
+    }
 
-      if (filesToProcess.Count == 0)
+    private class FilteredCodeCleanupProvider : ICodeCleanupFilesProvider
+    {
+      [NotNull] private readonly ICodeCleanupFilesProvider _innerProvider;
+      [NotNull] private readonly IList<IPsiSourceFile> _filteredFiles;
+
+      public FilteredCodeCleanupProvider([NotNull] ICodeCleanupFilesProvider innerProvider, [NotNull] IList<IPsiSourceFile> filteredFiles)
       {
-        return;
+        this._innerProvider = innerProvider ?? throw new ArgumentNullException(nameof(innerProvider));
+        this._filteredFiles = filteredFiles ?? throw new ArgumentNullException(nameof(filteredFiles));
       }
 
-      FormatFiles(context, profile, filesToProcess);
+      public IList<IPsiSourceFile> GetFiles() => this._filteredFiles;
+
+      public bool IsSuitableProjectElement(IProjectModelElement element) => this._innerProvider.IsSuitableProjectElement(element);
+
+      public bool IsSuitableFile(IProjectFile file) => this._innerProvider.IsSuitableFile(file);
+
+      public ISolution Solution => this._innerProvider.Solution;
+
+      public IProjectItem ProjectItem => this._innerProvider.ProjectItem;
     }
   }
 }
