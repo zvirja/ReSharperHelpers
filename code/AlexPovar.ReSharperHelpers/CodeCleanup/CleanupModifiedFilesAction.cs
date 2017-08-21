@@ -8,7 +8,6 @@ using JetBrains.Application;
 using JetBrains.Application.CommandProcessing;
 using JetBrains.Application.DataContext;
 using JetBrains.Application.Progress;
-using JetBrains.Application.Threading;
 using JetBrains.Application.UI.Actions;
 using JetBrains.Application.UI.ActionsRevised.Menu;
 using JetBrains.Application.UI.ActionSystem.ActionsRevised.Menu;
@@ -43,13 +42,13 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
         {
           switch (actionScope)
           {
-            case ActionScope.SELECTION:
-            case ActionScope.FILE:
+            case ActionScope.Selection:
+            case ActionScope.File:
               return;
 
-            case ActionScope.MULTIPLE_FILES:
-            case ActionScope.SOLUTION:
-            case ActionScope.DIRECTORY:
+            case ActionScope.MultipleFiles:
+            case ActionScope.Solution:
+            case ActionScope.Directory:
               this.RunFilesFormat(collector, profile);
               return;
           }
@@ -67,14 +66,14 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
 
       switch (collector.GetActionScope())
       {
-        case ActionScope.NONE:
-        case ActionScope.SELECTION:
-        case ActionScope.FILE:
+        case ActionScope.None:
+        case ActionScope.Selection:
+        case ActionScope.File:
           return false;
 
-        case ActionScope.MULTIPLE_FILES:
-        case ActionScope.SOLUTION:
-        case ActionScope.DIRECTORY:
+        case ActionScope.MultipleFiles:
+        case ActionScope.Solution:
+        case ActionScope.Directory:
           return true;
       }
 
