@@ -5,7 +5,6 @@ using JetBrains.Application;
 using JetBrains.Application.Environment;
 using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
-using JetBrains.DocumentManagers;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
@@ -35,16 +34,10 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
     {
     }
 
-    public new Severity GetSeverity(IHighlighting highlighting, IPsiSourceFile sourceFile)
+    public new Severity GetSeverity(IHighlighting highlighting, IPsiSourceFile sourceFile, ISolution solution)
     {
       var module = sourceFile?.PsiModule;
-      return this.TryGetHighlightingSeverity(highlighting, module) ?? base.GetSeverity(highlighting, sourceFile);
-    }
-
-    public new Severity GetSeverity(IHighlighting highlighting, ISolution solution)
-    {
-      var module = solution?.GetComponent<DocumentManager>().TryGetProjectFile(highlighting.CalculateRange().Document)?.GetPsiModule();
-      return this.TryGetHighlightingSeverity(highlighting, module) ?? base.GetSeverity(highlighting, solution);
+      return this.TryGetHighlightingSeverity(highlighting, module) ?? base.GetSeverity(highlighting, sourceFile, solution);
     }
 
     private Severity? TryGetHighlightingSeverity([NotNull] IHighlighting highlighting, [CanBeNull] IPsiModule module)
@@ -64,7 +57,7 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
     [NotNull]
     private static ISet<string> GetSuppressedHighlightingsForModule([NotNull] IPsiModule module)
     {
-      return module.GetOrCreateData(SuppressedHighlightingKey, module, ResolveSuppressedHighlightingsByAssemblyAttributes);
+      return module.GetOrCreateDataNoLock(SuppressedHighlightingKey, module, ResolveSuppressedHighlightingsByAssemblyAttributes);
     }
 
     private static bool IsValidAttributeInstance([NotNull] IAttributeInstance instance)

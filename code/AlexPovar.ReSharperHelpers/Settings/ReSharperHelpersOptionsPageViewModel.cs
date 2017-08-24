@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using JetBrains.Application.Settings;
+using JetBrains.Application.UI.Options;
 using JetBrains.DataFlow;
-using JetBrains.UI.Options;
 
 namespace AlexPovar.ReSharperHelpers.Settings
 {

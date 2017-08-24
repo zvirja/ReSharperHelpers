@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
+using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.Intentions;
-using JetBrains.UI.BulbMenu;
 using JetBrains.UI.Icons;
 
 namespace AlexPovar.ReSharperHelpers.Helpers

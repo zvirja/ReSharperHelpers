@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2017.1.20170428.83402" />
+    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2017.2.0" />
     <PackageReference Include="LibGit2Sharp" Version="0.23.1" />
   </ItemGroup>
 
@@ -28,6 +28,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
     <Reference Include="System.Xaml" />
   </ItemGroup>
 

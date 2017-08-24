@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using JetBrains.Application.Settings;
+using JetBrains.Application.Settings.WellKnownRootKeys;
 
 namespace AlexPovar.ReSharperHelpers.Settings
 {

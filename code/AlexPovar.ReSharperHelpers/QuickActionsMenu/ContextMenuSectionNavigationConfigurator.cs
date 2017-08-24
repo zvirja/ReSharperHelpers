@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using JetBrains.Annotations;
-using JetBrains.UI.PopupMenu.Impl;
+using JetBrains.Application.UI.Controls.JetPopupMenu.Detail;
+using JetBrains.UI.SrcView.Controls.JetPopupMenu.Impl;
 
 namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
 {

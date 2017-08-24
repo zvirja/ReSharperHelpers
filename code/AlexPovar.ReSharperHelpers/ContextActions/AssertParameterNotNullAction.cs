@@ -2,6 +2,7 @@
 using System.Linq;
 using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
+using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
@@ -9,13 +10,12 @@ using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.ReSharper.Intentions.CSharp.ContextActions;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
-using JetBrains.ReSharper.Psi.CSharp.Impl;
+using JetBrains.ReSharper.Psi.CSharp.Conversions;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
-using JetBrains.UI.BulbMenu;
 using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
@@ -162,7 +162,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       }
       else
       {
-        var candidates = symbolScope.GetElementsByShortName(AssertTypeName).OfType<IClass>().Where(c => (c.Module as IAssemblyPsiModule)?.Assembly.IsMscorlib != true).ToArray();
+        var candidates = symbolScope.GetElementsByShortName(AssertTypeName).OfType<IClass>().Where(c => c.CanBeVisibleToSolution()).ToArray();
         if (candidates.Length == 1) typeDecl = candidates[0];
         if (typeDecl != null) this.CachedAssertClassTypeName = typeDecl.GetClrName();
       }
