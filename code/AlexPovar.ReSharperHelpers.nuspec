@@ -15,6 +15,12 @@
       <dependency id="Wave" version="[9.0]" />
     </dependencies>
     <releaseNotes>
+Version 4.4
+  Add support for R# 2017.2.
+
+  Minor changes:
+    - Configuration page has been moved under the "Tools" section.
+
 Version 4.3.1
   Fix suppression of warnings for the project is no longer working.
 
