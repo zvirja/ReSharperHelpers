@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
+using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
-using JetBrains.UI.BulbMenu;
 using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline

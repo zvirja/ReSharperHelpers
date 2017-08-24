@@ -129,22 +129,21 @@ Target "PublishNuGetPrivate" (fun _ -> publishNuget
 type AppVeyorEnvironment with
     static member IsPullRequest = isNotNullOrEmpty AppVeyorEnvironment.PullRequestNumber
 
-type AppVeyorTrigger = Invalid | SemVerTag | PR | DevelopBranch | UnknownBranchOrTag
+type AppVeyorTrigger = Invalid | SemVerTag | PR | DevelopBranch | ConsumeEapBranch | UnknownBranchOrTag
 let appVeyorTrigger =
     if buildServer <> BuildServer.AppVeyor then
         Invalid
     else
+        let tag = if AppVeyorEnvironment.RepoTag then Some AppVeyorEnvironment.RepoTagName else None
         let isPR = AppVeyorEnvironment.IsPullRequest
-        let isTag = AppVeyorEnvironment.RepoTag
-        let isSemVerTag = isTag && "^v[\d\.]+" >** AppVeyorEnvironment.RepoTagName
         let branchName = AppVeyorEnvironment.RepoBranch
 
-        match isTag, isSemVerTag, isPR, branchName with
-        | true, true, _, _       -> SemVerTag
-        | _, _, true, _          -> PR
-        | false, _, _, "develop" -> DevelopBranch
-        | _                      -> UnknownBranchOrTag
-
+        match tag, isPR, branchName with
+        | Some t, _, _ when "^v\d.*" >** t -> SemVerTag
+        | _, true, _                        -> PR
+        | _, _, "develop"                   -> DevelopBranch
+        | _, _, "feature/consume-eap"       -> ConsumeEapBranch
+        | _                                 -> UnknownBranchOrTag
 
 Target "AppVeyor_DescribeState" (fun _ ->
    logfn "[AppVeyor state] Is AppVeyor: %b, is tag: %b, tag name: '%s', is PR: %b, branch name: '%s', trigger: %A"
@@ -178,11 +177,11 @@ Target "AppVeyor" (fun _ ->
 
 // AppVeyor CI
 dependency "AppVeyor" <| match appVeyorTrigger with
-                         | SemVerTag          -> "PublishNuGetPublic"
-                         | DevelopBranch      -> "PublishNuGetPrivate"
-                         | PR                 -> "CompleteBuild"
-                         | UnknownBranchOrTag -> "Build"
-                         | _                  -> "AppVeyor_InvalidTrigger"
+                         | SemVerTag             -> "PublishNuGetPublic"
+                         | DevelopBranch         -> "PublishNuGetPrivate"
+                         | ConsumeEapBranch | PR -> "CompleteBuild"
+                         | UnknownBranchOrTag    -> "Build"
+                         | _                     -> "AppVeyor_InvalidTrigger"
 
 "Tests"
     ?=> "AppVeyor_PublishTestResults"
