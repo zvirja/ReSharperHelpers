@@ -5,7 +5,6 @@ using JetBrains.Application;
 using JetBrains.Application.Environment;
 using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
-using JetBrains.DocumentManagers;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
@@ -58,7 +57,7 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
     [NotNull]
     private static ISet<string> GetSuppressedHighlightingsForModule([NotNull] IPsiModule module)
     {
-      return module.GetOrCreateData(SuppressedHighlightingKey, module, ResolveSuppressedHighlightingsByAssemblyAttributes);
+      return module.GetOrCreateDataNoLock(SuppressedHighlightingKey, module, ResolveSuppressedHighlightingsByAssemblyAttributes);
     }
 
     private static bool IsValidAttributeInstance([NotNull] IAttributeInstance instance)
