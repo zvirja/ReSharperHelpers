@@ -13,7 +13,7 @@ namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.SetFro
 }
 
 
-namespace Ploeh.AutoFixture.Xunit2
+namespace AutoFixture.Xunit2
 {
   using System;
 

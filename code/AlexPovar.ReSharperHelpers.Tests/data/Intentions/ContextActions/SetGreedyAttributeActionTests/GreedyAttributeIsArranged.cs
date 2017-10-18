@@ -14,7 +14,7 @@ namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.SetGre
   }
 }
 
-namespace Ploeh.AutoFixture.Xunit2
+namespace AutoFixture.Xunit2
 {
   public class GreedyAttribute
   {

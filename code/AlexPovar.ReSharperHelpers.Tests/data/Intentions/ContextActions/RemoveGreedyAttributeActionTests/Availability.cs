@@ -7,7 +7,7 @@
 
   public class Availability
   {
-    public void TestMethod(string arg{off}1, [Ploeh.AutoFixture.Xunit2.Greedy] string arg{on}2) { }
+    public void TestMethod(string arg{off}1, [AutoFixture.Xunit2.Greedy] string arg{on}2) { }
 
     public void TestMethod2([Greedy] string some{off}arg) { }
   }
@@ -15,7 +15,7 @@
   public class GreedyAttribute: Attribute { }
 }
 
-namespace Ploeh.AutoFixture.Xunit2
+namespace AutoFixture.Xunit2
 {
   using System;
 
