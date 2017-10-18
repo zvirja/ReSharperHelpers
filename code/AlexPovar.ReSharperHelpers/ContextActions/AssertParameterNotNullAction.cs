@@ -20,7 +20,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "[AlexHelpers] Assert parameter is not null (or empty) action", Description = "Assert parameter is not null or empty.")]
+  [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Assert parameter is not null (or empty) action", Description = "Assert parameter is not null or empty.")]
   public class AssertParameterNotNullAction : CheckParamNullAction
   {
     private const string ArgumentNotNullAssetionMethod = "ArgumentNotNull";

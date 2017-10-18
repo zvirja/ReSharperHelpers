@@ -11,7 +11,7 @@ using JetBrains.TextControl;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions.Pure
 {
-  [ContextAction(Group = "C#", Name = "[AlexHelpers] Set Pure attribute", Description = "Sets Pure annotation attribute.")]
+  [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Set Pure attribute", Description = "Sets Pure annotation attribute.")]
   public class PureAttributeAction : PureAttributeActionBase
   {
     public PureAttributeAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider)

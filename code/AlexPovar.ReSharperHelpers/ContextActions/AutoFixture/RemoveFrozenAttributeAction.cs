@@ -10,7 +10,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
 {
-  [ContextAction(Group = "C#", Name = "[AlexHelpers] Remove Frozen AutoFixture attribute", Description = "Removes Frozen AutoFixture attribute.", Priority = short.MinValue)]
+  [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Remove Frozen AutoFixture attribute", Description = "Removes Frozen AutoFixture attribute.", Priority = short.MinValue)]
   public class RemoveFrozenAttributeAction : AutoFixtureAttributeActionBase
   {
     public RemoveFrozenAttributeAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider, AutoFixtureConstants.FrozenAttributeType)

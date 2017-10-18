@@ -14,7 +14,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
 {
-  [ContextAction(Group = "C#", Name = "[AlexHelpers] Set Frozen AutoFixture attribute", Description = "Sets Frozen AutoFixture attribute.", Priority = short.MinValue)]
+  [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Set Frozen AutoFixture attribute", Description = "Sets Frozen AutoFixture attribute.", Priority = short.MinValue)]
   public class SetFrozenAttributeAction : AutoFixtureAttributeActionBase
   {
     [NotNull] private static readonly string[] MatchingFlags =
