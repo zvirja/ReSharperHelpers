@@ -1,6 +1,6 @@
 ﻿namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.SetGreedyAttributeActionTests
 {
-  using Ploeh.AutoFixture.Xunit2;
+  using AutoFixture.Xunit2;
   using System;
   using System.Collections.Generic;
   using System.Linq;
@@ -16,7 +16,7 @@
   }
 }
 
-namespace Ploeh.AutoFixture.Xunit2
+namespace AutoFixture.Xunit2
 {
   using System;
 

@@ -10,7 +10,7 @@ using JetBrains.TextControl;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions.Pure
 {
-  [ContextAction(Group = "C#", Name = "[AlexHelpers] Remove Pure attribute", Description = "Removes Pure annotation attribute.")]
+  [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Remove Pure attribute", Description = "Removes Pure annotation attribute.")]
   public class NotPureAttributeAction : PureAttributeActionBase
   {
     public NotPureAttributeAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider)

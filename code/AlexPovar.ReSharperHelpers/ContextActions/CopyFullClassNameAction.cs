@@ -14,7 +14,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "[AlexHelpers] Copy full class name", Description = "Copy full class name.", Priority = short.MinValue)]
+  [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Copy full class name", Description = "Copy full class name.", Priority = short.MinValue)]
   public class CopyFullClassNameAction : HelpersContextActionBase
   {
     [NotNull] private readonly Clipboard _clipboard;

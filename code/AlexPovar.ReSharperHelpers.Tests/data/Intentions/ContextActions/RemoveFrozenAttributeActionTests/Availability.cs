@@ -1,6 +1,6 @@
 ﻿namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.RemoveFrozenAttributeActionTests
 {
-  using Ploeh.AutoFixture.Xunit2;
+  using AutoFixture.Xunit2;
   using System.Collections.Generic;
   using System.Linq;
   using System.Text;
@@ -13,7 +13,7 @@
 }
 
 
-namespace Ploeh.AutoFixture.Xunit2
+namespace AutoFixture.Xunit2
 {
   using System;
 

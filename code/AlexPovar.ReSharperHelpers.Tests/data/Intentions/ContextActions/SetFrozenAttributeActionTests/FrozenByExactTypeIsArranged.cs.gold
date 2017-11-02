@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ploeh.AutoFixture.Xunit2;
+using AutoFixture.Xunit2;
 
 namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.SetFrozenAttributeActionTests
 {
@@ -14,7 +14,7 @@ namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.SetFro
 }
 
 
-namespace Ploeh.AutoFixture.Xunit2
+namespace AutoFixture.Xunit2
 {
   using System;
 
