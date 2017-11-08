@@ -95,21 +95,10 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       return false;
     }
 
-    public static MethodInfo GetSelectProfileWithWpfDialogMethod()
-    {
-      return typeof(CodeCleanupRunner)
-        .Assembly.GetType("JetBrains.ReSharper.Features.Altering.CodeCleanup.InteractiveProfileSelector")
-        .GetMethod("SelectProfileWithWpfDialog", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-    }
-
     protected override CodeCleanupProfile GetProfile(CodeCleanupFilesCollector cleanupFilesCollector)
     {
-      return (CodeCleanupProfile)GetSelectProfileWithWpfDialogMethod()
-        .Invoke(null, new object[]
-        {
-          cleanupFilesCollector,
-          false
-        });
+      return cleanupFilesCollector.Solution.GetComponent<CodeCleanupProfileSelector>()
+        .SelectProfile(cleanupFilesCollector, false);
     }
 
     protected override bool SaveProfileAsRecentlyUsed => true;

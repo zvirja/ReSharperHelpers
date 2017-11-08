@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>    
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
     <CodeAnalysisRuleSet>..\AlexPovar.ReSharperHelpers.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="2017.2.2" />
+    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="2017.3.0" />
   </ItemGroup>
 
   <ItemGroup>
