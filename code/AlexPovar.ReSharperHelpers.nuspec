@@ -10,11 +10,14 @@
     <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/master/LICENSE</licenseUrl>
     <copyright>Copyright 2017 Alex Povar</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>resharper helpers productivity actions plugin alex povar</tags>
+    <tags>resharper helpers productivity testing navigation cleanup actions plugin alex povar</tags>
     <dependencies>
       <dependency id="Wave" version="[11.0.0,12)" />
     </dependencies>
     <releaseNotes>
+Version 4.5
+  Add support for R# 2017.3
+
 Version 4.4.1
   Change AutoFixture actions to work with AutoFixture 4.0 namespace. Also change name prefix for all the context actions to "[ReSharperHelpers].
 
