@@ -139,7 +139,7 @@ let appVeyorTrigger =
         let branchName = AppVeyorEnvironment.RepoBranch
 
         match tag, isPR, branchName with
-        | Some t, _, _ when "^v\d.*" >** t -> SemVerTag
+        | Some t, _, _ when "^v\d.*" >** t  -> SemVerTag
         | _, true, _                        -> PR
         | _, _, "develop"                   -> DevelopBranch
         | _, _, "feature/consume-eap"       -> ConsumeEapBranch
@@ -150,7 +150,7 @@ Target "AppVeyor_DescribeState" (fun _ ->
          (buildServer = BuildServer.AppVeyor)
          AppVeyorEnvironment.RepoTag
          AppVeyorEnvironment.RepoTagName
-         (isNotNullOrEmpty AppVeyorEnvironment.PullRequestNumber)
+         AppVeyorEnvironment.IsPullRequest
          AppVeyorEnvironment.RepoBranch
          appVeyorTrigger
 )
