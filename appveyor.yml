@@ -18,7 +18,6 @@ deploy: off
 
 cache:
   - build\packages\ -> **\*.csproj
-  - code\AlexPovar.ReSharperHelpers.Tests\Packages\ -> **\*.csproj
 
 artifacts:
   - path: 'build\NuGetPackages\*.nupkg'
