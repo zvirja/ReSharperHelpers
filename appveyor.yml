@@ -16,8 +16,5 @@ build_script:
 test: off
 deploy: off
 
-cache:
-  - build\packages\ -> **\*.csproj
-
 artifacts:
   - path: 'build\NuGetPackages\*.nupkg'
