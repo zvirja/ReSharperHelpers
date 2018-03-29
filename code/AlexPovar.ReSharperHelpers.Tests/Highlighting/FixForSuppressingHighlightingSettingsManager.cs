@@ -16,9 +16,15 @@ namespace AlexPovar.ReSharperHelpers.Tests.Highlighting
   [ShellComponent]
   public class FixForSuppressingHighlightingSettingsManager : SuppressingHighlightingSettingsManager, IHideImplementation<TestHighlightingSettingsManagerImpl>
   {
-    public FixForSuppressingHighlightingSettingsManager([NotNull] Lifetime lifetime, [NotNull] ShellPartCatalogSet partsCatalogSet, [NotNull] ILanguages allLanguages,
-      [NotNull] ISettingsStore settingsStore, [NotNull] IEnumerable<ICustomConfigurableSeverityItemProvider> customConfigurableSeverityItemProviders, [NotNull] SettingsCacheManager cacheManger)
-      : base(lifetime, partsCatalogSet, allLanguages, settingsStore, customConfigurableSeverityItemProviders, cacheManger)
+    public FixForSuppressingHighlightingSettingsManager(
+      [NotNull] Lifetime lifetime,
+      [NotNull] ShellPartCatalogSet partsCatalogueSet,
+      [NotNull] ILanguages allLanguages,
+      [NotNull] ISettingsStore settingsStore,
+      [NotNull] IEnumerable<ICustomConfigurableSeverityItemProvider> customConfigurableSeverityItemProviders,
+      [NotNull] IEnumerable<ILiveCustomConfigurableSeverityItemProvider> liveCustomConfigurableSeverityItemProviders,
+      [NotNull] SettingsCacheManager cacheManger)
+      : base(lifetime, partsCatalogueSet, allLanguages, settingsStore, customConfigurableSeverityItemProviders, liveCustomConfigurableSeverityItemProviders, cacheManger)
     {
     }
   }

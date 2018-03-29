@@ -25,12 +25,13 @@ namespace AlexPovar.ReSharperHelpers.Highlighting
 
     public SuppressingHighlightingSettingsManager(
       [NotNull] Lifetime lifetime,
-      [NotNull] ShellPartCatalogSet partsCatalogSet,
+      [NotNull] ShellPartCatalogSet partsCatalogueSet,
       [NotNull] ILanguages allLanguages,
       [NotNull] ISettingsStore settingsStore,
       [NotNull] IEnumerable<ICustomConfigurableSeverityItemProvider> customConfigurableSeverityItemProviders,
+      [NotNull] IEnumerable<ILiveCustomConfigurableSeverityItemProvider> liveCustomConfigurableSeverityItemProviders,
       [NotNull] SettingsCacheManager cacheManger)
-      : base(lifetime, partsCatalogSet, allLanguages, settingsStore, customConfigurableSeverityItemProviders, cacheManger)
+      : base(lifetime, partsCatalogueSet, allLanguages, settingsStore, customConfigurableSeverityItemProviders,liveCustomConfigurableSeverityItemProviders, cacheManger)
     {
     }
 
