@@ -15,6 +15,13 @@
       <dependency id="Wave" version="[12.0.0,13)" />
     </dependencies>
     <releaseNotes>
+Version 5.0
+  Add support for R# 2018.1
+
+  Breaking changes:
+    - Removed the project specific warning suppression feature. Now this feature is supported out of the box by R#, so no need to duplicate it.
+      More info: https://blog.jetbrains.com/dotnet/2018/04/05/configuring-inspection-severities-editorconfig/ 
+
 Version 4.5
   Add support for R# 2017.3
 
