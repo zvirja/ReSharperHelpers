@@ -25,7 +25,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
       return !existingAttributes.IsEmpty();
     }
 
-    //Remove existing, but don't create a new one.
+    // Remove existing, but don't create a new one.
     protected override IAttribute CreateAttribute(ITypeElement resolvedAttributeType, CSharpElementFactory factory, IPsiModule psiModule) => null;
   }
 }

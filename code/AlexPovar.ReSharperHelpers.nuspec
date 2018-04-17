@@ -12,9 +12,16 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>resharper helpers productivity testing navigation cleanup actions plugin alex povar</tags>
     <dependencies>
-      <dependency id="Wave" version="[11.0.0,12)" />
+      <dependency id="Wave" version="[12.0.0,13)" />
     </dependencies>
     <releaseNotes>
+Version 5.0
+  Add support for R# 2018.1
+
+  Breaking changes:
+    - Removed the project specific warning suppression feature. Now this feature is supported out of the box by R#, so no need to duplicate it.
+      More info: https://blog.jetbrains.com/dotnet/2018/04/05/configuring-inspection-severities-editorconfig/ 
+
 Version 4.5
   Add support for R# 2017.3
 
@@ -100,6 +107,6 @@ Version 2.0
     <file src="AlexPovar.ReSharperHelpers.dll" target="DotFiles" />
     <file src="AlexPovar.ReSharperHelpers.UI.dll" target="DotFiles" />
     <file src="LibGit2Sharp.dll" target="DotFiles" />
-    <file src="lib\win32\x86\git2-a5cf255.dll" target="DotFiles" />
+    <file src="lib\win32\x86\git2-dd2d538.dll" target="DotFiles" />
   </files>
 </package>

@@ -66,13 +66,13 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
         if (middleJumpPos > state.CurrentIndex) return middleJumpPos;
       }
 
-      //Don't overflow for single section only. Otherwise, for user it will look as jump above current selection.
+      // Don't overflow for single section only. Otherwise, for user it will look as jump above current selection.
       if (state.IsSingleSection) return state.CurrentIndex;
 
-      //Skip delimiter
+      // Skip delimiter
       var nextSectionStart = state.SectionEndIndex + 2;
 
-      //if we are on bottom - overflow.
+      // If we are on bottom - overflow.
       if (nextSectionStart > state.ItemsInMenu - 1)
       {
         nextSectionStart = 0;
@@ -91,8 +91,8 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
       int targetSectionEnd;
       int targetSectionPos;
 
-      //If we are not at the beginning, we will not leave current section
-      //Also, we don't allow overflow behavior for single section.
+      // If we are not at the beginning, we will not leave current section.
+      // Also, we don't allow overflow behavior for single section.
       if (state.CurrentIndex != state.SectionStartIndex || state.IsSingleSection)
       {
         targetSectionStart = state.SectionStartIndex;
@@ -101,10 +101,10 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
       }
       else
       {
-        //Skip separator
+        // Skip separator.
         var previousSectionEnd = state.SectionStartIndex - 2;
 
-        //If we are on top - overflow.
+        // If we are on top - overflow.
         if (previousSectionEnd < 0)
         {
           previousSectionEnd = state.ItemsInMenu - 1;

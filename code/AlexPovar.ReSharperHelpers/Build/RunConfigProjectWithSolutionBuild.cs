@@ -23,13 +23,9 @@ namespace AlexPovar.ReSharperHelpers.Build
       //Use reflection to set field to avoid reference to VS specific stuff.
       //This tricks allows to entirely avoid project picker.
       var projectVisibilityProp = commonEditor.GetType().GetProperty("ProjectRequiredVisibility", BindingFlags.Instance | BindingFlags.Public);
-      if (projectVisibilityProp != null)
+      if (projectVisibilityProp != null && projectVisibilityProp.GetValue(commonEditor) is Property<Visibility> visibility)
       {
-        var visibility = projectVisibilityProp.GetValue(commonEditor) as Property<Visibility>;
-        if (visibility != null)
-        {
           visibility.Value = Visibility.Collapsed;
-        }
       }
 
       return null;

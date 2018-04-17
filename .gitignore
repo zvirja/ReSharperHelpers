@@ -264,3 +264,6 @@ build/
 
 #Deploy host
 deploy.host
+
+# VIM tmp file
+*.swp
