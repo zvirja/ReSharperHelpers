@@ -37,7 +37,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
     {
       var nodesToRemove = new List<ITokenNode>();
 
-      //Remove line breaks between parenthesis and arguments.
+      // Remove line breaks between parenthesis and arguments.
       for (var node = parametersOwnerDeclaration.LPar; node != null && node != parametersOwnerDeclaration.RPar; node = node.GetNextToken())
       {
         if (IsLineBreak(node))
@@ -48,7 +48,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
 
       nodesToRemove.ForEach(LowLevelModificationUtil.DeleteChild);
 
-      //Remove all line breaks between arguments.
+      // Remove all line breaks between arguments.
       nodesToRemove.Clear();
       nodesToRemove.AddRange(parameters.Children().OfType<ITokenNode>().Where(IsLineBreak));
 

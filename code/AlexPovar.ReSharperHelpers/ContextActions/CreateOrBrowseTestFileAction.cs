@@ -158,23 +158,23 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       var declaredType = classDeclaration?.DeclaredElement;
       if (declaredType == null) return false;
 
-      //Disable for nested classes
+      // Disable for nested classes.
       if (classDeclaration.GetContainingTypeDeclaration() != null) return false;
 
-      //TRY RESOLVE EXISTING TEST
+      // TRY RESOLVE EXISTING TEST.
       var helperSettings = ReSharperHelperSettings.GetSettings(classDeclaration.GetSettingsStore());
 
       var testProject = this.CachedTestProject = this.ResolveTargetTestProject(classDeclaration, classDeclaration.GetSolution(), helperSettings);
       if (testProject == null) return false;
 
-      //Skip project if it's the same as current. This way we don't suggest to create tests in test projects.
+      // Skip project if it's the same as current. This way we don't suggest to create tests in test projects.
       if (testProject.Equals(classDeclaration.GetProject())) return false;
 
       var testClassNamespaceParts = MakeTestClassNamespaceParts(classDeclaration, testProject);
       if (testClassNamespaceParts == null) return false;
       var testNamespace = StringUtil.MakeFQName(testClassNamespaceParts);
 
-      //Resolve candidates for test classes
+      // Resolve candidates for test classes.
       var validTestSuffixes = helperSettings.ValidTestClassNameSuffixes?.Split(',', StringSplitOptions.RemoveEmptyEntries)
         .Select(s => s.ToString())
         .Concat(helperSettings.TestClassNameSuffix)
@@ -213,7 +213,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     [CanBeNull]
     private IProject ResolveTargetTestProject([NotNull] ITreeNode contextNode, [NotNull] ISolution solution, [NotNull] ReSharperHelperSettings helperSettings)
     {
-      //Get project by assembly attribute (if present)
+      // Get project by assembly attribute (if present).
       var projectName = solution.GetPsiServices()
         .Symbols
         .GetModuleAttributes(contextNode.GetPsiModule())
@@ -221,7 +221,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         .Select(TryExtractProjectNameFromAssemblyMetadataAttribute)
         .FirstNotNull();
 
-      //Check whether we have configured global test project.
+      // Check whether we have configured global test project.
       if (string.IsNullOrEmpty(projectName))
       {
         projectName = helperSettings.TestsProjectName;
@@ -232,7 +232,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         return solution.GetProjectByName(projectName);
       }
 
-      //Try to guess project specific test project.
+      // Try to guess project specific test project.
       var currentProjectName = contextNode.GetProject()?.Name;
       if (currentProjectName == null) return null;
 
@@ -248,7 +248,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         return null;
       }
 
-      //Try to guess global test project
+      // Try to guess global test project.
       candidates = solution.GetAllProjects()
         .Where(proj => TestProjectSuffixes.Any(suffix => proj.Name.EndsWith(suffix, StringComparison.Ordinal)))
         .ToArray();
