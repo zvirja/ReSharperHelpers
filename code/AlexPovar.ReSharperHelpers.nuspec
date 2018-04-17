@@ -26,7 +26,7 @@ Version 4.5
   Add support for R# 2017.3
 
 Version 4.4.1
-  Change AutoFixture actions to work with AutoFixture 4.0 namespace. Also change name prefix for all the context actions to "[ReSharperHelpers].
+  Change AutoFixture actions to work with AutoFixture 4.0 namespace. Also change name prefix for all the context actions to "[ReSharperHelpers]".
 
 Version 4.4
   Add support for R# 2017.2.
