@@ -49,9 +49,33 @@ let calculateVersionFromGit buildNumber =
                       | _ -> sprintf "%s-%s" nugetVersion sha
 
     { assemblyVersion=assemblyVersion; fileVersion=fileVersion; infoVersion=infoVersion; nugetVersion=nugetVersion }
-
+    
 let currentBuildVersion = match getBuildParamOrDefault "BuildVersion" "git" with
                           | "git" -> calculateVersionFromGit (getBuildParamOrDefault "BuildNumber" "0" |> int)
+                          | "dev" -> 
+                              let registryPath = @"Software\Zvirja\ResharperHelpersBuild";
+                              let getStorageKey() = getRegistryKey HKEYCurrentUser registryPath true
+                              
+                              let registryKey = match getStorageKey() with
+                                                | null -> createRegistrySubKey HKEYCurrentUser registryPath
+                                                          getStorageKey()
+                                                | v -> v
+                              
+                              let seedValueName = "LastDevBuildSeed"
+                              let currentSeed = registryKey.GetValue(seedValueName, "100")
+                                                |> Convert.ToInt32
+                                                |> (+) 1
+                                                
+                              // Store increased seed for the next build
+                              registryKey.SetValue(seedValueName, currentSeed.ToString())
+                              
+                              let randomVersion = sprintf "1.0.0.%d" currentSeed
+                              
+                              { assemblyVersion = "1.0.0";
+                                fileVersion = "1.0.0";
+                                infoVersion = randomVersion;
+                                nugetVersion = randomVersion; }
+                                
                           | ver -> { assemblyVersion = ver;
                                      fileVersion     = ver;
                                      infoVersion     = ver;
