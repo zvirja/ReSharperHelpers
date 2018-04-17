@@ -49,7 +49,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
       ICSharpParametersOwnerDeclaration paramsOwnerDeclaration = methodDeclaration;
       IFormalParameterList paramsList = methodDeclaration?.Params;
 
-      //If unable to resolve by method declaration, try to resolve for ctor.
+      // If unable to resolve by method declaration, try to resolve for ctor.
       if (paramsOwnerDeclaration == null)
       {
         var constructorDeclaration = ConstructorDeclarationNavigator.GetByTypeName(methodName);

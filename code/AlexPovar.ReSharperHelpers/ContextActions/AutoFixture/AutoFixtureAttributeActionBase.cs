@@ -39,7 +39,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
       var parameter = this.Provider.GetSelectedElement<IRegularParameterDeclaration>()?.DeclaredElement;
       if (parameter == null || !parameter.IsValid()) return false;
 
-      //Check whether AF is present
+      // Check whether AF is present.
       this.ResolvedAttributeType = TypeElementUtil.GetTypeElementByClrName(this.AttributeType, this.Provider.PsiModule);
       if (this.ResolvedAttributeType == null) return false;
 
@@ -69,7 +69,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
 
       var psiModule = this.Provider.PsiModule;
 
-      //Try resolve again. It could happen that IsAvailable method was not invoked (e.g. for Frozen(Matching..)).
+      // Try resolve again. It could happen that IsAvailable method was not invoked (e.g. for Frozen(Matching...)).
       this.ResolvedAttributeType = this.ResolvedAttributeType ?? TypeElementUtil.GetTypeElementByClrName(this.AttributeType, this.Provider.PsiModule);
       if (this.ResolvedAttributeType == null) return null;
 

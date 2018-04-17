@@ -12,11 +12,6 @@ Quick action to copy full class/interface name (including assembly name) to clip
 #### Cleanup modified file
 Extend solution, project and directory context menu with additional action to perform cleanup on modified files only. Action uses git to get list of the modified files. All the dirty files (indexed and non-indexed) are included. If you select project or directory (or multiple ones simultaneously), list of files to cleanup is limited to the appropriate scope.
 
-#### Suppress warnings for project
-Now you can use `[assembly: SuppressMessage("ReSharper", "id")]` attribute to suppress inspection warnings on project level. It might be useful for the test projects where not all inspections are relevant.
-
-Note, you might need to reload solution and re-analyze files to apply changes.
-
 #### Assert parameter is not null/Assert all
 Quick action for method argument to insert assertion statement. Allows to assert all nullable argument using `Assert all` action.
 If annotation attributes are available and relevalt for argument, they are arranged.

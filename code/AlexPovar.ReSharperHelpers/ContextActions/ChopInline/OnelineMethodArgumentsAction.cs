@@ -15,7 +15,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.ChopInline
 
     protected override void DoPutNewIndents(IFormalParameterList parameters)
     {
-      //Indentations were removed. We just not put the new ones.
+      // Indentations were removed. We just not put the new ones.
     }
   }
 }

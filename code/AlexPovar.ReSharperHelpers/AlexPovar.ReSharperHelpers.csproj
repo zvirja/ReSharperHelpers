@@ -12,8 +12,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2017.3.2" />
-    <PackageReference Include="LibGit2Sharp" Version="0.23.1" />
+    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2018.1.0" />
+    <PackageReference Include="LibGit2Sharp" Version="0.24.1" />
   </ItemGroup>
 
   <ItemGroup>

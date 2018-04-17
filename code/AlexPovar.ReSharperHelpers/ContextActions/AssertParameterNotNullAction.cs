@@ -62,7 +62,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       this.AssertionAlreadyPresent = FindAssertionStatement(block, currentParameter) != null;
       if (this.AssertionAlreadyPresent) return null;
 
-      //We take last parameter assertion before our parameter. If nothing - create at the beginning.
+      // Take last parameter assertion before our parameter. If nothing - create at the beginning.
       foreach (var current in parameterDeclarations.TakeWhile(x => !parameterDeclaration.Equals(x)).Reverse())
       {
         var parameter = current.DeclaredElement;
@@ -97,7 +97,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         return factory.CreateStatement("$0($1, $2);", assertionMethod, parameter, parameterName);
       }
 
-      //Fallback to unresoled
+      // Fallback to unresoled.
       return factory.CreateStatement("$0.$1($2, $3);", AssertTypeName, assertionMethodName, parameter, parameterName);
     }
 
@@ -106,7 +106,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       var invocation = expressionStatement.Expression as IInvocationExpression;
       if (invocation == null) return false;
 
-      //Validate that parameter is valid
+      // Validate that parameter is valid.
       if (parameterToMatch != null)
       {
         if (invocation.Arguments.Count != 2) return false;
@@ -114,13 +114,13 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         if (firstArgExpr?.Reference.Resolve().DeclaredElement?.Equals(parameterToMatch) != true) return false;
       }
 
-      //Validate this is Assert.Argument... method.
+      // Validate this is Assert.Argument... method.
       var reference = invocation.InvokedExpression as IReferenceExpression;
       if (reference == null) return false;
 
       var resolveResult = reference.Reference.Resolve();
 
-      //Handle case when reference is not resolved 
+      // Handle case when reference is not resolved 
       if (resolveResult.ResolveErrorType == ResolveErrorType.NOT_RESOLVED)
       {
         var referenceText = reference.GetText();
