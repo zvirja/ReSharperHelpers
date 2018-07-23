@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <Company>Alex Povar</Company>
     <Copyright>Copyright 2017 Alex Povar</Copyright>
     <CodeAnalysisRuleSet>..\AlexPovar.ReSharperHelpers.ruleset</CodeAnalysisRuleSet>
@@ -12,7 +12,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2018.1.0" />
+    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2018.2.0-eap04" />
     <PackageReference Include="LibGit2Sharp" Version="0.24.1" />
   </ItemGroup>
 

@@ -1,11 +1,11 @@
 ﻿using JetBrains.Application;
-using JetBrains.IDE.RunConfig;
+using JetBrains.ProjectModel.Features.RunConfig;
 using JetBrains.UI.Icons;
 
 namespace AlexPovar.ReSharperHelpers.Build
 {
   [ShellComponent]
-  public class RunConfigProjectWithSolutionBulidProvider : RunConfigProviderBase
+  public class RunConfigProjectWithSolutionBuildProvider : RunConfigProviderBase
   {
     public override string Name => "Launch solution";
 

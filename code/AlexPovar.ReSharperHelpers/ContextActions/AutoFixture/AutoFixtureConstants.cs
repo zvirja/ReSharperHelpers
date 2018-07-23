@@ -10,6 +10,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
 
     [NotNull] public static readonly IClrTypeName GreedyAttributeType = new ClrTypeName("AutoFixture.Xunit2.GreedyAttribute");
 
-    [NotNull] public static readonly IClrTypeName MathingEnumType = new ClrTypeName("AutoFixture.Xunit2.Matching");
+    [NotNull] public static readonly IClrTypeName MatchingEnumType = new ClrTypeName("AutoFixture.Xunit2.Matching");
   }
 }

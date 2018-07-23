@@ -20,9 +20,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.Pure
 
     protected PureAttributeActionBase([NotNull] ICSharpContextActionDataProvider provider)
     {
-      if (provider == null) throw new ArgumentNullException(nameof(provider));
-
-      this.Provider = provider;
+      this.Provider = provider ?? throw new ArgumentNullException(nameof(provider));
     }
 
     [NotNull]

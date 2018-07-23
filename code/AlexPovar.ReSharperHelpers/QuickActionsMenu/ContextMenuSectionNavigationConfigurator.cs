@@ -141,14 +141,14 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
     {
       var allItems = doc.CurrentItems;
 
-      var ind = currentIndex;
-      while (ind >= 0)
+      var idx = currentIndex;
+      while (idx  >= 0)
       {
-        if (ind == 0 || allItems[ind - 1].IsSeparator) break;
-        ind--;
+        if (idx  == 0 || allItems[idx  - 1].IsSeparator) break;
+        idx--;
       }
 
-      return ind;
+      return idx ;
     }
 
     private static int FindSectionEndIndex([NotNull] JetPopupMenuDoc doc, int currentIndex)
