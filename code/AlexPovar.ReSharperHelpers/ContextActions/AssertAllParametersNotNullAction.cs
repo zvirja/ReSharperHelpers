@@ -56,7 +56,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     {
       if (this._myParameterDeclarations == null) return null;
 
-      List<ICSharpStatement> list = new List<ICSharpStatement>();
+      var list = new List<ICSharpStatement>();
       foreach (ICSharpParameterDeclaration current in this._myParameterDeclarations)
       {
         list.AddRange(this.ExecuteOverParameter(current));

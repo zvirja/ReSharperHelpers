@@ -47,7 +47,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
     {
       if (this.MatchingFlagName == null) return base.CreateAttribute(resolvedAttributeType, factory, psiModule);
 
-      var enumType = TypeElementUtil.GetTypeElementByClrName(AutoFixtureConstants.MathingEnumType, psiModule) as IEnum;
+      var enumType = TypeElementUtil.GetTypeElementByClrName(AutoFixtureConstants.MatchingEnumType, psiModule) as IEnum;
       var enumValue = enumType?.EnumMembers.FirstOrDefault(f => f.ShortName == this.MatchingFlagName)?.ConstantValue;
 
       if (enumValue == null) return null;
