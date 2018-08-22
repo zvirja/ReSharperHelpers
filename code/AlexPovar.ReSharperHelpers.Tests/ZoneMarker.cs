@@ -7,7 +7,7 @@ using JetBrains.TestFramework.Application.Zones;
 namespace AlexPovar.ReSharperHelpers.Tests
 {
   [ZoneDefinition]
-  public class ResharperHelpersTestEnvironmentZone : ITestsZone, IRequire<PsiFeatureTestZone>
+  public class ResharperHelpersTestEnvironmentZone : ITestsEnvZone, IRequire<PsiFeatureTestZone>
   {
   }
 

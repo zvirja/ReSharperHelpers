@@ -23,8 +23,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Assert parameter is not null (or empty) action", Description = "Assert parameter is not null or empty.")]
   public class AssertParameterNotNullAction : CheckParamNullAction
   {
-    private const string ArgumentNotNullAssetionMethod = "ArgumentNotNull";
-    private const string ArgumentNotNullOrEmptyAssetionMethod = "ArgumentNotNullOrEmpty";
+    private const string ArgumentNotNullAssertionMethod = "ArgumentNotNull";
+    private const string ArgumentNotNullOrEmptyAssertionMethod = "ArgumentNotNullOrEmpty";
     private const string AssertTypeName = "Assert";
 
     public AssertParameterNotNullAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider)
@@ -88,7 +88,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     {
       if (this.AssertionAlreadyPresent) return null;
 
-      var assertionMethodName = parameter.Type.IsString() ? ArgumentNotNullOrEmptyAssetionMethod : ArgumentNotNullAssetionMethod;
+      var assertionMethodName = parameter.Type.IsString() ? ArgumentNotNullOrEmptyAssertionMethod : ArgumentNotNullAssertionMethod;
 
       var assertionMethod = this.FindAssertionMethod(assertionMethodName, parameter.Type, psiModule);
 
@@ -97,7 +97,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         return factory.CreateStatement("$0($1, $2);", assertionMethod, parameter, parameterName);
       }
 
-      // Fallback to unresoled.
+      // Fallback to unresolved.
       return factory.CreateStatement("$0.$1($2, $3);", AssertTypeName, assertionMethodName, parameter, parameterName);
     }
 
@@ -131,7 +131,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
         var methodReferenceName = parts[1];
 
-        return methodReferenceName == ArgumentNotNullAssetionMethod || methodReferenceName == ArgumentNotNullOrEmptyAssetionMethod;
+        return methodReferenceName == ArgumentNotNullAssertionMethod || methodReferenceName == ArgumentNotNullOrEmptyAssertionMethod;
       }
 
       var method = reference.Reference.Resolve().DeclaredElement as IMethod;
@@ -139,7 +139,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       if (method == null) return false;
 
       var methodName = method.ShortName;
-      if (methodName != ArgumentNotNullAssetionMethod && methodName != ArgumentNotNullOrEmptyAssetionMethod)
+      if (methodName != ArgumentNotNullAssertionMethod && methodName != ArgumentNotNullOrEmptyAssertionMethod)
       {
         return false;
       }
