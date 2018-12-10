@@ -25,7 +25,7 @@ namespace AlexPovar.ReSharperHelpers.Build
       var projectVisibilityProp = commonEditor.GetType().GetProperty("ProjectRequiredVisibility", BindingFlags.Instance | BindingFlags.Public);
       if (projectVisibilityProp != null && projectVisibilityProp.GetValue(commonEditor) is Property<Visibility> visibility)
       {
-          visibility.Value = Visibility.Collapsed;
+        visibility.Value = Visibility.Collapsed;
       }
 
       return null;
