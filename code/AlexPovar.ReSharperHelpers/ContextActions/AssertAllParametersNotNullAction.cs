@@ -61,6 +61,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       {
         list.AddRange(this.ExecuteOverParameter(current));
       }
+
       return this.HandleAddedStatements(list.ToArray());
     }
   }

@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>resharper helpers productivity testing navigation cleanup actions plugin alex povar</tags>
     <dependencies>
-      <dependency id="Wave" version="13.0.0" />
+      <dependency id="Wave" version="14.0.0" />
     </dependencies>
     <releaseNotes>
 Version 5.1
