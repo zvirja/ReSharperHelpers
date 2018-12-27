@@ -15,6 +15,9 @@
       <dependency id="Wave" version="14.0.0" />
     </dependencies>
     <releaseNotes>
+Version 5.2
+  Add support for R# 2018.3
+
 Version 5.1
   Add support for R# 2018.2
 
