@@ -2,7 +2,7 @@ image: Visual Studio 2017
 
 environment:
   RESHARPER_GALLERY_KEY:
-    secure: n7O2pQ5KhsdnT2DhKmiU40gCt3Tl3/T/zxnclsYxgYwgxpNK2iZvK9apawWFMpCO
+    secure: ZHMReQXlwdjhYK3JPKDy8zckH93IR0bvNW6vx1JrWtjciAPlbcttAhDJZhS0UV3DeJiG91Xk/ngBDflfJy3lXS8jGmCIiZ+EmkuWgrHwSeQ=
   MYGET_KEY:
     secure: 4p4wi7VlIH54Ue2IKX5E8FW30mZeHihIevL9l+nKol4w4UWRmIWbBhnGs1iflu4F
 
