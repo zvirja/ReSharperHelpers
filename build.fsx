@@ -139,7 +139,7 @@ let publishNuget feed key =
     )
 
 Target "PublishNuGetPublic" (fun _ -> publishNuget 
-                                         "https://resharper-plugins.jetbrains.com" 
+                                         "https://plugins.jetbrains.com/" 
                                          (getBuildParam "NuGetPublicKey") )
                                          
 Target "PublishNuGetPrivate" (fun _ -> publishNuget 
