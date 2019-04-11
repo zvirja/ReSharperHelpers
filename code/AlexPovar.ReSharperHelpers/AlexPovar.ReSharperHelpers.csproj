@@ -14,6 +14,7 @@
   <ItemGroup>
     <PackageReference Include="JetBrains.ReSharper.SDK" Version="2019.1.0-eap05" />
     <PackageReference Include="LibGit2Sharp" Version="0.24.1" />
+    <PackageReference Include="Wave" Version="[191.0.0-eap05,192.0.0)" />
   </ItemGroup>
 
   <ItemGroup>
