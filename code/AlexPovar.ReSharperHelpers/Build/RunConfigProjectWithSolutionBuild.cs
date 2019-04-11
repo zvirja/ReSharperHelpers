@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows;
 using JetBrains.DataFlow;
+using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Features.RunConfig;
 

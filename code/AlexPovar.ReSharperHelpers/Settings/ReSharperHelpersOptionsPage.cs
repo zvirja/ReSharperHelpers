@@ -4,6 +4,7 @@ using JetBrains.Application.UI.Options;
 using JetBrains.Application.UI.Options.OptionPages;
 using JetBrains.Application.UI.UIAutomation;
 using JetBrains.DataFlow;
+using JetBrains.Lifetimes;
 
 namespace AlexPovar.ReSharperHelpers.Settings
 {
