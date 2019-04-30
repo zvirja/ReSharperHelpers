@@ -1,3 +1,4 @@
+open System.Linq
 #r @"build/tools/FAKE.Core/tools/FakeLib.dll"
 
 open Fake
@@ -6,6 +7,7 @@ open System
 open System.Text.RegularExpressions
 
 let solutionPath =  @"code\AlexPovar.ReSharperHelpers.sln" |> FullName
+let primaryProjectPath = @"code\AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj" |> FullName
 let testsProjectDir = @"code\AlexPovar.ReSharperHelpers.Tests" |> FullName
 let testsAssemblyName = "AlexPovar.ReSharperHelpers.Tests.dll"
 let nuspecFilePath = @"code\AlexPovar.ReSharperHelpers.nuspec" |> FullName
@@ -115,14 +117,20 @@ Target "Tests" (fun _ ->
 
     !! (buildOutDir </> testsAssemblyName)
     |> Fake.NUnitSequential.NUnit (fun p -> {p with OutputFile = testResultFile
+                                                    Framework = "net-4.6.2"
+                                                    DisableShadowCopy = true
                                                     TimeOut = TimeSpan.FromMinutes 30.0 })
 )
 
 Target "NuGetPack" (fun _ ->
+    let waveVersion = XMLRead false primaryProjectPath "" "" "Project/ItemGroup/PackageReference[@Include='Wave']/@Version"
+                      |> Enumerable.Single
+
     nuspecFilePath 
     |> NuGetPack (fun p -> {p with Version      = currentBuildVersion.nugetVersion
                                    WorkingDir   = buildOutDir
-                                   OutputPath   = nugetOutputDir })
+                                   OutputPath   = nugetOutputDir
+                                   Properties   = [("WaveVersion", waveVersion)] })
 )
 
 Target "CompleteBuild" DoNothing
@@ -139,7 +147,7 @@ let publishNuget feed key =
     )
 
 Target "PublishNuGetPublic" (fun _ -> publishNuget 
-                                         "https://resharper-plugins.jetbrains.com" 
+                                         "https://plugins.jetbrains.com/" 
                                          (getBuildParam "NuGetPublicKey") )
                                          
 Target "PublishNuGetPrivate" (fun _ -> publishNuget 

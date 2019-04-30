@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
 using JetBrains.Application.UI.Components;
+using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;

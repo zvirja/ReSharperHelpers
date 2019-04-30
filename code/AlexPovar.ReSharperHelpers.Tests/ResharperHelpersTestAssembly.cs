@@ -11,7 +11,7 @@ using NUnit.Framework;
 // ReSharper disable once CheckNamespace
 
 [SetUpFixture]
-public class ReSharperHelpersTestAssembly : ExtensionTestEnvironmentAssembly<ResharperHelpersTestEnvironmentZone>
+public class ReSharperHelpersTestAssembly : ExtensionTestEnvironmentAssembly<IReSharperHelpersTestEnvironmentZone>
 {
   public override void SetUp()
   {
