@@ -117,6 +117,8 @@ Target "Tests" (fun _ ->
 
     !! (buildOutDir </> testsAssemblyName)
     |> Fake.NUnitSequential.NUnit (fun p -> {p with OutputFile = testResultFile
+                                                    Framework = "net-4.6.2"
+                                                    DisableShadowCopy = true
                                                     TimeOut = TimeSpan.FromMinutes 30.0 })
 )
 
