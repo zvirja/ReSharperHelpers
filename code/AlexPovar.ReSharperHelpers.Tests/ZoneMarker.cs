@@ -7,12 +7,12 @@ using JetBrains.TestFramework.Application.Zones;
 namespace AlexPovar.ReSharperHelpers.Tests
 {
   [ZoneDefinition]
-  public class ResharperHelpersTestEnvironmentZone : ITestsEnvZone, IRequire<PsiFeatureTestZone>
+  public interface IReSharperHelpersTestEnvironmentZone : ITestsEnvZone, IRequire<PsiFeatureTestZone>, IRequire<ICodeEditingZone>, IRequire<ILanguageCSharpZone>
   {
   }
 
   [ZoneMarker]
-  public class ZoneMarker : IRequire<ICodeEditingZone>, IRequire<ILanguageCSharpZone>, IRequire<ResharperHelpersTestEnvironmentZone>
+  public class ZoneMarker : IRequire<IReSharperHelpersTestEnvironmentZone>
   {
   }
 }

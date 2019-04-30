@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AlexPovar.ReSharperHelpers.Helpers;
 using AlexPovar.ReSharperHelpers.Settings;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
+using JetBrains.Diagnostics;
 using JetBrains.DocumentManagers.impl;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.IDE;
@@ -64,11 +66,11 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     [CanBeNull]
     private IProject CachedTestProject { get; set; }
 
-    public void Execute(ISolution solution, ITextControl textControl)
+    public async void Execute(ISolution solution, ITextControl textControl)
     {
       if (this.ExistingProjectFile != null)
       {
-        ShowProjectFile(solution, this.ExistingProjectFile, null);
+        await ShowProjectFile(solution, this.ExistingProjectFile, null);
         return;
       }
 
@@ -111,7 +113,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
         if (testFileTemplate != null)
         {
-          FileTemplatesManager.Instance.CreateFileFromTemplate(testFileName, new ProjectFolderWithLocation(testFolder), testFileTemplate);
+          await FileTemplatesManager.Instance.CreateFileFromTemplateAsync(testFileName, new ProjectFolderWithLocation(testFolder), testFileTemplate);
           return;
         }
 
@@ -138,7 +140,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
             caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
           });
 
-        ShowProjectFile(solution, newFile, caretPosition);
+        await ShowProjectFile(solution, newFile, caretPosition);
       }
     }
 
@@ -291,12 +293,15 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       return namespaceParts;
     }
 
-    private static void ShowProjectFile([NotNull] ISolution solution, [NotNull] IProjectFile file, int? caretPosition)
+    private static async Task ShowProjectFile([NotNull] ISolution solution, [NotNull] IProjectFile file, int? caretPosition)
     {
       var editor = solution.GetComponent<IEditorManager>();
-      var textControl = editor.OpenProjectFile(file, OpenFileOptions.DefaultActivate);
+      var textControl = await editor.OpenProjectFileAsync(file, OpenFileOptions.DefaultActivate);
 
-      if (caretPosition != null) textControl?.Caret.MoveTo(caretPosition.Value, CaretVisualPlacement.DontScrollIfVisible);
+      if (caretPosition != null)
+      {
+        ReadLockCookie.GuardedExecute(() => textControl?.Caret.MoveTo(caretPosition.Value, CaretVisualPlacement.DontScrollIfVisible));
+      }
     }
   }
 }

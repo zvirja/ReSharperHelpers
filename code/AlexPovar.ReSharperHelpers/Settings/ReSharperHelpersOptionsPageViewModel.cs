@@ -2,12 +2,13 @@
 using JetBrains.Application.Settings;
 using JetBrains.Application.UI.Options;
 using JetBrains.DataFlow;
+using JetBrains.Lifetimes;
 
 namespace AlexPovar.ReSharperHelpers.Settings
 {
   public class ReSharperHelpersOptionsPageViewModel
   {
-    public ReSharperHelpersOptionsPageViewModel([NotNull] Lifetime lifetime, [NotNull] OptionsSettingsSmartContext settingsStore)
+    public ReSharperHelpersOptionsPageViewModel(Lifetime lifetime, [NotNull] OptionsSettingsSmartContext settingsStore)
     {
       this.TestProjectName = new Property<string>(lifetime, nameof(ReSharperHelperSettings.TestsProjectName));
       this.TestClassNameSuffix = new Property<string>(lifetime, nameof(ReSharperHelperSettings.TestClassNameSuffix));

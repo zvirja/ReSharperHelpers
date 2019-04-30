@@ -8,7 +8,7 @@ using JetBrains.Application.UI.Automation;
 using JetBrains.Application.UI.Components;
 using JetBrains.Application.UI.Controls.JetPopupMenu;
 using JetBrains.Application.UI.Tooltips;
-using JetBrains.DataFlow;
+using JetBrains.Lifetimes;
 using JetBrains.UI.PopupLayout;
 using JetBrains.UI.SrcView.Controls.JetPopupMenu;
 
@@ -18,7 +18,7 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
   public class JetPopupMenusInteractivePatched : JetPopupMenusInteractive
   {
     public JetPopupMenusInteractivePatched(
-      [NotNull] Lifetime lifetime,
+      Lifetime lifetime,
       [NotNull] IIsApplicationActiveState isApplicationActiveState,
       [NotNull] IUIApplicationSimple uiapp,
       [NotNull] IAutomationViewsRegistry automationViewsRegistry,
