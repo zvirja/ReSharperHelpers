@@ -258,6 +258,7 @@ paket-files/
 
 # VS Code
 .vscode/
+.ionide/
 
 # Build tools and artifacts
 build/
