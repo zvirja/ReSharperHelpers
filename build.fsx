@@ -209,7 +209,7 @@ Target "AppVeyor" (fun _ ->
 
 // AppVeyor CI
 dependency "AppVeyor" <| match appVeyorTrigger with
-                         | SemVerTag                            -> "PublishNuGetPublic"
+                         | SemVerTag                            -> "PublishNuGetPrivate"
                          | DevelopBranch                        -> "PublishNuGetPrivate"
                          | ConsumeEapBranch | PR | MasterBranch -> "CompleteBuild"
                          | UnknownBranchOrTag                   -> "Build"
