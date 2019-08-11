@@ -1,3 +1,4 @@
-﻿using NUnit.Framework;
+﻿using System.Threading;
+using NUnit.Framework;
 
-[assembly: RequiresSTA]
+[assembly: Apartment(ApartmentState.STA)]

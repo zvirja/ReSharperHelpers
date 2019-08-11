@@ -116,9 +116,8 @@ Target "Tests" (fun _ ->
     setEnvironVar "JetProductHomeDir" testsProjectDir
 
     !! (buildOutDir </> testsAssemblyName)
-    |> Fake.NUnitSequential.NUnit (fun p -> {p with OutputFile = testResultFile
-                                                    Framework = "net-4.6.2"
-                                                    DisableShadowCopy = true
+    |> Fake.Testing.NUnit3.NUnit3 (fun p -> {p with ResultSpecs = [testResultFile]
+                                                    Framework = Testing.NUnit3.NUnit3Runtime.Net45
                                                     TimeOut = TimeSpan.FromMinutes 30.0 })
 )
 
