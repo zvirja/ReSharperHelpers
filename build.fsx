@@ -116,9 +116,8 @@ Target "Tests" (fun _ ->
     setEnvironVar "JetProductHomeDir" testsProjectDir
 
     !! (buildOutDir </> testsAssemblyName)
-    |> Fake.NUnitSequential.NUnit (fun p -> {p with OutputFile = testResultFile
-                                                    Framework = "net-4.6.2"
-                                                    DisableShadowCopy = true
+    |> Fake.Testing.NUnit3.NUnit3 (fun p -> {p with ResultSpecs = [testResultFile]
+                                                    Framework = Testing.NUnit3.NUnit3Runtime.Net45
                                                     TimeOut = TimeSpan.FromMinutes 30.0 })
 )
 
@@ -161,7 +160,7 @@ Target "PublishNuGetPrivate" (fun _ -> publishNuget
 type AppVeyorEnvironment with
     static member IsPullRequest = isNotNullOrEmpty AppVeyorEnvironment.PullRequestNumber
 
-type AppVeyorTrigger = Invalid | SemVerTag | PR | DevelopBranch | ConsumeEapBranch | UnknownBranchOrTag
+type AppVeyorTrigger = Invalid | SemVerTag | PR | DevelopBranch | MasterBranch | ConsumeEapBranch | UnknownBranchOrTag
 let appVeyorTrigger =
     if buildServer <> BuildServer.AppVeyor then
         Invalid
@@ -173,6 +172,7 @@ let appVeyorTrigger =
         match tag, isPR, branchName with
         | Some t, _, _ when "^v\d.*" >** t  -> SemVerTag
         | _, true, _                        -> PR
+        | _, _, "master"                    -> MasterBranch
         | _, _, "develop"                   -> DevelopBranch
         | _, _, "feature/consume-eap"       -> ConsumeEapBranch
         | _                                 -> UnknownBranchOrTag
@@ -209,11 +209,11 @@ Target "AppVeyor" (fun _ ->
 
 // AppVeyor CI
 dependency "AppVeyor" <| match appVeyorTrigger with
-                         | SemVerTag             -> "PublishNuGetPublic"
-                         | DevelopBranch         -> "PublishNuGetPrivate"
-                         | ConsumeEapBranch | PR -> "CompleteBuild"
-                         | UnknownBranchOrTag    -> "Build"
-                         | _                     -> "AppVeyor_InvalidTrigger"
+                         | SemVerTag                            -> "PublishNuGetPrivate"
+                         | DevelopBranch                        -> "PublishNuGetPrivate"
+                         | ConsumeEapBranch | PR | MasterBranch -> "CompleteBuild"
+                         | UnknownBranchOrTag                   -> "Build"
+                         | _                                    -> "AppVeyor_InvalidTrigger"
 
 "Tests"
     ?=> "AppVeyor_PublishTestResults"
