@@ -38,7 +38,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         var declaredElement = this.Declaration?.DeclaredElement;
         if (declaredElement != null)
         {
-          type = DeclaredElementPresenter.Format(this.Declaration.Language, DeclaredElementPresenter.KIND_PRESENTER, declaredElement);
+          type = DeclaredElementPresenter.Format(this.Declaration.Language, DeclaredElementPresenter.KIND_PRESENTER, declaredElement).Text;
         }
 
         return $"[Helpers] Copy full {type} name";

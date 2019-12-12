@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexPovar.ReSharperHelpers"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexPovar.ReSharperHelpers.Tests", "AlexPovar.ReSharperHelpers.Tests\AlexPovar.ReSharperHelpers.Tests.csproj", "{2D7B1F9F-4C71-4920-B5E7-432EC5742081}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexPovar.ReSharperHelpers.UI", "AlexPovar.ReSharperHelpers.UI\AlexPovar.ReSharperHelpers.UI.csproj", "{035CF401-3B1E-4795-B221-8381215D5999}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3E50FE1A-847C-46ED-A410-56519D5FD771}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -30,10 +28,6 @@ Global
 		{2D7B1F9F-4C71-4920-B5E7-432EC5742081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D7B1F9F-4C71-4920-B5E7-432EC5742081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D7B1F9F-4C71-4920-B5E7-432EC5742081}.Release|Any CPU.Build.0 = Release|Any CPU
-		{035CF401-3B1E-4795-B221-8381215D5999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{035CF401-3B1E-4795-B221-8381215D5999}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{035CF401-3B1E-4795-B221-8381215D5999}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{035CF401-3B1E-4795-B221-8381215D5999}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
