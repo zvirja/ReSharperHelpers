@@ -14,14 +14,13 @@
     <dependencies>
       <dependency id="Wave" version="$WaveVersion$" />
     </dependencies>
-    <releaseNotes>Version 5.4&lt;br/&gt;
-  Add support for R# 2019.2&lt;br/&gt;
+    <releaseNotes>Version 5.5&lt;br/&gt;
+  Add support for R# 2019.3&lt;br/&gt;
     </releaseNotes>
   </metadata>
   <files>
     <!-- Plugin -->
     <file src="AlexPovar.ReSharperHelpers.dll" target="DotFiles" />
-    <file src="AlexPovar.ReSharperHelpers.UI.dll" target="DotFiles" />
     <file src="LibGit2Sharp.dll" target="DotFiles" />
     <file src="lib\win32\x86\git2-dd2d538.dll" target="DotFiles" />
   </files>

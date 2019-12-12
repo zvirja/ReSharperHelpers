@@ -1,7 +1,7 @@
 # ReSharper Helpers
 Plugin to extend R# functionality by set of custom actions.
 
-[![ReSharper Helpers Plugin](https://img.shields.io/resharper/v/AlexPovar.ReSharperHelpers.svg?label=ReSharper%20Helpers)](https://plugins.jetbrains.com/plugin/11665-resharper-helpers)
+[![ReSharper Helpers Plugin](https://img.shields.io/resharper/v/AlexPovar.ReSharperHelpers?label=R%23%20Helpers)](https://plugins.jetbrains.com/plugin/11665-resharper-helpers)
 [![Build status](https://ci.appveyor.com/api/projects/status/5n8xemx7o9wn32nh?svg=true)](https://ci.appveyor.com/project/Zvirja/resharperhelpers)
 
 ## Features:
