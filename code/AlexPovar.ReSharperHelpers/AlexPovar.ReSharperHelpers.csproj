@@ -12,9 +12,9 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2019.3.0" />
+    <PackageReference Include="JetBrains.ReSharper.SDK" Version="2020.1.0" />
     <PackageReference Include="LibGit2Sharp" Version="0.24.1" />
-    <PackageReference Include="Wave" Version="[193.0.0,194.0.0)" />
+    <PackageReference Include="Wave" Version="[201.0.0,202.0.0)" />
   </ItemGroup>
 
   <ItemGroup>
