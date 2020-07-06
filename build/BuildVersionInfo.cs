@@ -5,5 +5,5 @@ class BuildVersionInfo
   public string InfoVersion;
   public string NuGetVersion;
 
-  public override string ToString() => $"Assembly: {AssemblyVersion}, Info: {InfoVersion} NuGet: {NuGetVersion}";
+  public override string ToString() => $"Assembly: {AssemblyVersion}, Info: {InfoVersion}, File: {FileVersion} NuGet: {NuGetVersion}";
 }

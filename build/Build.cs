@@ -2,9 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
-using Microsoft.Build.Evaluation;
 using Microsoft.Win32;
 using Nuke.Common;
 using Nuke.Common.CI.AppVeyor;
@@ -12,15 +10,16 @@ using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
-using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.NUnit;
-using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Logger;
+using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
+using static Nuke.Common.Tools.NUnit.NUnitTasks;
+using static Nuke.Common.Tools.NuGet.NuGetTasks;
+using static Nuke.Common.Tools.Git.GitTasks;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
@@ -62,6 +61,8 @@ class Build : NukeBuild
     Target CalculateVersion => _ => _
         .Executes(() =>
         {
+            Info($"Build version: {BuildVersionParam}");
+
             CurrentBuildVersion = BuildVersionParam switch
             {
                 "git" => CalculateVersionFromGit(),
@@ -90,7 +91,7 @@ class Build : NukeBuild
             
             BuildVersionInfo CalculateVersionFromGit()
             {
-                var desc = GitTasks.Git("describe --tags --long --match=v*").Single().Text;
+                var desc = Git("describe --tags --long --abbrev=40 --match=v*", logInvocation: false, logOutput: false).Single().Text;
                 var result = Regex.Match(desc,
                         @"^v(?<maj>\d+)\.(?<min>\d+)(\.(?<rev>\d+))?(?<pre>-\w+\d*)?-(?<num>\d+)-g(?<sha>[a-z0-9]+)$",
                         RegexOptions.IgnoreCase)
@@ -147,7 +148,7 @@ class Build : NukeBuild
     Target Restore => _ => _
         .Executes(() =>
         {
-            MSBuildTasks.MSBuild(c => c
+            MSBuild(c => c
                 .SetConfiguration(Configuration)
                 .SetTargets("Restore")
                 .SetSolutionFile(Solution.Path)
@@ -159,7 +160,7 @@ class Build : NukeBuild
         .DependsOn(Prepare, Restore)
         .Executes(() =>
         {
-            MSBuildTasks.MSBuild(c => c
+            MSBuild(c => c
                 .SetConfiguration(Configuration)
                 .SetTargets("Build")
                 .SetSolutionFile(Solution.Path)
@@ -180,7 +181,7 @@ class Build : NukeBuild
             
             var testAssemblyPath = OutputDir / $"{TestProjectName}.dll";
             
-            NUnitTasks.NUnit3(c => c
+            NUnit3(c => c
                 .AddInputFiles(testAssemblyPath)
                 .SetResults(TestResultFile)
                 .SetFramework("net-4.5")
@@ -199,7 +200,7 @@ class Build : NukeBuild
                 .Single(r => r.EvaluatedInclude == "Wave")
                 .GetMetadataValue("Version");
 
-            NuGetTasks.NuGetPack(c => c
+            NuGetPack(c => c
                 .SetTargetPath(Solution.Directory / NuSpecFileName)
                 .SetBasePath(OutputDir)
                 .SetVersion(CurrentBuildVersion.NuGetVersion)
@@ -217,7 +218,7 @@ class Build : NukeBuild
         .Executes(() =>
         {
             var nugetPackage = GlobFiles(NuGetPackageOutDir, "*.nupkg").Single();
-            NuGetTasks.NuGetPush(c => c
+            NuGetPush(c => c
                 .SetTargetPath(nugetPackage)
                 .SetApiKey(MyGetKey)
                 .SetSource("https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/package")
@@ -230,7 +231,7 @@ class Build : NukeBuild
         .Executes(() =>
         {
             var nugetPackage = GlobFiles(NuGetPackageOutDir, "*.nupkg").Single();
-            NuGetTasks.NuGetPush(c => c
+            NuGetPush(c => c
                 .SetTargetPath(nugetPackage)
                 .SetApiKey(ReSharperGalleryKey)
                 .SetSource("https://plugins.jetbrains.com/")
