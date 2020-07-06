@@ -11,7 +11,7 @@ pull_requests:
 
 build_script:
 - ps: |
-    & .\build.ps1 --target AppVeyor_Pipeline --resharper-gallery-key "$($Env:RESHARPER_GALLERY_KEY)" --myget-key "$($Env:MYGET_KEY)" --build-version git  --build-number $($Env:APPVEYOR_BUILD_NUMBER) 
+    & .\build.ps1 --target AppVeyor_Pipeline --resharper-gallery-key "$($Env:RESHARPER_GALLERY_KEY)" --myget-key "$($Env:MYGET_KEY)" --build-version git  --build-number $($Env:APPVEYOR_BUILD_NUMBER) --no-logo
 
 test: off
 deploy: off
