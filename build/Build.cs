@@ -43,9 +43,6 @@ class Build : NukeBuild
     [Parameter("Specify R# installation host to where Dev artifacts should be put")]
     readonly string DevHostId = "";
 
-    [Parameter("Configures whether tests should be run")]
-    readonly bool SkipTests = false;
-
     [Parameter("API Key used to publish package to R# gallery", Name = "resharper-gallery-key")]
     readonly string ReSharperGalleryKey = null;
 
@@ -177,7 +174,6 @@ class Build : NukeBuild
 
     Target Test => _ => _
         .DependsOn(Compile)
-        .OnlyWhenDynamic(() => !SkipTests)
         .Executes(() =>
         {
             var testProject = Solution.GetProject(TestProjectName);
