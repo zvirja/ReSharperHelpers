@@ -279,7 +279,8 @@ class Build : NukeBuild
         .DependsOn(ResolveAppVeyorTarget(this), AppVeyor_DescribeState, AppVeyor_UploadTestResults)
         .Executes(() =>
         {
-            if (AppVeyorEnv.PullRequestNumber != 0)
+            var trigger = ResolveAppVeyorTrigger();
+            if (trigger != AppVeyorTrigger.PR)
             {
                 AppVeyorEnv.UpdateBuildNumber(CurrentBuildVersion.FileVersion);
                 Info($"Updated build version to: '{CurrentBuildVersion.FileVersion}'");
