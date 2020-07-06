@@ -261,7 +261,8 @@ paket-files/
 .ionide/
 
 # Build tools and artifacts
-build/
+artifacts/
+.tmp/
 
 #Deploy host
 deploy.host
