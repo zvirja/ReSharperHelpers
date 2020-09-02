@@ -28,10 +28,10 @@ class Build : NukeBuild
 
     public static int Main () => Execute<Build>(x => x.CompleteBuild);
 
+    [Solution] readonly Solution Solution;
+ 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
-
-    [Solution] readonly Solution Solution;
 
     [Parameter(Name = "BuildVersion")]
     readonly string BuildVersionParam = "git";
