@@ -115,7 +115,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
 
         if (!gitModificationResolver.IsValidRepository)
         {
-          MessageBox.ShowError($"[ReSharper Helpers] Unable to resolve solution path as a git repository:{Environment.NewLine}{solutionDir}");
+          MessageBox.ShowError($"[ReSharper Helpers] Unable to resolve solution directory as a git repository:{Environment.NewLine}{solutionDir}");
           return null;
         }
 
