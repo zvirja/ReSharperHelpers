@@ -25,6 +25,7 @@ using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Psi.Modules;
+using JetBrains.ReSharper.Psi.Transactions;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Resources.Shell;
@@ -76,58 +77,50 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
       using (ReadLockCookie.Create())
       {
-        string testClassName;
-        string testNamespace;
-        string testFileName;
-        IProjectFolder testFolder;
-        Template testFileTemplate;
-
         using (var cookie = solution.CreateTransactionCookie(DefaultAction.Rollback, this.Text, NullProgressIndicator.Create()))
         {
           var declaration = this._provider.GetSelectedElement<ICSharpTypeDeclaration>();
 
           var declaredType = declaration?.DeclaredElement;
-          if (declaredType == null) return;
+          if (declaredType == null)
+            return;
 
           var settingsStore = declaration.GetSettingsStore();
           var helperSettings = ReSharperHelperSettings.GetSettings(settingsStore);
 
           var testProject = this.CachedTestProject ?? this.ResolveTargetTestProject(declaration, solution, helperSettings);
-          if (testProject == null) return;
+          if (testProject == null)
+            return;
 
           var classNamespaceParts = TrimDefaultProjectNamespace(declaration.GetProject().NotNull(), declaredType.GetContainingNamespace().QualifiedName);
           var testFolderLocation = classNamespaceParts.Aggregate(testProject.Location, (current, part) => current.Combine(part));
 
-          testNamespace = StringUtil.MakeFQName(testProject.GetDefaultNamespace(), StringUtil.MakeFQName(classNamespaceParts));
+          var testNamespace = StringUtil.MakeFQName(testProject.GetDefaultNamespace(), StringUtil.MakeFQName(classNamespaceParts));
 
-          testFolder = testProject.GetOrCreateProjectFolder(testFolderLocation, cookie);
-          if (testFolder == null) return;
+          var testFolder = testProject.GetOrCreateProjectFolder(testFolderLocation, cookie);
+          if (testFolder == null)
+            return;
 
-          testClassName = declaredType.ShortName + helperSettings.TestClassNameSuffix;
-          testFileName = testClassName + ".cs";
+          var testClassName = declaredType.ShortName + helperSettings.TestClassNameSuffix;
+          var testFileName = testClassName + ".cs";
 
-          testFileTemplate = StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
-
-          cookie.Commit(NullProgressIndicator.Create());
-        }
-
-        if (testFileTemplate != null)
-        {
-          await FileTemplatesManager.Instance.CreateFileFromTemplateAsync(testFileName, new ProjectFolderWithLocation(testFolder), testFileTemplate);
-          return;
-        }
-
-        var newFile = AddNewItemHelper.AddFile(testFolder, testFileName);
-        if (newFile == null) return;
-
-        int? caretPosition = -1;
-        solution.GetPsiServices()
-          .Transactions.Execute(this.Text, () =>
+          var testFileTemplate = StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
+          if (testFileTemplate != null)
           {
-            var psiSourceFile = newFile.ToSourceFile();
+            await FileTemplatesManager.Instance.CreateFileFromTemplateAsync(testFileName, new ProjectFolderWithLocation(testFolder), testFileTemplate);
+            return;
+          }
 
-            var csharpFile = psiSourceFile?.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
-            if (csharpFile == null) return;
+          var newFile = AddNewItemHelper.AddFile(testFolder, testFileName).ToSourceFile();
+          if (newFile == null)
+            return;
+
+          int? caretPosition;
+          using (PsiTransactionCookie.CreateAutoCommitCookieWithCachesUpdate(newFile.GetPsiServices(), "CreateTestClass"))
+          {
+            var csharpFile = newFile.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
+            if (csharpFile == null)
+              return;
 
             var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
 
@@ -138,9 +131,12 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
             var addedTypeDeclaration = addedNs.AddTypeDeclarationAfter(classLikeDeclaration, null) as IClassDeclaration;
 
             caretPosition = addedTypeDeclaration?.Body?.GetDocumentRange().TextRange.StartOffset + 1;
-          });
+          }
 
-        await ShowProjectFile(solution, newFile, caretPosition);
+          cookie.Commit(NullProgressIndicator.Create());
+
+          await ShowProjectFile(solution, newFile.ToProjectFile().NotNull(), caretPosition);
+        }
       }
     }
 

@@ -11,8 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		AlexPovar.ReSharperHelpers.nuspec = AlexPovar.ReSharperHelpers.nuspec
-		..\build.fsx = ..\build.fsx
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\build\_build.csproj", "{80A0D54D-800E-4FAD-9219-36AA3C227790}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +21,8 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80A0D54D-800E-4FAD-9219-36AA3C227790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80A0D54D-800E-4FAD-9219-36AA3C227790}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C851F234-453D-415F-A395-C55A455BA830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C851F234-453D-415F-A395-C55A455BA830}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C851F234-453D-415F-A395-C55A455BA830}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -34,5 +37,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D5896C80-3F3D-4FB3-BE80-A2D0FBC585F5}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{80A0D54D-800E-4FAD-9219-36AA3C227790} = {3E50FE1A-847C-46ED-A410-56519D5FD771}
 	EndGlobalSection
 EndGlobal

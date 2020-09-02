@@ -4,7 +4,7 @@
     <id>AlexPovar.ReSharperHelpers</id>
     <title>ReSharper Helpers</title>
     <description>Set of custom actions and tweaks for ReSharper to improve your productivity. Refer to project site for entire feature list.</description>
-    <version>@build.number@</version>
+    <version>0.1.0</version>
     <authors>Alex Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
     <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/master/LICENSE</licenseUrl>
@@ -14,8 +14,8 @@
     <dependencies>
       <dependency id="Wave" version="$WaveVersion$" />
     </dependencies>
-    <releaseNotes>Version 5.6&lt;br/&gt;
-  Add support for R# 20120.1&lt;br/&gt;
+    <releaseNotes>Version 5.7&lt;br/&gt;
+  Add support for R# 2020.2&lt;br/&gt;
     </releaseNotes>
   </metadata>
   <files>

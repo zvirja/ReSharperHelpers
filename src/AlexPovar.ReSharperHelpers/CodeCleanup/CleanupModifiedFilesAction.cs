@@ -19,7 +19,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.CodeCleanup
 {
-  [Action("Cleanup modified code...", Icon = typeof(MainThemedIcons.ClearIcon))]
+  [Action("HelpersCleanupGitModifiedFiles", "Cleanup git modified code...", Icon = typeof(MainThemedIcons.ClearIcon))]
   public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
   {
     void IExecutableAction.Execute(IDataContext context, DelegateExecute nextExecute)
@@ -74,10 +74,12 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
     bool IExecutableAction.Update(IDataContext dataContext, ActionPresentation presentation, DelegateUpdate nextUpdate)
     {
       var collector = CodeCleanupFilesCollector.TryCreate(dataContext);
-      if (collector == null) return false;
+      if (collector == null)
+        return false;
 
       var psiServices = collector.Solution.GetPsiServices();
-      if (!psiServices.Files.AllDocumentsAreCommitted || !psiServices.CachesState.IsInitialUpdateFinished.Value) return false;
+      if (!psiServices.Files.AllDocumentsAreCommitted || !psiServices.CachesState.IsInitialUpdateFinished.Value)
+        return false;
 
       switch (collector.GetActionScope())
       {
@@ -113,7 +115,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
 
         if (!gitModificationResolver.IsValidRepository)
         {
-          MessageBox.ShowError($"[ReSharper Helpers] Unable to resolve solution path as a git repository:{Environment.NewLine}{solutionDir}");
+          MessageBox.ShowError($"[ReSharper Helpers] Unable to resolve solution directory as a git repository:{Environment.NewLine}{solutionDir}");
           return null;
         }
 

@@ -1,4 +1,4 @@
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 environment:
   RESHARPER_GALLERY_KEY:
@@ -11,10 +11,10 @@ pull_requests:
 
 build_script:
 - ps: |
-    & .\build.cmd AppVeyor NuGetPublicKey="$($Env:RESHARPER_GALLERY_KEY)" NuGetPrivateKey="$($Env:MYGET_KEY)" BuildVersion=git BuildNumber=$($Env:APPVEYOR_BUILD_NUMBER) 
+    & .\build.ps1 --target AppVeyor_Pipeline --resharper-gallery-key "$($Env:RESHARPER_GALLERY_KEY)" --myget-key "$($Env:MYGET_KEY)" --build-version git  --build-number $($Env:APPVEYOR_BUILD_NUMBER) --no-logo
 
 test: off
 deploy: off
 
 artifacts:
-  - path: 'build\NuGetPackages\*.nupkg'
+  - path: 'artifacts\nugetPackages\*.nupkg'
