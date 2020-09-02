@@ -14,8 +14,8 @@
     <dependencies>
       <dependency id="Wave" version="$WaveVersion$" />
     </dependencies>
-    <releaseNotes>Version 5.6&lt;br/&gt;
-  Add support for R# 20120.1&lt;br/&gt;
+    <releaseNotes>Version 5.7&lt;br/&gt;
+  Add support for R# 2020.2&lt;br/&gt;
     </releaseNotes>
   </metadata>
   <files>
