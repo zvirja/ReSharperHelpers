@@ -1,4 +1,4 @@
-class BuildVersionInfo
+public class BuildVersionInfo
 {
   public string AssemblyVersion;
   public string FileVersion;

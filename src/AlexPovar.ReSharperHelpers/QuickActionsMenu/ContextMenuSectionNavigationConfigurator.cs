@@ -10,7 +10,6 @@ namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
   {
     private const int MiddleJumpThreshold = 6;
 
-
     private ContextMenuSectionNavigationConfigurator([NotNull] JetPopupMenuView menuView)
     {
       this.MenuView = menuView;
