@@ -3,21 +3,18 @@
   <PropertyGroup>    
     <TargetFramework>net472</TargetFramework>
     <CodeAnalysisRuleSet>..\AlexPovar.ReSharperHelpers.ruleset</CodeAnalysisRuleSet>
+    <DefaultItemExcludes>$(DefaultItemExcludes);test\packages\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="data\**" />
-    <None Include="data\**" />
-    <None Remove="Packages\**" />
-    <Compile Remove="Packages\**" />
-    <EmbeddedResource Remove="Packages\**" />
+    <Compile Remove="test\data\**" />
+    <None Include="test\data\**" />
 
     <None Remove="AlexPovar.ReSharperHelpers.Tests.csproj.DotSettings" />
-    
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="2020.3.0" />
+    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="2021.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
   </ItemGroup>
 
@@ -28,13 +25,4 @@
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties" />
-  </ItemGroup>
-
 </Project>
