@@ -9,6 +9,7 @@ using JetBrains.Application.UI.Actions;
 using JetBrains.Application.UI.ActionsRevised.Menu;
 using JetBrains.Application.UI.ActionSystem.ActionsRevised.Menu;
 using JetBrains.Diagnostics;
+using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.DataContext;
 using JetBrains.ReSharper.Feature.Services.Actions;
@@ -143,6 +144,8 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
 
     private class FilteredCodeCleanupProvider : ICodeCleanupFilesProvider
     {
+      private static DocumentRange[] DefaultRanges { get; } = {DocumentRange.InvalidRange};
+
       [NotNull] private readonly ICodeCleanupFilesProvider _innerProvider;
       [NotNull] private readonly IList<IPsiSourceFile> _filteredFiles;
 
@@ -153,6 +156,8 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       }
 
       public IList<IPsiSourceFile> GetFiles() => this._filteredFiles;
+
+      public DocumentRange[] GetRangesForFile(IPsiSourceFile file) => DefaultRanges;
 
       public bool IsSuitableProjectElement(IProjectModelElement element) => this._innerProvider.IsSuitableProjectElement(element);
 
