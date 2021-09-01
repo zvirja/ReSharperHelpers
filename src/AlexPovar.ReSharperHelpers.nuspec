@@ -22,6 +22,6 @@
     <!-- Plugin -->
     <file src="AlexPovar.ReSharperHelpers.dll" target="DotFiles" />
     <file src="LibGit2Sharp.dll" target="DotFiles" />
-    <file src="lib\win32\x86\git2-dd2d538.dll" target="DotFiles" />
+    <file src="lib\win32\**\*.dll" target="DotFiles\lib\win32" />
   </files>
 </package>
