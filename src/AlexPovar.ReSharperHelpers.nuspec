@@ -14,8 +14,9 @@
     <dependencies>
       <dependency id="Wave" version="$WaveVersion$" />
     </dependencies>
-    <releaseNotes>Version 5.10&lt;br/&gt;
+    <releaseNotes>Version 5.10.1&lt;br/&gt;
   Add support for R# 2021.2&lt;br/&gt;
+  Fix LibGit2Sharp does not work for x64&lt;br/&gt;
     </releaseNotes>
   </metadata>
   <files>
