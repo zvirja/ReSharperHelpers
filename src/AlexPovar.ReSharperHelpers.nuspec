@@ -8,13 +8,14 @@
     <authors>Oleksandr Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
     <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/master/LICENSE</licenseUrl>
-    <copyright>Copyright 2017 Oleksadr Povar</copyright>
+    <copyright>Copyright 2017-2021 Oleksandr Povar</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>resharper helpers productivity testing navigation cleanup actions plugin alex povar</tags>
     <dependencies>
       <dependency id="Wave" version="$WaveVersion$" />
     </dependencies>
-    <releaseNotes>Version 5.10.1&lt;br/&gt;
+    <releaseNotes>Version 6.0&lt;br/&gt;
+  Add possibility to configure sub-namespace for test classes&lt;br/&gt;
   Add support for R# 2021.2&lt;br/&gt;
   Fix LibGit2Sharp does not work for x64&lt;br/&gt;
     </releaseNotes>
