@@ -84,7 +84,11 @@ If section is very large, it jumps to the middle of the section before jumping t
 Quick actions to add/remove `[Frozen]` or `[Greedy]` attributes for [AutoFixture xunit integration](https://github.com/AutoFixture/AutoFixture). Allows to specify match criteria for the `[Frozen(Matching.XXX)]` attribute.
 
 ### Copy full class name
-Quick action to copy full class/interface name (including assembly name) to clipboard.
+
+Extend "Copy Code Reference" menu with an extra item which contains fully qualified class/struct/interface name (including assembly name).
+Useful when there is a need to copy type name in a config.
+
+To access the menu put the cursor on class/struct/interface name identifier, hit "Alt+Enter", type "fqn" and hit "Enter". The list will contain an extra entry.
 
 ### [Pure] annotation
 Quick actions to add/remove `Pure` annotation attribute.
