@@ -23,6 +23,7 @@ using JetBrains.ReSharper.Feature.Services.Util;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Psi.CSharp.Util;
 using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Transactions;
@@ -181,7 +182,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
             var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
 
-            var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testClassNs);
+            bool isFileScoped = CSharpNamespaceUtil.CanAddFileScopedNamespaceDeclaration(csharpFile);
+            var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testClassNs, isFileScoped);
             var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
 
             var classLikeDeclaration = (IClassLikeDeclaration)elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
@@ -214,11 +216,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       }
 
       return relativeSourceNsParts;
-      //
-      //
-      // // IEnumerable<string> testProjectDefaultNsParts = StringUtil.FullySplitFQName(testProject.GetDefaultNamespace().NotNull());
-      //
-      // return testProjectDefaultNsParts.Concat(relativeTypeNamespace).ToArray();
     }
 
     [NotNull, Pure]
