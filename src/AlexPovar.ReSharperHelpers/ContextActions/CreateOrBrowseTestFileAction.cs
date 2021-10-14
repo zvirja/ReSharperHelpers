@@ -80,23 +80,25 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       this.ExistingProjectFile = null;
       this.CachedTestProject = null;
 
-      var classDeclaration = ClassDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>());
-      var declaredType = classDeclaration?.DeclaredElement;
+      IClassLikeDeclaration typeDeclaration = ClassLikeDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>());
+      if (typeDeclaration is IInterfaceDeclaration) return false;
+
+      ITypeElement declaredType = typeDeclaration?.DeclaredElement;
       if (declaredType == null) return false;
 
       // Disable for nested classes.
-      if (classDeclaration.GetContainingTypeDeclaration() != null) return false;
+      if (typeDeclaration.GetContainingTypeDeclaration() != null) return false;
 
       // TRY RESOLVE EXISTING TEST.
-      var helperSettings = ReSharperHelperSettings.GetSettings(classDeclaration.GetSettingsStoreWithEditorConfig());
+      var helperSettings = ReSharperHelperSettings.GetSettings(typeDeclaration.GetSettingsStoreWithEditorConfig());
 
-      var testProject = this.CachedTestProject = this.ResolveTargetTestProject(classDeclaration, classDeclaration.GetSolution(), helperSettings);
+      var testProject = this.CachedTestProject = this.ResolveTargetTestProject(typeDeclaration, typeDeclaration.GetSolution(), helperSettings);
       if (testProject == null) return false;
 
       // Skip project if it's the same as current. This way we don't suggest to create tests in test projects.
-      if (testProject.Equals(classDeclaration.GetProject())) return false;
+      if (testProject.Equals(typeDeclaration.GetProject())) return false;
 
-      var testClassRelativeNsParts = GetTestClassRelativeNamespaceParts(classDeclaration, testProject, helperSettings);
+      var testClassRelativeNsParts = GetTestClassRelativeNamespaceParts(typeDeclaration, testProject, helperSettings);
       if (testClassRelativeNsParts == null)
         return false;
 
@@ -111,7 +113,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       var classTypeFqnCandidates = validTestSuffixes?.Select(suffix => StringUtil.MakeFQName(testClassNs, declaredType.ShortName + suffix));
       if (classTypeFqnCandidates == null) return false;
 
-      var symbolsService = classDeclaration.GetPsiServices().Symbols;
+      var symbolsService = typeDeclaration.GetPsiServices().Symbols;
 
       var testClass = testProject.GetPsiModules()
         .Select(m => symbolsService.GetSymbolScope(m, false, true))
@@ -135,7 +137,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       {
         using (var cookie = solution.CreateTransactionCookie(DefaultAction.Rollback, this.Text, NullProgressIndicator.Create()))
         {
-          var declaration = this._provider.GetSelectedElement<ICSharpTypeDeclaration>();
+          var declaration = this._provider.GetSelectedElement<IClassLikeDeclaration>();
 
           ITypeElement declaredType = declaration?.DeclaredElement;
           if (declaredType == null)
