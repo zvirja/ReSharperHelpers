@@ -41,8 +41,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   {
     private const string TemplateDescription = "[ReSharperHelpers] TestFile";
 
-    [NotNull] private static readonly ClrTypeName AssemblyMetadataAttributeName = new ClrTypeName("System.Reflection.AssemblyMetadataAttribute");
-
     [NotNull] private static readonly string[] TestProjectSuffixes =
       new[]
         {
@@ -247,22 +245,11 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     [CanBeNull]
     private IProject ResolveTargetTestProject([NotNull] ITreeNode contextNode, [NotNull] ISolution solution, [NotNull] ReSharperHelperSettings helperSettings)
     {
-      // Get project by assembly attribute (if present).
-      var explicitProjectName = solution.GetPsiServices()
-        .Symbols
-        .GetModuleAttributes(contextNode.GetPsiModule())
-        .GetAttributeInstances(AssemblyMetadataAttributeName, false)
-        .Select(TryExtractProjectNameFromAssemblyMetadataAttribute)
-        .FirstNotNull();
-
-      // Check whether we have configured global test project.
-      if (string.IsNullOrEmpty(explicitProjectName))
-      {
-        explicitProjectName = helperSettings.TestsProjectName;
-      }
-
+      var explicitProjectName = helperSettings.TestsProjectName;
       if (!string.IsNullOrEmpty(explicitProjectName))
+      {
         return solution.GetProjectByName(explicitProjectName);
+      }
 
       // Try to guess project specific test project.
       var currentProjectName = contextNode.GetProject()?.Name;
@@ -294,26 +281,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       if (candidate.isSingle)
       {
         return candidate.value;
-      }
-
-      return null;
-    }
-
-    [CanBeNull]
-    private static string TryExtractProjectNameFromAssemblyMetadataAttribute([NotNull] IAttributeInstance attributeInstance)
-    {
-      const string testProjectKey = "ReSharperHelpers.TestProject";
-
-      if (attributeInstance.PositionParameterCount != 2) return null;
-
-      var key = attributeInstance.PositionParameter(0);
-      if (key.IsConstant && key.ConstantValue.IsString() && string.Equals((string)key.ConstantValue.Value, testProjectKey, StringComparison.Ordinal))
-      {
-        var value = attributeInstance.PositionParameter(1);
-        if (value.IsConstant && value.ConstantValue.IsString())
-        {
-          return (string)value.ConstantValue.Value;
-        }
       }
 
       return null;

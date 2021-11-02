@@ -42,9 +42,6 @@ namespace AlexPovar.ReSharperHelpers.Settings
       this.AddControl(projectNameProperty.GetBeTextBox(lifetime));
       this.AddRichText(new RichText()
         .AppendLine("This setting is used to explicitly specify single project in solution where all unit tests are located.")
-        .Append("The setting has less priority than ")
-        .Append("[assembly: AssemblyMetadata(\"ReSharperHelpers.TestProject\", \"<name>\")]) ", new TextStyle(FontStyle.Italic))
-        .Append("project attribute.", TextStyle.Default).AppendLine()
         .Append("Save it to .editorconfig file instead", new TextStyle(FontStyle.Bold)).AppendLine()
       );
       this.AddSpacer();
