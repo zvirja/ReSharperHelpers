@@ -46,13 +46,21 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     [NotNull] private static readonly string[] TestProjectSuffixes =
       new[]
         {
-          "Test",
-          "Tests",
-          "UnitTest",
+          "Tests.Unit",
+          "Test.Unit",
           "UnitTests",
-          "Tests.Unit"
+          "UnitTest",
+          "Unit.Tests",
+          "Unit.Test",
+          "Tests",
+          "Test",
         }
-        .SelectMany(suffix => new[] {"", "."}.Select(delimiter => delimiter + suffix))
+        .ToArray();
+
+
+    [NotNull] private static readonly string[] TestProjectSuffixesWithDelimiters =
+      TestProjectSuffixes
+        .SelectMany(suffix => new[] { suffix, $".{suffix}" })
         .ToArray();
 
     [NotNull] private readonly ICSharpContextActionDataProvider _provider;
@@ -68,7 +76,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     [CanBeNull]
     private IProject CachedTestProject { get; set; }
 
-    public string Text => this.ExistingProjectFile == null ? "[Helpers] Create test file" : "[Helpers] Go to test file";
+    public string Text => this.ExistingProjectFile == null ? "Create test file" : "Go to test file";
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
@@ -240,7 +248,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     private IProject ResolveTargetTestProject([NotNull] ITreeNode contextNode, [NotNull] ISolution solution, [NotNull] ReSharperHelperSettings helperSettings)
     {
       // Get project by assembly attribute (if present).
-      var projectName = solution.GetPsiServices()
+      var explicitProjectName = solution.GetPsiServices()
         .Symbols
         .GetModuleAttributes(contextNode.GetPsiModule())
         .GetAttributeInstances(AssemblyMetadataAttributeName, false)
@@ -248,38 +256,45 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
         .FirstNotNull();
 
       // Check whether we have configured global test project.
-      if (string.IsNullOrEmpty(projectName))
+      if (string.IsNullOrEmpty(explicitProjectName))
       {
-        projectName = helperSettings.TestsProjectName;
+        explicitProjectName = helperSettings.TestsProjectName;
       }
 
-      if (!string.IsNullOrEmpty(projectName))
-      {
-        return solution.GetProjectByName(projectName);
-      }
+      if (!string.IsNullOrEmpty(explicitProjectName))
+        return solution.GetProjectByName(explicitProjectName);
 
       // Try to guess project specific test project.
       var currentProjectName = contextNode.GetProject()?.Name;
-      if (currentProjectName == null) return null;
-
-      var candidates = TestProjectSuffixes
-        .SelectMany(suffix => solution.GetProjectsByName(currentProjectName + suffix))
-        .WhereNotNull()
-        .ToArray();
-
-      if (candidates.Length > 0)
+      if (currentProjectName == null)
       {
-        if (candidates.Length == 1) return candidates[0];
+        return null;
+      }
 
+      var candidate = TestProjectSuffixesWithDelimiters
+        .SelectMany(suffix => solution.GetProjectsByName(currentProjectName + suffix))
+        .TryGetSingleCandidate();
+
+      if (candidate.isSingle)
+      {
+        return candidate.value;
+      }
+
+      // Optimize, as we are definitely sure that more than one project with test suffix exists.
+      if (candidate.hasAny)
+      {
         return null;
       }
 
       // Try to guess global test project.
-      candidates = solution.GetAllProjects()
-        .Where(proj => TestProjectSuffixes.Any(suffix => proj.Name.EndsWith(suffix, StringComparison.Ordinal)))
-        .ToArray();
+      candidate = solution.GetAllProjects()
+        .Where(static proj => TestProjectSuffixes.Any(suffix => proj.Name.EndsWith(suffix, StringComparison.Ordinal)))
+        .TryGetSingleCandidate();
 
-      if (candidates.Length == 1) return candidates[0];
+      if (candidate.isSingle)
+      {
+        return candidate.value;
+      }
 
       return null;
     }
@@ -295,7 +310,10 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       if (key.IsConstant && key.ConstantValue.IsString() && string.Equals((string)key.ConstantValue.Value, testProjectKey, StringComparison.Ordinal))
       {
         var value = attributeInstance.PositionParameter(1);
-        if (value.IsConstant && value.ConstantValue.IsString()) return (string)value.ConstantValue.Value;
+        if (value.IsConstant && value.ConstantValue.IsString())
+        {
+          return (string)value.ConstantValue.Value;
+        }
       }
 
       return null;

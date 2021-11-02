@@ -23,5 +23,26 @@ namespace AlexPovar.ReSharperHelpers.Helpers
     {
       return action.ToContextActionIntention(customAnchor ?? HelperActionsConstants.ContextActionsAnchor, customIcon ?? MyIcons.ContextActionIcon);
     }
+
+    [Pure]
+    public static (T value, bool hasAny, bool isSingle) TryGetSingleCandidate<T>(this IEnumerable<T> enumerable)
+    {
+      using IEnumerator<T> enumerator = enumerable.GetEnumerator();
+
+      T value = default;
+      int count = 0;
+
+      while (enumerator.MoveNext())
+      {
+        count++;
+
+        if (count == 1)
+          value = enumerator.Current;
+        else if (count > 1)
+          break;
+      }
+
+      return (value, count > 0, count == 1);
+    }
   }
 }
