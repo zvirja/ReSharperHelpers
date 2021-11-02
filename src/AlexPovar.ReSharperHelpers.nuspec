@@ -7,7 +7,7 @@
     <version>0.1.0</version>
     <authors>Oleksandr Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
-    <licenseUrl>https://github.com/Zvirja/ReSharperHelpers/blob/master/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
     <copyright>Copyright 2017-2021 Oleksandr Povar</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>resharper helpers productivity testing navigation cleanup actions plugin alex povar</tags>

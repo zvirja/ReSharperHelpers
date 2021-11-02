@@ -1,5 +1,9 @@
 <Project>
     <PropertyGroup>
         <LangVersion>latest</LangVersion>
+
+        <!-- NU1608: Detected package version outside of dependency constraint -->
+        <!-- MSB3277: Found conflicts between different versions of 'assembly' that could not be resolved -->
+        <NoWarn>$(NoWarn);NU1608;MSB3277</NoWarn>
     </PropertyGroup>
 </Project>
