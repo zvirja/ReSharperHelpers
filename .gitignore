@@ -262,6 +262,7 @@ paket-files/
 
 # Build tools and artifacts
 artifacts/
+.nuke/temp
 .tmp/
 
 #Deploy host
