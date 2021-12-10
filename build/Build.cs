@@ -124,7 +124,7 @@ class Build : NukeBuild
                 toolPath = editions
                     .Select(edition => Path.Combine(
                         EnvironmentInfo.SpecialFolder(SpecialFolders.ProgramFiles)!,
-                        $@"Microsoft Visual Studio\2022\{edition}\MSBuild\Current\Bin\msbuild.exe"))
+                        $@"Microsoft Visual Studio\2022\{edition}\MSBuild\Current\Bin\{(Environment.Is64BitProcess ? @"amd64\" : "")}msbuild.exe"))
                     .First(File.Exists);
             }
 
@@ -263,7 +263,7 @@ class Build : NukeBuild
             AppVeyorTrigger.DevelopBranch    => build.PublishMyGet,
             AppVeyorTrigger.ConsumeEapBranch => build.CompleteBuild,
             AppVeyorTrigger.PR               => build.CompleteBuild,
-            AppVeyorTrigger.MasterBranch     => build.CompleteBuild,
+            AppVeyorTrigger.MainBranch       => build.CompleteBuild,
             _                                => build.Compile
         };
     }
@@ -274,7 +274,7 @@ class Build : NukeBuild
         SemVerTag,
         PR,
         DevelopBranch,
-        MasterBranch,
+        MainBranch,
         ConsumeEapBranch,
         UnknownBranchOrTag
     }
@@ -295,7 +295,8 @@ class Build : NukeBuild
         {
             ({ } t, _, _) when Regex.IsMatch(t, "^v\\d.*") => AppVeyorTrigger.SemVerTag,
             (_, true, _)                                   => AppVeyorTrigger.PR,
-            (_, _, "master")                               => AppVeyorTrigger.MasterBranch,
+            (_, _, "main")                                 => AppVeyorTrigger.MainBranch,
+            (_, _, "master")                               => AppVeyorTrigger.MainBranch,
             (_, _, "develop")                              => AppVeyorTrigger.DevelopBranch,
             (_, _, "feature/consume-eap")                  => AppVeyorTrigger.ConsumeEapBranch,
             _                                              => AppVeyorTrigger.UnknownBranchOrTag
