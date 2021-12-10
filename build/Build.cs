@@ -147,7 +147,7 @@ class Build : NukeBuild
         .DependsOn(Prepare, Restore, Compile)
         .Executes(() =>
         {
-            var testProject = Solution.GetProject(TestProjectName);
+            var testProject = Solution.GetProject(TestProjectName)!;
             
             var testAssemblyPath = OutputDir / $"{TestProjectName}.dll";
 
@@ -155,8 +155,8 @@ class Build : NukeBuild
                 .AddInputFiles(testAssemblyPath)
                 .SetResults(TestResultFile)
                 .SetFramework("net-4.5")
-                .SetTimeout(30_000)
-                .AddProcessEnvironmentVariable("JetProductHomeDir", testProject!.Directory)
+                .SetTimeout((int)TimeSpan.FromMinutes(10).TotalMilliseconds)
+                .AddProcessEnvironmentVariable("JetProductHomeDir", testProject.Directory)
             );
         });
 
