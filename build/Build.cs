@@ -10,6 +10,7 @@ using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.NUnit;
@@ -19,7 +20,7 @@ using static Nuke.Common.Logger;
 using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
 using static Nuke.Common.Tools.NUnit.NUnitTasks;
 using static Nuke.Common.Tools.NuGet.NuGetTasks;
-using static Nuke.Common.Tools.Git.GitTasks;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
@@ -100,11 +101,9 @@ class Build : NukeBuild
     Target Restore => _ => _
         .Executes(() =>
         {
-            MSBuild(c => c
-                .SetConfiguration(Configuration)
-                .SetTargets("Restore")
-                .SetSolutionFile(Solution.Path)
-                .SetVerbosity(MSBuildVerbosity.Minimal)
+            DotNetRestore(c => c
+                .SetProjectFile(Solution)
+                .SetVerbosity(DotNetVerbosity.Minimal)
             );
         });
     
@@ -112,21 +111,40 @@ class Build : NukeBuild
         .DependsOn(Prepare, Restore)
         .Executes(() =>
         {
+            // Workaround till we add VS 2022 support in a new version
+            string toolPath;
+            try
+            {
+                toolPath = MSBuildToolPathResolver.Resolve();
+            }
+            catch
+            {
+
+                var editions = new[] { "Enterprise", "Professional", "Community", "BuildTools", "Preview" };
+                toolPath = editions
+                    .Select(edition => Path.Combine(
+                        EnvironmentInfo.SpecialFolder(SpecialFolders.ProgramFiles)!,
+                        $@"Microsoft Visual Studio\2022\{edition}\MSBuild\Current\Bin\msbuild.exe"))
+                    .First(File.Exists);
+            }
+
+            // Cannot use dotnet, as build relies on 'Microsoft.Build.Utilities.v4.0' which is available for MS Build only.
             MSBuild(c => c
                 .SetConfiguration(Configuration)
                 .SetTargets("Build")
-                .SetSolutionFile(Solution.Path)
+                .SetSolutionFile(Solution)
                 .SetVerbosity(MSBuildVerbosity.Minimal)
                 .SetOutDir(OutputDir)
                 .AddProperty("AssemblyVersion", CurrentBuildVersion.AssemblyVersion)
                 .AddProperty("FileVersion", CurrentBuildVersion.FileVersion)
                 .AddProperty("InformationalVersion", CurrentBuildVersion.InfoVersion)
                 .AddProperty("DevHostId", DevHostId)
+                .SetProcessToolPath(toolPath)
             );
         });
 
     Target Test => _ => _
-        .DependsOn(Compile)
+        .DependsOn(Prepare, Restore, Compile)
         .Executes(() =>
         {
             var testProject = Solution.GetProject(TestProjectName);
@@ -143,7 +161,7 @@ class Build : NukeBuild
         });
 
     Target Pack => _ => _
-        .DependsOn(Test)
+        .DependsOn(Compile, Test)
         .Executes(() =>
         {
             var waveVersion = Solution.GetProject(ProjectName)
@@ -272,15 +290,15 @@ class Build : NukeBuild
         var tag = env.RepositoryTag ? env.RepositoryTagName : null;
         var isPr = env.PullRequestNumber != null;
         var branchName = env.RepositoryBranch;
-        
+
         return (tag, isPr, branchName) switch
         {
-            (string t, _, _) when Regex.IsMatch(t, "^v\\d.*") => AppVeyorTrigger.SemVerTag,
-            (_, true, _)                                                    => AppVeyorTrigger.PR,
-            (_, _, "master")                                                => AppVeyorTrigger.MasterBranch,
-            (_, _, "develop")                                               => AppVeyorTrigger.DevelopBranch,
-            (_, _, "feature/consume-eap")                                   => AppVeyorTrigger.ConsumeEapBranch,
-            _                                                               => AppVeyorTrigger.UnknownBranchOrTag
+            ({ } t, _, _) when Regex.IsMatch(t, "^v\\d.*") => AppVeyorTrigger.SemVerTag,
+            (_, true, _)                                   => AppVeyorTrigger.PR,
+            (_, _, "master")                               => AppVeyorTrigger.MasterBranch,
+            (_, _, "develop")                              => AppVeyorTrigger.DevelopBranch,
+            (_, _, "feature/consume-eap")                  => AppVeyorTrigger.ConsumeEapBranch,
+            _                                              => AppVeyorTrigger.UnknownBranchOrTag
         };
     }
 }

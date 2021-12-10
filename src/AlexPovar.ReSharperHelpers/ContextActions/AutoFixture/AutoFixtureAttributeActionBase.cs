@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AlexPovar.ReSharperHelpers.Helpers;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.ContextActions;
+using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Impl;
@@ -17,7 +20,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
 {
-  public abstract class AutoFixtureAttributeActionBase : HelpersContextActionBase
+  public abstract class AutoFixtureAttributeActionBase : ContextActionBase
   {
     protected AutoFixtureAttributeActionBase([NotNull] ICSharpContextActionDataProvider provider, [NotNull] IClrTypeName attributeType)
     {
@@ -46,6 +49,10 @@ namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
       return this.IsAvailableWithAttributeInstances(parameter.GetAttributeInstances(this.AttributeType, false));
     }
 
+    public override IEnumerable<IntentionAction> CreateBulbItems()
+    {
+      return this.ToHelpersContextActionIntentions();
+    }
 
     protected virtual bool IsAvailableWithAttributeInstances([NotNull] IList<IAttributeInstance> existingAttributes)
     {

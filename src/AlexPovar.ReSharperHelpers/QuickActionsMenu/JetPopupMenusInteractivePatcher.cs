@@ -1,11 +1,12 @@
 using JetBrains.Application;
+using JetBrains.Application.Parts;
 using JetBrains.Application.UI.Controls.JetPopupMenu;
 using JetBrains.Lifetimes;
 using JetBrains.UI.SrcView.Controls.JetPopupMenu;
 
 namespace AlexPovar.ReSharperHelpers.QuickActionsMenu
 {
-  [ShellComponent(Lifecycle.DemandReclaimable, Creation.AnyThread, Access.AnyThread)]
+  [ShellComponent(Lifecycle.Container, Creation.AnyThread)]
   public class JetPopupMenusInteractivePatcher
   {
     public JetPopupMenusInteractivePatcher(JetPopupMenus menus)

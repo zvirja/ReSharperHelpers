@@ -23,6 +23,7 @@ using JetBrains.ReSharper.Feature.Services.Util;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Psi.CSharp.Util;
 using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Transactions;
@@ -40,18 +41,24 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
   {
     private const string TemplateDescription = "[ReSharperHelpers] TestFile";
 
-    [NotNull] private static readonly ClrTypeName AssemblyMetadataAttributeName = new ClrTypeName("System.Reflection.AssemblyMetadataAttribute");
-
     [NotNull] private static readonly string[] TestProjectSuffixes =
       new[]
         {
-          "Test",
-          "Tests",
-          "UnitTest",
+          "Tests.Unit",
+          "Test.Unit",
           "UnitTests",
-          "Tests.Unit"
+          "UnitTest",
+          "Unit.Tests",
+          "Unit.Test",
+          "Tests",
+          "Test",
         }
-        .SelectMany(suffix => new[] {"", "."}.Select(delimiter => delimiter + suffix))
+        .ToArray();
+
+
+    [NotNull] private static readonly string[] TestProjectSuffixesWithDelimiters =
+      TestProjectSuffixes
+        .SelectMany(suffix => new[] { suffix, $".{suffix}" })
         .ToArray();
 
     [NotNull] private readonly ICSharpContextActionDataProvider _provider;
@@ -67,7 +74,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     [CanBeNull]
     private IProject CachedTestProject { get; set; }
 
-    public string Text => this.ExistingProjectFile == null ? "[Helpers] Create test file" : "[Helpers] Go to test file";
+    public string Text => this.ExistingProjectFile == null ? "Create test file" : "Go to test file";
 
     public IEnumerable<IntentionAction> CreateBulbItems()
     {
@@ -79,23 +86,25 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       this.ExistingProjectFile = null;
       this.CachedTestProject = null;
 
-      var classDeclaration = ClassDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>());
-      var declaredType = classDeclaration?.DeclaredElement;
+      IClassLikeDeclaration typeDeclaration = ClassLikeDeclarationNavigator.GetByNameIdentifier(this._provider.GetSelectedElement<ICSharpIdentifier>());
+      if (typeDeclaration is IInterfaceDeclaration) return false;
+
+      ITypeElement declaredType = typeDeclaration?.DeclaredElement;
       if (declaredType == null) return false;
 
       // Disable for nested classes.
-      if (classDeclaration.GetContainingTypeDeclaration() != null) return false;
+      if (typeDeclaration.GetContainingTypeDeclaration() != null) return false;
 
       // TRY RESOLVE EXISTING TEST.
-      var helperSettings = ReSharperHelperSettings.GetSettings(classDeclaration.GetSettingsStoreWithEditorConfig());
+      var helperSettings = ReSharperHelperSettings.GetSettings(typeDeclaration.GetSettingsStoreWithEditorConfig());
 
-      var testProject = this.CachedTestProject = this.ResolveTargetTestProject(classDeclaration, classDeclaration.GetSolution(), helperSettings);
+      var testProject = this.CachedTestProject = this.ResolveTargetTestProject(typeDeclaration, typeDeclaration.GetSolution(), helperSettings);
       if (testProject == null) return false;
 
       // Skip project if it's the same as current. This way we don't suggest to create tests in test projects.
-      if (testProject.Equals(classDeclaration.GetProject())) return false;
+      if (testProject.Equals(typeDeclaration.GetProject())) return false;
 
-      var testClassRelativeNsParts = GetTestClassRelativeNamespaceParts(classDeclaration, testProject, helperSettings);
+      var testClassRelativeNsParts = GetTestClassRelativeNamespaceParts(typeDeclaration, testProject, helperSettings);
       if (testClassRelativeNsParts == null)
         return false;
 
@@ -110,7 +119,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       var classTypeFqnCandidates = validTestSuffixes?.Select(suffix => StringUtil.MakeFQName(testClassNs, declaredType.ShortName + suffix));
       if (classTypeFqnCandidates == null) return false;
 
-      var symbolsService = classDeclaration.GetPsiServices().Symbols;
+      var symbolsService = typeDeclaration.GetPsiServices().Symbols;
 
       var testClass = testProject.GetPsiModules()
         .Select(m => symbolsService.GetSymbolScope(m, false, true))
@@ -134,7 +143,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       {
         using (var cookie = solution.CreateTransactionCookie(DefaultAction.Rollback, this.Text, NullProgressIndicator.Create()))
         {
-          var declaration = this._provider.GetSelectedElement<ICSharpTypeDeclaration>();
+          var declaration = this._provider.GetSelectedElement<IClassLikeDeclaration>();
 
           ITypeElement declaredType = declaration?.DeclaredElement;
           if (declaredType == null)
@@ -181,7 +190,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
             var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
 
-            var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testClassNs);
+            bool isFileScoped = CSharpNamespaceUtil.CanAddFileScopedNamespaceDeclaration(csharpFile);
+            var namespaceDeclaration = elementFactory.CreateNamespaceDeclaration(testClassNs, isFileScoped);
             var addedNs = csharpFile.AddNamespaceDeclarationAfter(namespaceDeclaration, null);
 
             var classLikeDeclaration = (IClassLikeDeclaration)elementFactory.CreateTypeMemberDeclaration("public class $0 {}", testClassName);
@@ -214,11 +224,6 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       }
 
       return relativeSourceNsParts;
-      //
-      //
-      // // IEnumerable<string> testProjectDefaultNsParts = StringUtil.FullySplitFQName(testProject.GetDefaultNamespace().NotNull());
-      //
-      // return testProjectDefaultNsParts.Concat(relativeTypeNamespace).ToArray();
     }
 
     [NotNull, Pure]
@@ -240,63 +245,42 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
     [CanBeNull]
     private IProject ResolveTargetTestProject([NotNull] ITreeNode contextNode, [NotNull] ISolution solution, [NotNull] ReSharperHelperSettings helperSettings)
     {
-      // Get project by assembly attribute (if present).
-      var projectName = solution.GetPsiServices()
-        .Symbols
-        .GetModuleAttributes(contextNode.GetPsiModule())
-        .GetAttributeInstances(AssemblyMetadataAttributeName, false)
-        .Select(TryExtractProjectNameFromAssemblyMetadataAttribute)
-        .FirstNotNull();
-
-      // Check whether we have configured global test project.
-      if (string.IsNullOrEmpty(projectName))
+      var explicitProjectName = helperSettings.TestsProjectName;
+      if (!string.IsNullOrEmpty(explicitProjectName))
       {
-        projectName = helperSettings.TestsProjectName;
-      }
-
-      if (!string.IsNullOrEmpty(projectName))
-      {
-        return solution.GetProjectByName(projectName);
+        return solution.GetProjectByName(explicitProjectName);
       }
 
       // Try to guess project specific test project.
       var currentProjectName = contextNode.GetProject()?.Name;
-      if (currentProjectName == null) return null;
-
-      var candidates = TestProjectSuffixes
-        .SelectMany(suffix => solution.GetProjectsByName(currentProjectName + suffix))
-        .WhereNotNull()
-        .ToArray();
-
-      if (candidates.Length > 0)
+      if (currentProjectName == null)
       {
-        if (candidates.Length == 1) return candidates[0];
+        return null;
+      }
 
+      var candidate = TestProjectSuffixesWithDelimiters
+        .SelectMany(suffix => solution.GetProjectsByName(currentProjectName + suffix))
+        .TryGetSingleCandidate();
+
+      if (candidate.isSingle)
+      {
+        return candidate.value;
+      }
+
+      // Optimize, as we are definitely sure that more than one project with test suffix exists.
+      if (candidate.hasAny)
+      {
         return null;
       }
 
       // Try to guess global test project.
-      candidates = solution.GetAllProjects()
-        .Where(proj => TestProjectSuffixes.Any(suffix => proj.Name.EndsWith(suffix, StringComparison.Ordinal)))
-        .ToArray();
+      candidate = solution.GetAllProjects()
+        .Where(static proj => TestProjectSuffixes.Any(suffix => proj.Name.EndsWith(suffix, StringComparison.Ordinal)))
+        .TryGetSingleCandidate();
 
-      if (candidates.Length == 1) return candidates[0];
-
-      return null;
-    }
-
-    [CanBeNull]
-    private static string TryExtractProjectNameFromAssemblyMetadataAttribute([NotNull] IAttributeInstance attributeInstance)
-    {
-      const string testProjectKey = "ReSharperHelpers.TestProject";
-
-      if (attributeInstance.PositionParameterCount != 2) return null;
-
-      var key = attributeInstance.PositionParameter(0);
-      if (key.IsConstant && key.ConstantValue.IsString() && string.Equals((string)key.ConstantValue.Value, testProjectKey, StringComparison.Ordinal))
+      if (candidate.isSingle)
       {
-        var value = attributeInstance.PositionParameter(1);
-        if (value.IsConstant && value.ConstantValue.IsString()) return (string)value.ConstantValue.Value;
+        return candidate.value;
       }
 
       return null;

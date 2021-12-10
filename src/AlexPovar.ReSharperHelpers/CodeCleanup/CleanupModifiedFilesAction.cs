@@ -120,7 +120,7 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
           return null;
         }
 
-        var modifiedFiles = gitModificationResolver
+        ISet<FileSystemPath> modifiedFiles = gitModificationResolver
           .GetModifiedFiles()
           .Select(f => FileSystemPath.Parse(f, FileSystemPathInternStrategy.TRY_GET_INTERNED_BUT_DO_NOT_INTERN))
           .ToSet();
@@ -128,8 +128,8 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
         var filteredFiles = originalProvider.GetFiles()
           .Where(file =>
           {
-            var loc = file.GetLocation();
-            return !loc.IsEmpty && modifiedFiles.Contains(loc);
+            var loc = file.GetLocation().ToNativeFileSystemPath();
+            return loc is { IsEmpty: false } && modifiedFiles.Contains(loc);
           })
           .ToArray();
 
