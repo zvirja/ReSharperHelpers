@@ -21,7 +21,11 @@ The following settings are available.
 
 **Format:** String name of existing Tests project
 
-**Example:** `All.Unit`
+**Example:**
+```
+[*.cs]
+resharperhelpers_tests_project_name = All.Unit
+```
 
 By default plugin tries to apply heuristics and discover test project name automatically. If however you have an unusual setup, you can use this setting to configure a custom project name.
 
@@ -33,7 +37,11 @@ Notice, this setting affects both existing tests discovery and new tests creatio
 
 **Format:** Dot-separated list of namespace chunks to prepend to test class name
 
-**Example:** `Integration.Core`
+**Example:**
+```
+[*.cs]
+resharperhelpers_tests_project_sub_namespace = Integration.Core
+```
 
 By default it's assumed that both code and test will have the same relative namespace (i.e. excluding default project namespace). This setting allows to customize it by adding extra namespace chunks to test relative namespace when calculating final value. Effectively it allows to nest tests within extra folders.
 
@@ -49,7 +57,11 @@ Notice, this setting affects both existing tests discovery and new tests creatio
 
 **Default:** `Tests`
 
-**Example:** `Test`
+**Example:**
+```
+[*.cs]
+resharperhelpers_new_test_class_name_suffix = Test
+```
 
 Suffix to append to class name when creating a new test (e.g. `MyProvider` -> `MyProviderTests`).
 
@@ -61,7 +73,11 @@ Suffix to append to class name when creating a new test (e.g. `MyProvider` -> `M
 
 **Default:** `Test,Fixture`
 
-**Example:** `TestFixture,Validation`
+**Example:**
+```
+[*.cs]
+resharperhelpers_existing_test_class_name_suffixes = TestFixture,Validation
+```
 
 A list of test suffixes used to find an existing test. Each suffix will be probed one by one. Setting is useful if you have existing code base and some tests have different suffixes.
 
