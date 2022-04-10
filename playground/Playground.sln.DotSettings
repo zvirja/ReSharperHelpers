@@ -1,0 +1,8 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/Environment/ExtensionManager/PackageSource/=dev_005Flocal/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/ExtensionManager/PackageSource/=dev_005Flocal/IsEnabled/@EntryValue">False</s:Boolean>
+	<s:String x:Key="/Default/Environment/ExtensionManager/PackageSource/=dev_005Flocal/Name/@EntryValue">dev_local</s:String>
+	<s:Int64 x:Key="/Default/Environment/ExtensionManager/PackageSource/=dev_005Flocal/Order/@EntryValue">1</s:Int64>
+	<s:String x:Key="/Default/Environment/ExtensionManager/PackageSource/=dev_005Flocal/Source/@EntryValue">..\artifacts\nugetPackages</s:String>
+	<s:Boolean x:Key="/Default/Environment/ExtensionManager/PackageSource/=_002ENET_0020Products_0020Gallery/IsEnabled/@EntryValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/Housekeeping/ExtensionManager/IncludePrereleasePackages/@EntryValue">True</s:Boolean></wpf:ResourceDictionary>
