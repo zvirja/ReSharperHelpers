@@ -14,9 +14,9 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.NUnit;
+using Serilog;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
-using static Nuke.Common.Logger;
 using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
 using static Nuke.Common.Tools.NUnit.NUnitTasks;
 using static Nuke.Common.Tools.NuGet.NuGetTasks;
@@ -61,7 +61,7 @@ class Build : NukeBuild
     Target CalculateVersion => _ => _
         .Executes(() =>
         {
-            Info($"Build version: {BuildVersionParam}");
+            Log.Information($"Build version: {BuildVersionParam}");
 
             CurrentBuildVersion = BuildVersionParam switch
             {
@@ -70,7 +70,7 @@ class Build : NukeBuild
                 var ver => new BuildVersionInfo {AssemblyVersion = ver, FileVersion = ver, InfoVersion = ver, NuGetVersion = ver}
             };
             
-            Info($"Calculated version: {CurrentBuildVersion}");
+            Log.Information($"Calculated version: {CurrentBuildVersion}");
 
             BuildVersionInfo CalculateDevVersion()
             {
@@ -220,14 +220,14 @@ class Build : NukeBuild
         {
             var env = AppVeyorEnv;
             var trigger = ResolveAppVeyorTrigger();
-            Info($"Is tag: {env.RepositoryTag}, tag name: '{env.RepositoryTagName}', PR number: {env.PullRequestNumber}, branch name: '{env.RepositoryBranch}', trigger: {trigger}");
+            Log.Information($"Is tag: {env.RepositoryTag}, tag name: '{env.RepositoryTagName}', PR number: {env.PullRequestNumber}, branch name: '{env.RepositoryBranch}', trigger: {trigger}");
         });
 
     Target AppVeyor_UploadTestResults => _ => _
         .DependsOn(Test)
         .Executes(async () =>
         {
-            Info($"Uploading tests result file: {TestResultFile}");
+            Log.Information($"Uploading tests result file: {TestResultFile}");
 
             var testResultBytes = await File.ReadAllBytesAsync(TestResultFile);
 
@@ -239,7 +239,7 @@ class Build : NukeBuild
             using var httpClient = new HttpClient();
             var result = await httpClient.PostAsync($"https://ci.appveyor.com/api/testresults/nunit3/{AppVeyorEnv.JobId}", multipartContent);
             result.EnsureSuccessStatusCode();
-            Info($"Successfully uploaded the file");
+            Log.Information($"Successfully uploaded the file");
         });
 
     Target AppVeyor_Pipeline => _ => _
@@ -250,7 +250,7 @@ class Build : NukeBuild
             if (trigger != AppVeyorTrigger.PR)
             {
                 AppVeyorEnv.UpdateBuildVersion(CurrentBuildVersion.FileVersion);
-                Info($"Updated build version to: '{CurrentBuildVersion.FileVersion}'");
+                Log.Information($"Updated build version to: '{CurrentBuildVersion.FileVersion}'");
             }
         });
 
