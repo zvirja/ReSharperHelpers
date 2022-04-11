@@ -14,11 +14,8 @@
     <dependencies>
       <dependency id="Wave" version="$WaveVersion$" />
     </dependencies>
-    <releaseNotes>Version 7.0&lt;br/&gt;
-      Support latest R# and VS 2022 🎉&lt;br/&gt;
-      Move "Copy full class name" action under "Copy Code Reference" action&lt;br/&gt;
-      Action to create or browse tests now works also for structs and records&lt;br/&gt;
-      Entirely remove `AssemblyMetadata` configuration in favor of .editorconfig&lt;br/&gt;
+    <releaseNotes>Version 7.0.1&lt;br/&gt;
+      Respect configured file header when creating a test file&lt;br/&gt;
     </releaseNotes>
   </metadata>
   <files>
