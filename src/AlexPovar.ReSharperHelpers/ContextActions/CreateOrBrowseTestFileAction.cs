@@ -10,10 +10,11 @@ using JetBrains.Application.Settings;
 using JetBrains.Diagnostics;
 using JetBrains.DocumentManagers.impl;
 using JetBrains.DocumentManagers.Transactions;
+using JetBrains.DocumentModel;
 using JetBrains.IDE;
-using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
+using JetBrains.ReSharper.Feature.Services.CodeCleanup;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.ContextActions;
 using JetBrains.ReSharper.Feature.Services.Intentions;
@@ -181,12 +182,12 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
           if (newFile == null)
             return;
 
+          solution.TryGetComponent<FileHeaderUtils>()?.InsertHeader(solution, newFile, newFile.Document.GetDocumentStartOffset());
+
           int? caretPosition;
           using (PsiTransactionCookie.CreateAutoCommitCookieWithCachesUpdate(newFile.GetPsiServices(), "CreateTestClass"))
           {
-            var csharpFile = newFile.GetDominantPsiFile<CSharpLanguage>() as ICSharpFile;
-            if (csharpFile == null)
-              return;
+            var csharpFile = (ICSharpFile)newFile.GetDominantPsiFile<CSharpLanguage>().NotNull();
 
             var elementFactory = CSharpElementFactory.GetInstance(csharpFile);
 
