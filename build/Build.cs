@@ -111,23 +111,6 @@ class Build : NukeBuild
         .DependsOn(Prepare, Restore)
         .Executes(() =>
         {
-            // Workaround till we add VS 2022 support in a new version
-            string toolPath;
-            try
-            {
-                toolPath = MSBuildToolPathResolver.Resolve();
-            }
-            catch
-            {
-
-                var editions = new[] { "Enterprise", "Professional", "Community", "BuildTools", "Preview" };
-                toolPath = editions
-                    .Select(edition => Path.Combine(
-                        EnvironmentInfo.SpecialFolder(SpecialFolders.ProgramFiles)!,
-                        $@"Microsoft Visual Studio\2022\{edition}\MSBuild\Current\Bin\{(Environment.Is64BitProcess ? @"amd64\" : "")}msbuild.exe"))
-                    .First(File.Exists);
-            }
-
             // Cannot use dotnet, as build relies on 'Microsoft.Build.Utilities.v4.0' which is available for MS Build only.
             MSBuild(c => c
                 .SetConfiguration(Configuration)
@@ -139,7 +122,6 @@ class Build : NukeBuild
                 .AddProperty("FileVersion", CurrentBuildVersion.FileVersion)
                 .AddProperty("InformationalVersion", CurrentBuildVersion.InfoVersion)
                 .AddProperty("DevHostId", DevHostId)
-                .SetProcessToolPath(toolPath)
             );
         });
 
