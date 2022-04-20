@@ -8,14 +8,14 @@
     <authors>Oleksandr Povar</authors>
     <projectUrl>https://github.com/Zvirja/ReSharperHelpers</projectUrl>
     <license type="expression">MIT</license>
-    <copyright>Copyright 2017-2021 Oleksandr Povar</copyright>
+    <copyright>Copyright 2017-2022 Oleksandr Povar</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>resharper helpers productivity testing navigation cleanup actions plugin alex povar</tags>
     <dependencies>
       <dependency id="Wave" version="$WaveVersion$" />
     </dependencies>
-    <releaseNotes>Version 7.0.1&lt;br/&gt;
-      Respect configured file header when creating a test file&lt;br/&gt;
+    <releaseNotes>Version 7.1&lt;br/&gt;
+      Support R# 2022.1&lt;br/&gt;
     </releaseNotes>
   </metadata>
   <files>
