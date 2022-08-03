@@ -40,12 +40,6 @@ public static class GitVersioning
             _ => $"{nugetVersion}-{sha}"
         };
 
-        return new BuildVersionInfo
-        {
-            AssemblyVersion = assemblyVersion,
-            FileVersion = fileVersion,
-            InfoVersion = infoVersion,
-            NuGetVersion = nugetVersion
-        };
+        return new BuildVersionInfo(assemblyVersion, fileVersion, infoVersion, nugetVersion);
     }
 }
