@@ -22,7 +22,8 @@ using static Nuke.Common.Tools.NUnit.NUnitTasks;
 using static Nuke.Common.Tools.NuGet.NuGetTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
-[CheckBuildProjectConfigurations]
+// ReSharper disable InconsistentNaming
+
 [UnsetVisualStudioEnvironmentVariables]
 class Build : NukeBuild
 {
@@ -37,16 +38,16 @@ class Build : NukeBuild
     readonly string BuildVersionParam = "git";
 
     [Parameter(Name = "BuildNumber")]
-    readonly int BuildNumberParam = 0;
+    readonly int BuildNumberParam;
 
     [Parameter("Specify R# installation host to where Dev artifacts should be put")]
     readonly string DevHostId = "";
 
     [Parameter("API Key used to publish package to R# gallery", Name = "resharper-gallery-key")]
-    readonly string ReSharperGalleryKey = null;
+    readonly string ReSharperGalleryKey;
 
     [Parameter(Name = "myget-key")]
-    readonly string MyGetKey = null;
+    readonly string MyGetKey;
 
     static readonly string ProjectName = "AlexPovar.ReSharperHelpers";
     static readonly string TestProjectName = "AlexPovar.ReSharperHelpers.Tests";
@@ -67,24 +68,29 @@ class Build : NukeBuild
             {
                 "git" => GitVersioning.CalculateVersionFromGit(BuildNumberParam),
                 "dev" => CalculateDevVersion(),
-                var ver => new BuildVersionInfo {AssemblyVersion = ver, FileVersion = ver, InfoVersion = ver, NuGetVersion = ver}
+                var ver => BuildVersionInfo.Create(ver)
             };
             
             Log.Information($"Calculated version: {CurrentBuildVersion}");
 
             BuildVersionInfo CalculateDevVersion()
             {
+                if (!OperatingSystem.IsWindows())
+                {
+                    return BuildVersionInfo.Create("1.0.0");
+                }
+                
                 const string registryPath = @"Software\Zvirja\ReSharperHelpersBuild";
                 var registryKey = Registry.CurrentUser.OpenSubKey(registryPath, writable: true) ?? Registry.CurrentUser.CreateSubKey(registryPath, writable: true);
 
                 const string seedValueName = "LastDevBuildSeed";
-                var currentSeed = (int)registryKey.GetValue(seedValueName, 100) + 1;
+                var currentSeed = (int)registryKey.GetValue(seedValueName, 100)! + 1;
                 
                 // Store increased seed for the next build
                 registryKey.SetValue(seedValueName, currentSeed, RegistryValueKind.DWord);
 
                 var devVersion = $"1.0.0.{currentSeed}";
-                return new BuildVersionInfo {AssemblyVersion = "1.0.0", FileVersion = "1.0.0", InfoVersion = devVersion, NuGetVersion = devVersion};
+                return BuildVersionInfo.Create(baseVersion: "1.0.0", infoVersion: devVersion, nuGetVersion: devVersion);
             }
         });
 
@@ -157,6 +163,8 @@ class Build : NukeBuild
                 .SetBasePath(OutputDir)
                 .SetVersion(CurrentBuildVersion.NuGetVersion)
                 .AddProperty("WaveVersion", waveVersion)
+                // NU5100: The assembly is not inside the 'lib' folder 
+                .AddProperty("NoWarn", "NU5100")
                 .SetOutputDirectory(NuGetPackageOutDir)
             );
         });
@@ -215,7 +223,7 @@ class Build : NukeBuild
 
             using var multipartContent = new MultipartFormDataContent($"------------{DateTime.Now.Ticks:X}")
             {
-                {new ByteArrayContent(testResultBytes), "file", Path.GetFileName(TestResultFile)}
+                {new ByteArrayContent(testResultBytes), "file", Path.GetFileName(TestResultFile)!}
             };
             
             using var httpClient = new HttpClient();
@@ -228,7 +236,7 @@ class Build : NukeBuild
         .DependsOn(ResolveAppVeyorTarget(this), AppVeyor_DescribeState, AppVeyor_UploadTestResults)
         .Executes(() =>
         {
-            var trigger = ResolveAppVeyorTrigger();
+            AppVeyorTrigger trigger = ResolveAppVeyorTrigger();
             if (trigger != AppVeyorTrigger.PR)
             {
                 AppVeyorEnv.UpdateBuildVersion(CurrentBuildVersion.FileVersion);
