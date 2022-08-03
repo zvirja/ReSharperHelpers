@@ -14,8 +14,8 @@
     <dependencies>
       <dependency id="Wave" version="$WaveVersion$" />
     </dependencies>
-    <releaseNotes>Version 7.1&lt;br/&gt;
-      Support R# 2022.1&lt;br/&gt;
+    <releaseNotes>Version 7.2&lt;br/&gt;
+      Support R# 2022.2&lt;br/&gt;
     </releaseNotes>
   </metadata>
   <files>
