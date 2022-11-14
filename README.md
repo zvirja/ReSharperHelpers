@@ -115,7 +115,7 @@ Useful to format method signatures with large number of parameters (e.g. in test
 
 ### Assert parameter is not null/Assert all
 Quick action for method argument to insert assertion statement. Allows to assert all nullable argument using `Assert all` action.
-If annotation attributes are available and relevalt for argument, they are arranged.
+If annotation attributes are available and relevant for argument, they are arranged.
 
 ### "Launch solution" build configuration
 Custom [R# Build Configuration](https://blog.jetbrains.com/dotnet/2015/10/15/introducing-resharper-build/) that builds solution and runs it. The difference comparing to the "VS Startup" (default) configuration is that the default one builds the startup project (with all dependencies) rather than a solution. If you have projects which you want to be always built, they might be skipped if your startup project doesn't depend on them.
