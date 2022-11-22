@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexPovar.ReSharperHelpers", "AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj", "{C851F234-453D-415F-A395-C55A455BA830}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexPovar.ReSharperHelpers", "src\AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj", "{C851F234-453D-415F-A395-C55A455BA830}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexPovar.ReSharperHelpers.Tests", "AlexPovar.ReSharperHelpers.Tests\AlexPovar.ReSharperHelpers.Tests.csproj", "{2D7B1F9F-4C71-4920-B5E7-432EC5742081}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexPovar.ReSharperHelpers.Tests", "src\AlexPovar.ReSharperHelpers.Tests\AlexPovar.ReSharperHelpers.Tests.csproj", "{2D7B1F9F-4C71-4920-B5E7-432EC5742081}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3E50FE1A-847C-46ED-A410-56519D5FD771}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		AlexPovar.ReSharperHelpers.nuspec = AlexPovar.ReSharperHelpers.nuspec
-		..\README.md = ..\README.md
-		..\Directory.Build.props = ..\Directory.Build.props
+		src\.editorconfig = src\.editorconfig
+		src\AlexPovar.ReSharperHelpers.nuspec = src\AlexPovar.ReSharperHelpers.nuspec
+		README.md = README.md
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\build\_build.csproj", "{80A0D54D-800E-4FAD-9219-36AA3C227790}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{80A0D54D-800E-4FAD-9219-36AA3C227790}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

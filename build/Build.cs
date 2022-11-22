@@ -51,7 +51,7 @@ class Build : NukeBuild
 
     static readonly string ProjectName = "AlexPovar.ReSharperHelpers";
     static readonly string TestProjectName = "AlexPovar.ReSharperHelpers.Tests";
-    static readonly string NuSpecFileName = "AlexPovar.ReSharperHelpers.nuspec";
+    static readonly AbsolutePath NuSpecFile = RootDirectory / "src" / "AlexPovar.ReSharperHelpers.nuspec";
     static readonly AbsolutePath ArtifactsDir = RootDirectory / "artifacts";
     static readonly AbsolutePath OutputDir = ArtifactsDir / "output";
     static readonly AbsolutePath TestResultFile = ArtifactsDir / "testResult.xml";
@@ -159,7 +159,7 @@ class Build : NukeBuild
                 .GetMetadataValue("Version");
 
             NuGetPack(c => c
-                .SetTargetPath(Solution.Directory / NuSpecFileName)
+                .SetTargetPath(NuSpecFile)
                 .SetBasePath(OutputDir)
                 .SetVersion(CurrentBuildVersion.NuGetVersion)
                 .AddProperty("WaveVersion", waveVersion)
