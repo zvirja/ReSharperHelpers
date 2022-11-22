@@ -49,9 +49,9 @@ class Build : NukeBuild
     [Parameter(Name = "myget-key")]
     readonly string MyGetKey;
 
-    static readonly string ProjectName = "AlexPovar.ReSharperHelpers";
     static readonly string TestProjectName = "AlexPovar.ReSharperHelpers.Tests";
-    static readonly AbsolutePath NuSpecFile = RootDirectory / "src" / "AlexPovar.ReSharperHelpers.nuspec";
+    static readonly AbsolutePath ChangelogFile = RootDirectory / "CHANGELOG.md";
+
     static readonly AbsolutePath ArtifactsDir = RootDirectory / "artifacts";
     static readonly AbsolutePath OutputDir = ArtifactsDir / "output";
     static readonly AbsolutePath TestResultFile = ArtifactsDir / "testResult.xml";
@@ -124,10 +124,11 @@ class Build : NukeBuild
                 .SetSolutionFile(Solution)
                 .SetVerbosity(MSBuildVerbosity.Minimal)
                 .SetOutDir(OutputDir)
-                .AddProperty("AssemblyVersion", CurrentBuildVersion.AssemblyVersion)
-                .AddProperty("FileVersion", CurrentBuildVersion.FileVersion)
-                .AddProperty("InformationalVersion", CurrentBuildVersion.InfoVersion)
+                //
                 .AddProperty("DevHostId", DevHostId)
+                .SetPackageVersion(CurrentBuildVersion.NuGetVersion)
+                .SetAssemblyVersion(CurrentBuildVersion.AssemblyVersion)
+                .SetFileVersion(CurrentBuildVersion.FileVersion)
             );
         });
 
@@ -152,21 +153,27 @@ class Build : NukeBuild
         .DependsOn(Compile, Test)
         .Executes(() =>
         {
-            var waveVersion = Solution.GetProject(ProjectName)
-                .GetMSBuildProject(Configuration)
-                .GetItems("PackageReference")
-                .Single(r => r.EvaluatedInclude == "Wave")
-                .GetMetadataValue("Version");
+          // Magic regex from template: https://github.com/JetBrains/resharper-rider-plugin/blob/53f8339a19363c7ab639e0cd6867c21db29a5cc2/template/content/publishPlugin.ps1#L16
+          var changelogEntries = Regex.Matches(File.ReadAllText(ChangelogFile), "(##.+?.+?)(?=##|$)", RegexOptions.Singleline)
+            .Take(3)
+            .Select(x => x.ToString());
 
-            NuGetPack(c => c
-                .SetTargetPath(NuSpecFile)
-                .SetBasePath(OutputDir)
-                .SetVersion(CurrentBuildVersion.NuGetVersion)
-                .AddProperty("WaveVersion", waveVersion)
-                // NU5100: The assembly is not inside the 'lib' folder 
-                .AddProperty("NoWarn", "NU5100")
-                .SetOutputDirectory(NuGetPackageOutDir)
-            );
+          var changelog = string.Join("", changelogEntries);
+
+          // Cannot use dotnet, as build relies on 'Microsoft.Build.Utilities.v4.0' which is available for MS Build only.
+          MSBuild(c => c
+            .SetConfiguration(Configuration)
+            .SetTargets("Pack")
+            .SetSolutionFile(Solution)
+            .SetVerbosity(MSBuildVerbosity.Minimal)
+            .SetPackageOutputPath(NuGetPackageOutDir)
+            //
+            .SetPackageReleaseNotes(changelog)
+            .SetPackageVersion(CurrentBuildVersion.NuGetVersion)
+            .SetAssemblyVersion(CurrentBuildVersion.AssemblyVersion)
+            .SetFileVersion(CurrentBuildVersion.FileVersion)
+            .SetInformationalVersion(CurrentBuildVersion.InfoVersion)
+          );
         });
 
     Target CompleteBuild => _ => _
