@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B731D401-416
 		src\dotnet\Plugin.props = src\dotnet\Plugin.props
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexPovar.ReSharperHelpers.Rider", "src\dotnet\AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.Rider.csproj", "{876A117C-8B37-4672-AED3-15B0D5691203}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2D7B1F9F-4C71-4920-B5E7-432EC5742081}.Release|Any CPU.Build.0 = Release|Any CPU
 		{80A0D54D-800E-4FAD-9219-36AA3C227790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80A0D54D-800E-4FAD-9219-36AA3C227790}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{876A117C-8B37-4672-AED3-15B0D5691203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{876A117C-8B37-4672-AED3-15B0D5691203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{876A117C-8B37-4672-AED3-15B0D5691203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{876A117C-8B37-4672-AED3-15B0D5691203}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +53,7 @@ Global
 		{C851F234-453D-415F-A395-C55A455BA830} = {B731D401-4164-4469-98EB-AB500B1D1B25}
 		{2D7B1F9F-4C71-4920-B5E7-432EC5742081} = {B731D401-4164-4469-98EB-AB500B1D1B25}
 		{80A0D54D-800E-4FAD-9219-36AA3C227790} = {3E50FE1A-847C-46ED-A410-56519D5FD771}
+		{876A117C-8B37-4672-AED3-15B0D5691203} = {B731D401-4164-4469-98EB-AB500B1D1B25}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D5896C80-3F3D-4FB3-BE80-A2D0FBC585F5}

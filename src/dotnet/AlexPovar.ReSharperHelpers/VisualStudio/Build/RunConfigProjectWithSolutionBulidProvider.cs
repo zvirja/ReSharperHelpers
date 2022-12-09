@@ -2,7 +2,7 @@
 using JetBrains.ProjectModel.Features.RunConfig;
 using JetBrains.UI.Icons;
 
-namespace AlexPovar.ReSharperHelpers.Build
+namespace AlexPovar.ReSharperHelpers.VisualStudio.Build
 {
   [ShellComponent]
   public class RunConfigProjectWithSolutionBuildProvider : RunConfigProviderBase
@@ -17,7 +17,7 @@ namespace AlexPovar.ReSharperHelpers.Build
     {
       return new RunConfigProjectWithSolutionBuild
       {
-        Type = this.Type
+        Type = Type
       };
     }
   }

@@ -1,4 +1,9 @@
 ﻿using System.Diagnostics;
+using AlexPovar;
+using AlexPovar.ReSharperHelpers;
+using AlexPovar.ReSharperHelpers.Settings;
+using AlexPovar.ReSharperHelpers.VisualStudio;
+using AlexPovar.ReSharperHelpers.VisualStudio.Settings;
 using JetBrains.Annotations;
 using JetBrains.Application.Settings;
 using JetBrains.Application.UI.Options;
@@ -11,7 +16,7 @@ using JetBrains.Rider.Model.UIAutomation;
 using JetBrains.UI.RichText;
 using JetBrains.Util.Media;
 
-namespace AlexPovar.ReSharperHelpers.Settings
+namespace AlexPovar.ReSharperHelpers.VisualStudio.Settings
 {
   [OptionsPage(PID, "ReSharper Helpers", typeof(MainThemedIcons.HelpersContextAction), ParentId = ToolsPage.PID)]
   public class ReSharperHelpersOptionsPage : BeSimpleOptionsPage, IOptionsPage
@@ -22,7 +27,7 @@ namespace AlexPovar.ReSharperHelpers.Settings
     public ReSharperHelpersOptionsPage(Lifetime lifetime, [NotNull] OptionsPageContext optionsPageContext, [NotNull] OptionsSettingsSmartContext settingsSmart) :
       base(lifetime, optionsPageContext, settingsSmart)
     {
-      this.AddControl(
+      AddControl(
         BeControls
           .GetGrid(
             GridOrientation.Vertical,
@@ -34,30 +39,30 @@ namespace AlexPovar.ReSharperHelpers.Settings
           .WithColor(JetRgbaColors.LightYellow)
           .InGroupBox("⚠ Use Editor Config")
       );
-      this.AddSpacer();
+      AddSpacer();
 
       var projectNameProperty = settingsSmart.GetValueProperty(lifetime, (ReSharperHelperSettings settings) => settings.TestsProjectName);
-      this.AddHeader("Test project name [deprecated, use .editorconfig]");
-      this.AddControl(projectNameProperty.GetBeTextBox(lifetime));
-      this.AddRichText(new RichText()
+      AddHeader("Test project name [deprecated, use .editorconfig]");
+      AddControl(projectNameProperty.GetBeTextBox(lifetime));
+      AddRichText(new RichText()
         .AppendLine("This setting is used to explicitly specify single project in solution where all unit tests are located.")
         .Append("Save it to .editorconfig file instead", new TextStyle(JetFontStyles.Bold)).AppendLine()
       );
-      this.AddSpacer();
+      AddSpacer();
 
       var testClassNameSuffix = settingsSmart.GetValueProperty(lifetime, (ReSharperHelperSettings settings) => settings.TestClassNameSuffix);
-      this.AddHeader("New test class name suffix");
-      this.AddControl(testClassNameSuffix.GetBeTextBox(lifetime));
-      this.AddRichText(new RichText()
+      AddHeader("New test class name suffix");
+      AddControl(testClassNameSuffix.GetBeTextBox(lifetime));
+      AddRichText(new RichText()
         .AppendLine("This setting specifies test class name suffix that should be used for the new tests.")
         .Append("Consider saving this setting to .editorconfig file or solution specific layer.", new TextStyle(JetFontStyles.Italic)));
 
-      this.AddSpacer();
+      AddSpacer();
 
       var validTestClassNameSuffixes = settingsSmart.GetValueProperty(lifetime, (ReSharperHelperSettings settings) => settings.ValidTestClassNameSuffixes);
-      this.AddHeader("Existing test class name suffixes");
-      this.AddControl(validTestClassNameSuffixes.GetBeTextBox(lifetime));
-      this.AddRichText(new RichText()
+      AddHeader("Existing test class name suffixes");
+      AddControl(validTestClassNameSuffixes.GetBeTextBox(lifetime));
+      AddRichText(new RichText()
         .AppendLine("This setting defines additional test suffixes valid for discovering the existing test classes.")
         .AppendLine("Suffixes should be delimited by comma (e.g. value1,value2).")
         .Append("Consider saving this setting to .editorconfig file or solution specific layer.", new TextStyle(JetFontStyles.Italic)));

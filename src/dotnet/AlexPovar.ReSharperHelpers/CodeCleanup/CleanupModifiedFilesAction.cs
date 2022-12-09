@@ -20,7 +20,11 @@ using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.CodeCleanup
 {
-  [Action("HelpersCleanupGitModifiedFiles", "Cleanup git modified code...", Icon = typeof(MainThemedIcons.ClearIcon))]
+#if RESHARPER
+  [Action("HelpersCleanupGitModifiedFiles", "Cleanup git modified code...", Icon = typeof(AlexPovar.ReSharperHelpers.VisualStudio.MainThemedIcons.ClearIcon))]
+#else
+  [Action("HelpersCleanupGitModifiedFiles", "Cleanup git modified code...", Icon = typeof(JetBrains.ReSharper.Feature.Services.Resources.BulbThemedIcons.ContextAction))]
+#endif
   public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
   {
     void IExecutableAction.Execute(IDataContext context, DelegateExecute nextExecute)

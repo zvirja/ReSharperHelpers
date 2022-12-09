@@ -5,7 +5,7 @@ using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Features.RunConfig;
 
-namespace AlexPovar.ReSharperHelpers.Build
+namespace AlexPovar.ReSharperHelpers.VisualStudio.Build
 {
   public class RunConfigProjectWithSolutionBuild : RunConfigBase
   {

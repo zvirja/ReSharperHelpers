@@ -6,12 +6,11 @@ namespace AlexPovar.ReSharperHelpers
   public static class MyIcons
   {
     [NotNull]
-    public static IconId ContextActionIcon => MainThemedIcons.HelpersContextAction.Id;
-
-    [NotNull]
-    public static IconId YellowBulbIcon => MainThemedIcons.HelpersYellowBulbIcon.Id;
-
-    [NotNull]
-    public static IconId EditIcon => MainThemedIcons.HelpersEditIcon.Id;
+    public static IconId ContextActionIcon =>
+#if RESHARPER
+      AlexPovar.ReSharperHelpers.VisualStudio.MainThemedIcons.HelpersContextAction.Id;
+#else
+      JetBrains.ReSharper.Feature.Services.Resources.BulbThemedIcons.ContextAction.Id;
+#endif
   }
 }

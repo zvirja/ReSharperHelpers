@@ -2,7 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-		<IncludeBuildOutput>false</IncludeBuildOutput>
+    <AssemblyName>AlexPovar.ReSharperHelpers</AssemblyName>
+    <!-- <RootNamespace>AlexPovar.ReSharperHelpers</RootNamespace> -->
+    <DefineConstants>$(DefineConstants);RESHARPER</DefineConstants>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -31,12 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ThemedIconsXamlV3 Include="MainIcons\ContextActions.Icons.xaml">
+    <ThemedIconsXamlV3 Include="VisualStudio\MainIcons\ContextActions.Icons.xaml">
       <ThemeColumns>Gray</ThemeColumns>
       <RemoveBackgroundElement>True</RemoveBackgroundElement>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ThemedIconsXamlV3>
-    <ThemedIconPng Include="MainIcons\clearIcon.png" />
+    <ThemedIconPng Include="VisualStudio\MainIcons\clearIcon.png" />
   </ItemGroup>
 </Project>
