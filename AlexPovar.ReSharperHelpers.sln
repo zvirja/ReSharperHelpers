@@ -18,7 +18,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.cspr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B731D401-4164-4469-98EB-AB500B1D1B25}"
 	ProjectSection(SolutionItems) = preProject
-		src\AlexPovar.ReSharperHelpers.nuspec = src\AlexPovar.ReSharperHelpers.nuspec
 		src\dotnet\Directory.Build.props = src\dotnet\Directory.Build.props
 		src\dotnet\Plugin.props = src\dotnet\Plugin.props
 	EndProjectSection
