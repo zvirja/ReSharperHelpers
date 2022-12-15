@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+		<!-- <AssemblyName>AlexPovar.ReSharperHelpers</AssemblyName> -->
+    <RootNamespace>AlexPovar.ReSharperHelpers</RootNamespace>
+    <DefineConstants>$(DefineConstants);RIDER</DefineConstants>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="VisualStudio/**/*" />
+    <Compile Remove="VisualStudio/**/*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Rider.SDK" Version="$(SdkVersion)" PrivateAssets="all" />
+    <PackageReference Include="LibGit2Sharp" Version="0.26.2" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\$(AssemblyName)\$(Configuration)\$(AssemblyName).dll" PackagePath="dotFiles" Pack="true" />
+    <Content Include="bin\$(AssemblyName)\$(Configuration)\$(AssemblyName).pdb" PackagePath="dotFiles" Pack="true" />
+    <Content Include="bin\$(AssemblyName)\$(Configuration)\LibGit2Sharp.dll" PackagePath="dotFiles" Pack="true" />
+    <Content Include="bin\$(AssemblyName)\$(Configuration)\lib\win32\**\*.dll" PackagePath="DotFiles\lib\win32" Pack="true" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
+
+namespace AlexPovar.ReSharperHelpers.Tests.data.Intentions.ContextActions.AssertAllParametersNotNullActionTests
+{
+  class WorksCorrectly
+  {
+    void TestMethod([NotNull] object ar{caret}g1, int arg2, [NotNull] string arg3)
+    {
+      Assert.ArgumentNotNull(arg1, nameof(arg1));
+      Assert.ArgumentNotNullOrEmpty(arg3, nameof(arg3));
+    }
+  }
+
+  public static class Assert
+  {
+    public static void ArgumentNotNull<T>(T value, string argName);
+    public static void ArgumentNotOrEmptyNull<T>(T value, string argName);
+  }
+}

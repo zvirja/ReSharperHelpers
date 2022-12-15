@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <DefaultItemExcludes>$(DefaultItemExcludes);test\packages\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="test\data\**" />
+    <None Include="test\data\**" />
+
+    <None Remove="AlexPovar.ReSharperHelpers.Tests.csproj.DotSettings" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="$(SdkVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AlexPovar.ReSharperHelpers\AlexPovar.ReSharperHelpers.csproj" />
+  </ItemGroup>
+</Project>

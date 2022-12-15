@@ -1,0 +1,13 @@
+root = true
+
+[*]
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.cs]
+indent_style = space
+indent_size = 2
+
+# xml project files
+[*.{csproj,vbproj,proj,projitems,shproj,props}]
+indent_size = 2
