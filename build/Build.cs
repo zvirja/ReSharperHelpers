@@ -30,7 +30,7 @@ class Build : NukeBuild
     public static int Main () => Execute<Build>(x => x.CompleteBuild);
 
     [Solution] readonly Solution Solution;
- 
+
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
@@ -56,7 +56,7 @@ class Build : NukeBuild
     static readonly AbsolutePath OutputDir = ArtifactsDir / "output";
     static readonly AbsolutePath TestResultFile = ArtifactsDir / "testResult.xml";
     static readonly AbsolutePath NuGetPackageOutDir = ArtifactsDir / "nugetPackages";
-    
+
     BuildVersionInfo CurrentBuildVersion;
 
     Target CalculateVersion => _ => _
@@ -70,7 +70,7 @@ class Build : NukeBuild
                 "dev" => CalculateDevVersion(),
                 var ver => BuildVersionInfo.Create(ver)
             };
-            
+
             Log.Information($"Calculated version: {CurrentBuildVersion}");
 
             BuildVersionInfo CalculateDevVersion()
@@ -79,13 +79,13 @@ class Build : NukeBuild
                 {
                     return BuildVersionInfo.Create("1.0.0");
                 }
-                
+
                 const string registryPath = @"Software\Zvirja\ReSharperHelpersBuild";
                 var registryKey = Registry.CurrentUser.OpenSubKey(registryPath, writable: true) ?? Registry.CurrentUser.CreateSubKey(registryPath, writable: true);
 
                 const string seedValueName = "LastDevBuildSeed";
                 var currentSeed = (int)registryKey.GetValue(seedValueName, 100)! + 1;
-                
+
                 // Store increased seed for the next build
                 registryKey.SetValue(seedValueName, currentSeed, RegistryValueKind.DWord);
 
@@ -112,7 +112,7 @@ class Build : NukeBuild
                 .SetVerbosity(DotNetVerbosity.Minimal)
             );
         });
-    
+
     Target Compile => _ => _
         .DependsOn(Prepare, Restore)
         .Executes(() =>
@@ -137,7 +137,7 @@ class Build : NukeBuild
         .Executes(() =>
         {
             var testProject = Solution.GetProject(TestProjectName)!;
-            
+
             var testAssemblyPath = OutputDir / $"{TestProjectName}.dll";
 
             NUnit3(c => c
@@ -184,27 +184,27 @@ class Build : NukeBuild
         .DependsOn(Pack)
         .Executes(() =>
         {
-            var nugetPackage = GlobFiles(NuGetPackageOutDir, "*.nupkg").Single();
+            var nugetPackage = GlobFiles(NuGetPackageOutDir, "*.nupkg").Single(x => !x.Contains("Rider"));
             NuGetPush(c => c
                 .SetTargetPath(nugetPackage)
                 .SetApiKey(MyGetKey)
                 .SetSource("https://www.myget.org/F/alexpovar-resharperhelpers-prerelease/api/v2/package")
             );
         });
-    
+
     Target PublishGallery => _ => _
         .Requires(() => ReSharperGalleryKey)
         .DependsOn(Pack)
         .Executes(() =>
         {
-            var nugetPackage = GlobFiles(NuGetPackageOutDir, "*.nupkg").Single();
+            var nugetPackage = GlobFiles(NuGetPackageOutDir, "*.nupkg").Single(x => !x.Contains("Rider"));
             NuGetPush(c => c
                 .SetTargetPath(nugetPackage)
                 .SetApiKey(ReSharperGalleryKey)
                 .SetSource("https://plugins.jetbrains.com/")
             );
         });
-    
+
     // ==============================================
     // ================== AppVeyor ==================
     // ==============================================
@@ -232,7 +232,7 @@ class Build : NukeBuild
             {
                 {new ByteArrayContent(testResultBytes), "file", Path.GetFileName(TestResultFile)!}
             };
-            
+
             using var httpClient = new HttpClient();
             var result = await httpClient.PostAsync($"https://ci.appveyor.com/api/testresults/nunit3/{AppVeyorEnv.JobId}", multipartContent);
             result.EnsureSuccessStatusCode();
@@ -275,7 +275,7 @@ class Build : NukeBuild
         ConsumeEapBranch,
         UnknownBranchOrTag
     }
-    
+
     static AppVeyorTrigger ResolveAppVeyorTrigger()
     {
         var env = AppVeyor.Instance;
