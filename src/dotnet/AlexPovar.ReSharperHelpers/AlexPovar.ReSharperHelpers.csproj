@@ -19,10 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="bin\$(AssemblyName)\$(Configuration)\$(AssemblyName).dll" PackagePath="dotFiles" Pack="true" />
-    <Content Include="bin\$(AssemblyName)\$(Configuration)\$(AssemblyName).pdb" PackagePath="dotFiles" Pack="true" />
-    <Content Include="bin\$(AssemblyName)\$(Configuration)\LibGit2Sharp.dll" PackagePath="dotFiles" Pack="true" />
-    <Content Include="bin\$(AssemblyName)\$(Configuration)\lib\win32\**\*.dll" PackagePath="DotFiles\lib\win32" Pack="true" />
+    <Content Include="bin\$(AssemblyName)\$(Configuration)\$(AssemblyName).dll" PackagePath="DotFiles" Pack="true" />
+    <Content Include="bin\$(AssemblyName)\$(Configuration)\$(AssemblyName).pdb" PackagePath="DotFiles" Pack="true" />
+    <Content Include="bin\$(AssemblyName)\$(Configuration)\LibGit2Sharp.dll" PackagePath="DotFiles" Pack="true" />
+    <Content Include="bin\$(AssemblyName)\$(Configuration)\lib\win32\**\*" PackagePath="DotFiles\lib\win32" Pack="true" />
   </ItemGroup>
 
   <ItemGroup>
