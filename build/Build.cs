@@ -53,7 +53,6 @@ class Build : NukeBuild
     static readonly AbsolutePath ChangelogFile = RootDirectory / "CHANGELOG.md";
 
     static readonly AbsolutePath ArtifactsDir = RootDirectory / "artifacts";
-    static readonly AbsolutePath OutputDir = ArtifactsDir / "output";
     static readonly AbsolutePath TestResultFile = ArtifactsDir / "testResult.xml";
     static readonly AbsolutePath NuGetPackageOutDir = ArtifactsDir / "nugetPackages";
 
@@ -123,7 +122,6 @@ class Build : NukeBuild
                 .SetTargets("Build")
                 .SetSolutionFile(Solution)
                 .SetVerbosity(MSBuildVerbosity.Minimal)
-                .SetOutDir(OutputDir)
                 //
                 .AddProperty("DevHostId", DevHostId)
                 .SetPackageVersion(CurrentBuildVersion.NuGetVersion)
@@ -138,7 +136,7 @@ class Build : NukeBuild
         {
             var testProject = Solution.GetProject(TestProjectName)!;
 
-            var testAssemblyPath = OutputDir / $"{TestProjectName}.dll";
+            var testAssemblyPath = testProject.Directory / "bin" / TestProjectName / Configuration / $"{TestProjectName}.dll";
 
             NUnit3(c => c
                 .AddInputFiles(testAssemblyPath)
