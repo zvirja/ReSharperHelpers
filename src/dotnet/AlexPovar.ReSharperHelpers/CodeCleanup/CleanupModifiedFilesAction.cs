@@ -47,9 +47,10 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
 
           if (this.SaveProfileAsRecentlyUsed)
           {
-            solution.GetComponent<CodeCleanupSettingsComponent>().SetRecentlyUsedProfileName(
+
+            solution.GetComponent<CodeCleanupSettingsComponent>().SetRecentlyUsedProfileId(
               solution.GetComponent<ISettingsStore>().BindToContextTransient(ContextRange.Smart(collector.GetContext())),
-              profile.Name);
+              profile.Id);
           }
 
           switch (actionScope)
