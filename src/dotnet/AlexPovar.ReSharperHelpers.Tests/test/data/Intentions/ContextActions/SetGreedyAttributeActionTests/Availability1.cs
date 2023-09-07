@@ -12,6 +12,14 @@
     public void Te{off}st(string some{on}arg, [Greedy] string other{off}Arg)
     {
       Action<string> act => (va{off}lue) => {};
+
+      void InnerMethod1(string val{off}ue)
+      {
+      }
+
+      static void InnerMethod2(string val{off}ue)
+      {
+      }
     }
   }
 }

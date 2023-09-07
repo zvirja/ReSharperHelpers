@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -13,8 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="Nuke.Common" Version="6.2.1" />
-    <PackageReference Include="NUnit.ConsoleRunner" Version="3.16.0" />
-    <PackageReference Include="NuGet.CommandLine" Version="6.3.1">
+    <PackageReference Include="NUnit.ConsoleRunner" Version="3.16.3" />
+    <PackageReference Include="NuGet.CommandLine" Version="6.3.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

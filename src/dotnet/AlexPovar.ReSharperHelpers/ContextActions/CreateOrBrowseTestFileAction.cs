@@ -32,6 +32,7 @@ using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
+using JetBrains.Threading;
 using JetBrains.Util;
 using JetBrains.Util.Extension;
 
@@ -132,11 +133,12 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       return true;
     }
 
-    public async void Execute(ISolution solution, ITextControl textControl)
+    public void Execute(ISolution solution, ITextControl textControl)
     {
       if (this.ExistingProjectFile != null)
       {
-        await ShowProjectFile(solution, this.ExistingProjectFile, null);
+        // BE AWARE OF ASYNC
+        ShowProjectFileAsync(solution, this.ExistingProjectFile, null).NoAwait();
         return;
       }
 
@@ -174,7 +176,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
           var testFileTemplate = StoredTemplatesProvider.Instance.EnumerateTemplates(settingsStore, TemplateApplicability.File).FirstOrDefault(t => t.Description == TemplateDescription);
           if (testFileTemplate != null)
           {
-            await FileTemplatesManager.Instance.CreateFileFromTemplateAsync(testFileName, new ProjectFolderWithLocation(testFolder), testFileTemplate);
+            // BE AWARE OF ASYNC
+            FileTemplatesManager.Instance.CreateFileFromTemplateAsync(testFileName, new ProjectFolderWithLocation(testFolder), testFileTemplate).NoAwait();
             return;
           }
 
@@ -203,7 +206,8 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
           cookie.Commit(NullProgressIndicator.Create());
 
-          await ShowProjectFile(solution, newFile.ToProjectFile().NotNull(), caretPosition);
+          // BE AWARE OF ASYNC
+          ShowProjectFileAsync(solution, newFile.ToProjectFile().NotNull(), caretPosition).NoAwait();
         }
       }
     }
@@ -287,7 +291,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       return null;
     }
 
-    private static async Task ShowProjectFile([NotNull] ISolution solution, [NotNull] IProjectFile file, int? caretPosition)
+    private static async Task ShowProjectFileAsync([NotNull] ISolution solution, [NotNull] IProjectFile file, int? caretPosition)
     {
       var editor = solution.GetComponent<IEditorManager>();
       var textControl = await editor.OpenProjectFileAsync(file, OpenFileOptions.DefaultActivate);
