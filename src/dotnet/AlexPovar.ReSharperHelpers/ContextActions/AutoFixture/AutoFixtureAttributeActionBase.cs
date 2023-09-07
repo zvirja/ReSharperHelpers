@@ -18,81 +18,97 @@ using JetBrains.ReSharper.Psi.Util;
 using JetBrains.TextControl;
 using JetBrains.Util;
 
-namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
+namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture;
+
+public abstract class AutoFixtureAttributeActionBase : ContextActionBase
 {
-  public abstract class AutoFixtureAttributeActionBase : ContextActionBase
+  protected AutoFixtureAttributeActionBase([NotNull] ICSharpContextActionDataProvider provider, [NotNull] IClrTypeName attributeType)
   {
-    protected AutoFixtureAttributeActionBase([NotNull] ICSharpContextActionDataProvider provider, [NotNull] IClrTypeName attributeType)
+    this.Provider = provider;
+    this.AttributeType = attributeType;
+  }
+
+  [NotNull]
+  protected ICSharpContextActionDataProvider Provider { get; }
+
+  [NotNull]
+  private IClrTypeName AttributeType { get; }
+
+  [CanBeNull]
+  private ITypeElement ResolvedAttributeType { get; set; }
+
+  public override bool IsAvailable(IUserDataHolder cache)
+  {
+    var parameter = this.Provider.GetSelectedElement<ICSharpRegularParameterDeclaration>()?.DeclaredElement;
+    if (parameter == null || !parameter.IsValid())
     {
-      this.Provider = provider;
-      this.AttributeType = attributeType;
+      return false;
     }
 
-    [NotNull]
-    protected ICSharpContextActionDataProvider Provider { get; }
-
-    [NotNull]
-    private IClrTypeName AttributeType { get; }
-
-    [CanBeNull]
-    private ITypeElement ResolvedAttributeType { get; set; }
-
-    public override bool IsAvailable(IUserDataHolder cache)
+    if (parameter.ContainingParametersOwner is ILambdaExpression or ILocalFunctionDeclaration)
     {
-      var parameter = this.Provider.GetSelectedElement<IRegularParameterDeclaration>()?.DeclaredElement;
-      if (parameter == null || !parameter.IsValid()) return false;
-
-      // Check whether AF is present.
-      this.ResolvedAttributeType = TypeElementUtil.GetTypeElementByClrName(this.AttributeType, this.Provider.PsiModule);
-      if (this.ResolvedAttributeType == null) return false;
-
-      return this.IsAvailableWithAttributeInstances(parameter.GetAttributeInstances(this.AttributeType, false));
+      return false;
     }
 
-    public override IEnumerable<IntentionAction> CreateBulbItems()
+    // Check whether AF is present.
+    this.ResolvedAttributeType = TypeElementUtil.GetTypeElementByClrName(this.AttributeType, this.Provider.PsiModule);
+    if (this.ResolvedAttributeType == null)
     {
-      return this.ToHelpersContextActionIntentions();
+      return false;
     }
 
-    protected virtual bool IsAvailableWithAttributeInstances([NotNull] IList<IAttributeInstance> existingAttributes)
+    return this.IsAvailableWithAttributeInstances(parameter.GetAttributeInstances(this.AttributeType, false));
+  }
+
+  public override IEnumerable<IntentionAction> CreateBulbItems()
+  {
+    return this.ToHelpersContextActionIntentions();
+  }
+
+  protected virtual bool IsAvailableWithAttributeInstances([NotNull] IList<IAttributeInstance> existingAttributes)
+  {
+    return existingAttributes.IsEmpty();
+  }
+
+  protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
+  {
+    var parameterDeclaration = this.Provider.GetSelectedElement<ICSharpRegularParameterDeclaration>();
+    if (parameterDeclaration == null)
     {
-      return existingAttributes.IsEmpty();
-    }
-
-    protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
-    {
-      var parameterDeclaration = this.Provider.GetSelectedElement<IRegularParameterDeclaration>();
-      if (parameterDeclaration == null) return null;
-
-      var existingAttributes = parameterDeclaration.AttributesEnumerable
-        .Where(attr => attr.GetAttributeInstance().GetClrName().Equals(this.AttributeType))
-        .ToArray();
-
-      foreach (var existingAttribute in existingAttributes)
-      {
-        parameterDeclaration.RemoveAttribute(existingAttribute);
-      }
-
-
-      var psiModule = this.Provider.PsiModule;
-
-      // Try resolve again. It could happen that IsAvailable method was not invoked (e.g. for Frozen(Matching...)).
-      this.ResolvedAttributeType = this.ResolvedAttributeType ?? TypeElementUtil.GetTypeElementByClrName(this.AttributeType, this.Provider.PsiModule);
-      if (this.ResolvedAttributeType == null) return null;
-
-      var attribute = this.CreateAttribute(this.ResolvedAttributeType, CSharpElementFactory.GetInstance(parameterDeclaration), psiModule);
-      if (attribute != null)
-      {
-        parameterDeclaration.AddAttributeBefore(attribute, null);
-      }
-
       return null;
     }
 
-    [CanBeNull]
-    protected virtual IAttribute CreateAttribute([NotNull] ITypeElement resolvedAttributeType, [NotNull] CSharpElementFactory factory, [NotNull] IPsiModule psiModule)
+    var existingAttributes = parameterDeclaration.AttributesEnumerable
+      .Where(attr => attr.GetAttributeInstance().GetClrName().Equals(this.AttributeType))
+      .ToArray();
+
+    foreach (var existingAttribute in existingAttributes)
     {
-      return factory.CreateAttribute(resolvedAttributeType);
+      parameterDeclaration.RemoveAttribute(existingAttribute);
     }
+
+
+    var psiModule = this.Provider.PsiModule;
+
+    // Try resolve again. It could happen that IsAvailable method was not invoked (e.g. for Frozen(Matching...)).
+    this.ResolvedAttributeType = this.ResolvedAttributeType ?? TypeElementUtil.GetTypeElementByClrName(this.AttributeType, this.Provider.PsiModule);
+    if (this.ResolvedAttributeType == null)
+    {
+      return null;
+    }
+
+    var attribute = this.CreateAttribute(this.ResolvedAttributeType, CSharpElementFactory.GetInstance(parameterDeclaration), psiModule);
+    if (attribute != null)
+    {
+      parameterDeclaration.AddAttributeBefore(attribute, null);
+    }
+
+    return null;
+  }
+
+  [CanBeNull]
+  protected virtual IAttribute CreateAttribute([NotNull] ITypeElement resolvedAttributeType, [NotNull] CSharpElementFactory factory, [NotNull] IPsiModule psiModule)
+  {
+    return factory.CreateAttribute(resolvedAttributeType);
   }
 }

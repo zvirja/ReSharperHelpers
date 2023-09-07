@@ -8,24 +8,23 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.Util;
 
-namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture
+namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture;
+
+[ContextAction(Group = "C#", Name = "[ReSharperHelpers] Remove Greedy AutoFixture attribute", Description = "Removes Greedy AutoFixture attribute.", Priority = short.MinValue)]
+public class RemoveGreedyAttributeAction : AutoFixtureAttributeActionBase
 {
-  [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Remove Greedy AutoFixture attribute", Description = "Removes Greedy AutoFixture attribute.", Priority = short.MinValue)]
-  public class RemoveGreedyAttributeAction : AutoFixtureAttributeActionBase
+  public RemoveGreedyAttributeAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider, AutoFixtureConstants.GreedyAttributeType)
   {
-    public RemoveGreedyAttributeAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider, AutoFixtureConstants.GreedyAttributeType)
-    {
-    }
-
-    public override string Text => "Remove [Greedy] attribute";
-
-
-    protected override bool IsAvailableWithAttributeInstances(IList<IAttributeInstance> existingAttributes)
-    {
-      return !existingAttributes.IsEmpty();
-    }
-
-    // Remove existing, but don't create a new one.
-    protected override IAttribute CreateAttribute(ITypeElement resolvedAttributeType, CSharpElementFactory factory, IPsiModule psiModule) => null;
   }
+
+  public override string Text => "Remove [Greedy] attribute";
+
+
+  protected override bool IsAvailableWithAttributeInstances(IList<IAttributeInstance> existingAttributes)
+  {
+    return !existingAttributes.IsEmpty();
+  }
+
+  // Remove existing, but don't create a new one.
+  protected override IAttribute CreateAttribute(ITypeElement resolvedAttributeType, CSharpElementFactory factory, IPsiModule psiModule) => null;
 }

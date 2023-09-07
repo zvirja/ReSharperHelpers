@@ -270,3 +270,5 @@ deploy.host
 
 # VIM tmp file
 *.swp
+
+/src/dotnet/AlexPovar.ReSharperHelpers.Tests/test/data/NuGetLocks/
