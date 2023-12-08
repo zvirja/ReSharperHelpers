@@ -4,13 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 7.5.0
+## 7.6.0
+- Added support for ReSharper 2023.2
+- Publish Rider version in addition to ReSharper. Notice, Rider version lucks some features which are Visual Studio specific.
 
+## 7.5.0
 - Added support for ReSharper 2023.2
 - Enhanced AutoFixture attribute actions applicability detection
-
+-
 ## 7.4.0
-
 - Added support for ReSharper 2023.1
 - Updated LibGit2Sharp to 0.27.2, so hopefully long paths are supported now
 

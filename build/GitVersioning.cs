@@ -6,7 +6,7 @@ public static class GitVersioning
 {
     public static BuildVersionInfo CalculateVersionFromGit(int buildNumber)
     {
-        var desc = GitTasks.Git("describe --tags --long --abbrev=40 --match=v*", logInvocation: false, logOutput: false).Single().Text;
+        var desc = GitTasks.Git($"describe --tags --long --abbrev=40 --match=v*", logInvocation: false, logOutput: false).Single().Text;
         var result = Regex.Match(desc,
                 @"^v(?<maj>\d+)\.(?<min>\d+)(\.(?<rev>\d+))?(?<pre>-\w+\d*)?-(?<num>\d+)-g(?<sha>[a-z0-9]+)$",
                 RegexOptions.IgnoreCase)

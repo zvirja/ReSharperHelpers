@@ -19,3 +19,4 @@ deploy: off
 
 artifacts:
   - path: 'artifacts\nugetPackages\*.nupkg'
+  - path: 'artifacts\riderPackages\*.zip'
