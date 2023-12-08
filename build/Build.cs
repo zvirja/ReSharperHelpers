@@ -3,7 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
+using NuGet.Packaging;
 using Nuke.Common;
 using Nuke.Common.CI.AppVeyor;
 using Nuke.Common.Execution;
@@ -55,6 +57,8 @@ class Build : NukeBuild
     static readonly AbsolutePath ArtifactsDir = RootDirectory / "artifacts";
     static readonly AbsolutePath TestResultFile = ArtifactsDir / "testResult.xml";
     static readonly AbsolutePath NuGetPackageOutDir = ArtifactsDir / "nugetPackages";
+    static readonly AbsolutePath RiderPackageOutDir = ArtifactsDir / "riderPackages";
+    static readonly AbsolutePath RiderPackageTmpDir = TemporaryDirectory / "Rider";
 
     BuildVersionInfo CurrentBuildVersion;
 
@@ -97,6 +101,7 @@ class Build : NukeBuild
         .Executes(() =>
         {
           ArtifactsDir.CreateOrCleanDirectory();
+          RiderPackageTmpDir.CreateOrCleanDirectory();
         });
 
     Target Prepare => _ => _
@@ -172,6 +177,47 @@ class Build : NukeBuild
             .SetFileVersion(CurrentBuildVersion.FileVersion)
             .SetInformationalVersion(CurrentBuildVersion.InfoVersion)
           );
+
+          // Build Rider extension
+          var riderNuGetDir = RiderPackageTmpDir / "NuGet";
+          AbsolutePath riderNugetPackage = GlobFiles(NuGetPackageOutDir, "*Rider*.nupkg").Single();
+          riderNugetPackage.UnZipTo(riderNuGetDir);
+
+          var riderPkgRootDir = RiderPackageTmpDir / "Package";
+          riderPkgRootDir.CreateOrCleanDirectory();
+
+          var riderPkgContentDir = riderPkgRootDir / "ResharperHelpers";
+          riderPkgContentDir.CreateOrCleanDirectory();
+
+          var nuspecReader = new NuspecReader(riderNuGetDir / "AlexPovar.ReSharperHelpers.Rider.nuspec");
+          var waveVersion = nuspecReader.GetDependencyGroups().SelectMany(x => x.Packages).Single(x => x.Id == "Wave").VersionRange.MinVersion.Version.Major.ToString();
+
+          var pluginXmlFile = riderPkgContentDir / "META-INF" / "plugin.xml";
+          pluginXmlFile.WriteAllText(
+            $"""
+             <idea-plugin require-restart="true">
+               <depends>com.intellij.modules.rider</depends>
+               <idea-version since-build="{waveVersion}.0.0" until-build="{waveVersion}.*"/>
+
+               <id>{nuspecReader.GetMetadataValue("id")}</id>
+               <version>{nuspecReader.GetMetadataValue("version")}</version>
+               <name>{nuspecReader.GetMetadataValue("title")}</name>
+               <vendor url="{nuspecReader.GetMetadataValue("projectUrl")}">{nuspecReader.GetMetadataValue("authors")}</vendor>
+               <description>{nuspecReader.GetMetadataValue("description")}</description>
+               <change-notes>{changelog.ReplaceLineEndings($"&lt;br /&gt;{Environment.NewLine}")}</change-notes>
+             </idea-plugin>
+             """
+          );
+
+          CopyDirectoryRecursively(riderNuGetDir / "dotFiles", riderPkgContentDir / "dotnet");
+
+          var riderPackageFilePath = RiderPackageOutDir / $"{nuspecReader.GetMetadataValue("id")}.{nuspecReader.GetMetadataValue("version")}.zip";
+          riderPackageFilePath.Parent.CreateDirectory();
+          new FastZip().CreateZip(zipFileName: riderPackageFilePath, sourceDirectory: riderPkgRootDir, recurse: true, fileFilter: null);
+
+          Log.Information("Created Rider package: {path}", riderPackageFilePath);
+
+          RiderPackageTmpDir.DeleteDirectory();
         });
 
     Target CompleteBuild => _ => _
