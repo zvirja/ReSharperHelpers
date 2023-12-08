@@ -16,7 +16,7 @@ using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.NUnit;
 using Serilog;
 using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
+using static Nuke.Common.IO.Globbing;
 using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
 using static Nuke.Common.Tools.NUnit.NUnitTasks;
 using static Nuke.Common.Tools.NuGet.NuGetTasks;
@@ -96,7 +96,7 @@ class Build : NukeBuild
     Target Clean => _ => _
         .Executes(() =>
         {
-            EnsureCleanDirectory(ArtifactsDir);
+          ArtifactsDir.CreateOrCleanDirectory();
         });
 
     Target Prepare => _ => _
