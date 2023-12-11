@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 7.6.1
+- Fixed publish of Rider Plugin. Nothing changed for Visual Studio plugin.
+
 ## 7.6.0
 - Added support for ReSharper 2023.2
 - Publish Rider version in addition to ReSharper. Notice, Rider version lucks some features which are Visual Studio specific.
