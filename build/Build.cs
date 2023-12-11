@@ -191,6 +191,7 @@ class Build : NukeBuild
 
           var nuspecReader = new NuspecReader(riderNuGetDir / "AlexPovar.ReSharperHelpers.Rider.nuspec");
           var waveVersion = nuspecReader.GetDependencyGroups().SelectMany(x => x.Packages).Single(x => x.Id == "Wave").VersionRange.MinVersion.Version.Major.ToString();
+          var riderPackageId = $"{nuspecReader.GetMetadataValue("id")}.{nuspecReader.GetMetadataValue("version")}";
 
           var pluginXmlFile = riderPkgContentDir / "META-INF" / "plugin.xml";
           pluginXmlFile.WriteAllText(
@@ -211,7 +212,19 @@ class Build : NukeBuild
 
           CopyDirectoryRecursively(riderNuGetDir / "dotFiles", riderPkgContentDir / "dotnet");
 
-          var riderPackageFilePath = RiderPackageOutDir / $"{nuspecReader.GetMetadataValue("id")}.{nuspecReader.GetMetadataValue("version")}.zip";
+          // Build jar file. It's an empty file with metadata only. Is needed otherwise I cannot upload to marketplace
+          {
+            var jarContentDir = RiderPackageTmpDir / "jar";
+            jarContentDir.CreateOrCleanDirectory();
+
+            CopyFileToDirectory(pluginXmlFile, jarContentDir / "META-INF");
+
+            var jarPkgFilePath = riderPkgContentDir / "lib" / $"{riderPackageId}.jar";
+            jarPkgFilePath.Parent.CreateDirectory();
+            new FastZip().CreateZip(zipFileName: jarPkgFilePath, sourceDirectory: jarContentDir, recurse: true, fileFilter: null);
+          }
+
+          var riderPackageFilePath = RiderPackageOutDir / $"{riderPackageId}.zip";
           riderPackageFilePath.Parent.CreateDirectory();
           new FastZip().CreateZip(zipFileName: riderPackageFilePath, sourceDirectory: riderPkgRootDir, recurse: true, fileFilter: null);
 
