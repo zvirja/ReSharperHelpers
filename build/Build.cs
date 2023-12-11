@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
@@ -191,6 +192,7 @@ class Build : NukeBuild
 
           var nuspecReader = new NuspecReader(riderNuGetDir / "AlexPovar.ReSharperHelpers.Rider.nuspec");
           var waveVersion = nuspecReader.GetDependencyGroups().SelectMany(x => x.Packages).Single(x => x.Id == "Wave").VersionRange.MinVersion.Version.Major.ToString();
+          var riderPackageId = $"{nuspecReader.GetMetadataValue("id")}.{nuspecReader.GetMetadataValue("version")}";
 
           var pluginXmlFile = riderPkgContentDir / "META-INF" / "plugin.xml";
           pluginXmlFile.WriteAllText(
@@ -211,7 +213,19 @@ class Build : NukeBuild
 
           CopyDirectoryRecursively(riderNuGetDir / "dotFiles", riderPkgContentDir / "dotnet");
 
-          var riderPackageFilePath = RiderPackageOutDir / $"{nuspecReader.GetMetadataValue("id")}.{nuspecReader.GetMetadataValue("version")}.zip";
+          // Build jar file. It's an empty file with metadata only. Is needed otherwise I cannot upload to marketplace
+          {
+            var jarContentDir = RiderPackageTmpDir / "jar";
+            jarContentDir.CreateOrCleanDirectory();
+
+            CopyFileToDirectory(pluginXmlFile, jarContentDir / "META-INF");
+
+            var jarPkgFilePath = riderPkgContentDir / "lib" / $"{riderPackageId}.jar";
+            jarPkgFilePath.Parent.CreateDirectory();
+            new FastZip().CreateZip(zipFileName: jarPkgFilePath, sourceDirectory: jarContentDir, recurse: true, fileFilter: null);
+          }
+
+          var riderPackageFilePath = RiderPackageOutDir / $"{riderPackageId}.zip";
           riderPackageFilePath.Parent.CreateDirectory();
           new FastZip().CreateZip(zipFileName: riderPackageFilePath, sourceDirectory: riderPkgRootDir, recurse: true, fileFilter: null);
 
@@ -239,7 +253,7 @@ class Build : NukeBuild
     Target PublishGallery => _ => _
         .Requires(() => ReSharperGalleryKey)
         .DependsOn(Pack)
-        .Executes(() =>
+        .Executes(async () =>
         {
             var nugetPackage = GlobFiles(NuGetPackageOutDir, "*.nupkg").Single(x => !x.Contains("Rider"));
             NuGetPush(c => c
@@ -247,6 +261,26 @@ class Build : NukeBuild
                 .SetApiKey(ReSharperGalleryKey)
                 .SetSource("https://plugins.jetbrains.com/")
             );
+
+            var riderPackage = GlobFiles(RiderPackageOutDir, "*.zip").Single();
+            var packageId = Regex.Match(Path.GetFileName(riderPackage), pattern: @"^(.*?)[\.\d]*\.zip$").Groups[1].Value;
+
+            var uploadPackageContent = new MultipartFormDataContent();
+            uploadPackageContent.Add(new StringContent(packageId), name: "xmlId");
+            uploadPackageContent.Add(new StreamContent(File.OpenRead(riderPackage)), name: "file", fileName: Path.GetFileName(riderPackage));
+
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ReSharperGalleryKey);
+
+            var result = await httpClient.PostAsync(new Uri("https://plugins.jetbrains.com/plugin/uploadPlugin"), uploadPackageContent);
+            if (result.IsSuccessStatusCode)
+            {
+              Log.Information("Published Rider Plugin: {fileName}", Path.GetFileName(riderPackage));
+            }
+            else
+            {
+              throw new InvalidOperationException($"Cannot upload Rider package: {result}");
+            }
         });
 
     // ==============================================
