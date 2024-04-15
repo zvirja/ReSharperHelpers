@@ -114,7 +114,7 @@ class Build : NukeBuild
         {
             DotNetRestore(c => c
                 .SetProjectFile(Solution)
-                .SetVerbosity(DotNetVerbosity.Minimal)
+                .SetVerbosity(DotNetVerbosity.minimal)
             );
         });
 
@@ -140,7 +140,7 @@ class Build : NukeBuild
         .DependsOn(Prepare, Restore, Compile)
         .Executes(() =>
         {
-            var testProject = Solution.GetProject(TestProjectName)!;
+            var testProject = Solution.GetAllProjects(TestProjectName).Single();
 
             var testAssemblyPath = testProject.Directory / "bin" / TestProjectName / Configuration / $"{TestProjectName}.dll";
 
