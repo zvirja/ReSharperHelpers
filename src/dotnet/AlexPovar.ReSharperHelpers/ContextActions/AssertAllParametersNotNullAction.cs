@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.Feature.Services.BulbActions;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.ContextActions;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -52,7 +53,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       return true;
     }
 
-    protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
+    protected override IBulbActionCommand ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
       if (this._myParameterDeclarations == null) return null;
 

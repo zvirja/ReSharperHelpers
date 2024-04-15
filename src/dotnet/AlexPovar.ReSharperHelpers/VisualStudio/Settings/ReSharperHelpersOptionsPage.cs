@@ -10,6 +10,7 @@ using JetBrains.Application.UI.Options;
 using JetBrains.Application.UI.Options.OptionPages;
 using JetBrains.Application.UI.Options.OptionsDialog;
 using JetBrains.IDE.UI.Extensions;
+using JetBrains.IDE.UI.Extensions.Properties;
 using JetBrains.IDE.UI.Options;
 using JetBrains.Lifetimes;
 using JetBrains.Rider.Model.UIAutomation;
@@ -37,7 +38,7 @@ namespace AlexPovar.ReSharperHelpers.VisualStudio.Settings
             (BeControls.GetSpacer(), BeSizingType.Fit)
           )
           .WithColor(JetRgbaColors.LightYellow)
-          .InGroupBox("⚠ Use Editor Config")
+          .WithTitledBorder("⚠ Use Editor Config", 5, BeMargins.Create(5))
       );
       AddSpacer();
 
