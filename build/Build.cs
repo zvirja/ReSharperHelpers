@@ -206,7 +206,7 @@ class Build : NukeBuild
                <name>{nuspecReader.GetMetadataValue("title")}</name>
                <vendor url="{nuspecReader.GetMetadataValue("projectUrl")}">{nuspecReader.GetMetadataValue("authors")}</vendor>
                <description>{nuspecReader.GetMetadataValue("description")}</description>
-               <change-notes>{changelog.ReplaceLineEndings($"&lt;br /&gt;{Environment.NewLine}")}</change-notes>
+               <change-notes>{changelog.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").ReplaceLineEndings($"&lt;br /&gt;{Environment.NewLine}")}</change-notes>
              </idea-plugin>
              """
           );
