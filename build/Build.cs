@@ -368,13 +368,12 @@ class Build : NukeBuild
 
         return (tag, isPr, branchName) switch
         {
-            ({ } t, _, _) when Regex.IsMatch(t, "^v\\d.*") => AppVeyorTrigger.SemVerTag,
-            (_, true, _)                                   => AppVeyorTrigger.PR,
-            (_, _, "main")                                 => AppVeyorTrigger.MainBranch,
-            (_, _, "master")                               => AppVeyorTrigger.MainBranch,
-            (_, _, "develop")                              => AppVeyorTrigger.DevelopBranch,
-            (_, _, "feature/consume-eap")                  => AppVeyorTrigger.ConsumeEapBranch,
-            _                                              => AppVeyorTrigger.UnknownBranchOrTag
+            (tag: { } t, _, _) when Regex.IsMatch(t, "^v\\d.*") => AppVeyorTrigger.SemVerTag,
+            (_, isPr: true, _)                                  => AppVeyorTrigger.PR,
+            (_, _, branchName: "main")                          => AppVeyorTrigger.MainBranch,
+            (_, _, branchName: "develop")                       => AppVeyorTrigger.DevelopBranch,
+            (_, _, branchName: "feature/consume-eap")           => AppVeyorTrigger.ConsumeEapBranch,
+            _                                                   => AppVeyorTrigger.UnknownBranchOrTag
         };
     }
 }
