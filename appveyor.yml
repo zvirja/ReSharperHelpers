@@ -2,7 +2,7 @@ image: Visual Studio 2022
 
 environment:
   RESHARPER_GALLERY_KEY:
-    secure: ZHMReQXlwdjhYK3JPKDy8zckH93IR0bvNW6vx1JrWtjciAPlbcttAhDJZhS0UV3DeJiG91Xk/ngBDflfJy3lXS8jGmCIiZ+EmkuWgrHwSeQ=
+    secure: gjJvmA3GoGF/HsNqsk59WGi399wV/Qwl2nOznPs1bs36S0VYxbXCns32lf27kAPyAdbFfqgVQQWSR1BeqmX8QA==
   MYGET_KEY:
     secure: 4p4wi7VlIH54Ue2IKX5E8FW30mZeHihIevL9l+nKol4w4UWRmIWbBhnGs1iflu4F
 

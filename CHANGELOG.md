@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 7.7.1
+- Added support for ReSharper & Rider 2024.1.3
+
+JetBrains introduced a subtle breaking change in their API, so recompiling is required.
+It will make this version incompatible with prior 2024.1.x versions.
+
 ## 7.7.0
 - Added support for ReSharper & Rider 2024.1
 

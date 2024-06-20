@@ -206,7 +206,7 @@ class Build : NukeBuild
                <name>{nuspecReader.GetMetadataValue("title")}</name>
                <vendor url="{nuspecReader.GetMetadataValue("projectUrl")}">{nuspecReader.GetMetadataValue("authors")}</vendor>
                <description>{nuspecReader.GetMetadataValue("description")}</description>
-               <change-notes>{changelog.ReplaceLineEndings($"&lt;br /&gt;{Environment.NewLine}")}</change-notes>
+               <change-notes>{changelog.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").ReplaceLineEndings($"&lt;br /&gt;{Environment.NewLine}")}</change-notes>
              </idea-plugin>
              """
           );
@@ -368,13 +368,12 @@ class Build : NukeBuild
 
         return (tag, isPr, branchName) switch
         {
-            ({ } t, _, _) when Regex.IsMatch(t, "^v\\d.*") => AppVeyorTrigger.SemVerTag,
-            (_, true, _)                                   => AppVeyorTrigger.PR,
-            (_, _, "main")                                 => AppVeyorTrigger.MainBranch,
-            (_, _, "master")                               => AppVeyorTrigger.MainBranch,
-            (_, _, "develop")                              => AppVeyorTrigger.DevelopBranch,
-            (_, _, "feature/consume-eap")                  => AppVeyorTrigger.ConsumeEapBranch,
-            _                                              => AppVeyorTrigger.UnknownBranchOrTag
+            (tag: { } t, _, _) when Regex.IsMatch(t, "^v\\d.*") => AppVeyorTrigger.SemVerTag,
+            (_, isPr: true, _)                                  => AppVeyorTrigger.PR,
+            (_, _, branchName: "main")                          => AppVeyorTrigger.MainBranch,
+            (_, _, branchName: "develop")                       => AppVeyorTrigger.DevelopBranch,
+            (_, _, branchName: "feature/consume-eap")           => AppVeyorTrigger.ConsumeEapBranch,
+            _                                                   => AppVeyorTrigger.UnknownBranchOrTag
         };
     }
 }
