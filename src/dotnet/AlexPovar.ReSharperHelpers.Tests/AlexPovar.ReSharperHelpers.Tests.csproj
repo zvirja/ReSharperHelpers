@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="$(SdkVersion)" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
   </ItemGroup>
 
   <ItemGroup>
