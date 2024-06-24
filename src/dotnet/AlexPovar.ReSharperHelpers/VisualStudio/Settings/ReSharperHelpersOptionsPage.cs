@@ -34,7 +34,8 @@ namespace AlexPovar.ReSharperHelpers.VisualStudio.Settings
             GridOrientation.Vertical,
             (BeControls.GetSpacer(), BeSizingType.Fit),
             (BeControls.GetRichText("It's recommended to save project specific settings to .editorconfig file instead of configuring them here."), BeSizingType.Fit),
-            (BeControls.GetLinkButton("Read documentation", lifetime, () => Process.Start("https://github.com/zvirja/ReSharperHelpers#editor-config")), BeSizingType.Fit),
+            // Temporarily remove for 2024.1.x due to breaking change: https://youtrack.jetbrains.com/issue/RSRP-497631
+            // (BeControls.GetLinkButton("Read documentation", lifetime, () => Process.Start("https://github.com/zvirja/ReSharperHelpers#editor-config")), BeSizingType.Fit),
             (BeControls.GetSpacer(), BeSizingType.Fit)
           )
           .WithColor(JetRgbaColors.LightYellow)
