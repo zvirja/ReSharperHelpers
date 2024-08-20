@@ -1,5 +1,6 @@
 ﻿using AlexPovar.ReSharperHelpers.ContextActions.AutoFixture;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
+using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.FeaturesTestFramework.Intentions;
 using JetBrains.TextControl;
 using NUnit.Framework;
@@ -8,7 +9,7 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
 {
   public class SetFrozenAttributeActionTests : PathedContextActionExecuteTestBase<SetFrozenAttributeAction>
   {
-    protected override IBulbAction SelectItem(SetFrozenAttributeAction contextAction, string attribute, ITextControl textControl)
+    protected override IBulbAction SelectItem(ContextActionInstance contextAction, string attribute, ITextControl textControl)
     {
       if (attribute == "Freeze") attribute = "[AutoFixture] Freeze";
       return base.SelectItem(contextAction, attribute, textControl);
