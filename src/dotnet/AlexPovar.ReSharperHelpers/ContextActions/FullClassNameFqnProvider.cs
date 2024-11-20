@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.DataContext;
+using JetBrains.Application.Parts;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Features.Environment.CopyFqn;
 using JetBrains.ReSharper.Psi;
@@ -11,7 +12,8 @@ using JetBrains.UI.RichText;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
 {
-  [SolutionComponent]
+  // Instantiation option was looked at other IFqnProvider implementations at a time
+  [SolutionComponent(Instantiation.DemandAnyThreadSafe)]
   public class FullClassNameFqnProvider : IFqnProvider
   {
     public int Priority => -1;

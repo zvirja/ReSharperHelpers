@@ -1,7 +1,7 @@
 ﻿<Project>
 
   <PropertyGroup>
-    <SdkVersion>2024.2.0</SdkVersion>
+    <SdkVersion>2024.3.0</SdkVersion>
 
     <Title>ReSharper Helpers</Title>
     <Description>Set of custom actions and tweaks for ReSharper to improve your productivity. Refer to project site for entire feature list.</Description>

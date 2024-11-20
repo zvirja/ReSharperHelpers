@@ -152,15 +152,15 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
       private static DocumentRange[] DefaultRanges { get; } = {DocumentRange.InvalidRange};
 
       [NotNull] private readonly ICodeCleanupFilesProvider _innerProvider;
-      [NotNull] private readonly IList<IPsiSourceFile> _filteredFiles;
+      [NotNull] private readonly IPsiSourceFile[] _filteredFiles;
 
-      public FilteredCodeCleanupProvider([NotNull] ICodeCleanupFilesProvider innerProvider, [NotNull] IList<IPsiSourceFile> filteredFiles)
+      public FilteredCodeCleanupProvider([NotNull] ICodeCleanupFilesProvider innerProvider, [NotNull] IPsiSourceFile[] filteredFiles)
       {
         this._innerProvider = innerProvider ?? throw new ArgumentNullException(nameof(innerProvider));
         this._filteredFiles = filteredFiles ?? throw new ArgumentNullException(nameof(filteredFiles));
       }
 
-      public IList<IPsiSourceFile> GetFiles() => this._filteredFiles;
+      public IReadOnlyList<IPsiSourceFile> GetFiles() => this._filteredFiles;
 
       public DocumentRange[] GetRangesForFile(IPsiSourceFile file) => DefaultRanges;
 
