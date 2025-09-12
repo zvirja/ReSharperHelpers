@@ -120,7 +120,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
 
       var resolveResult = reference.Reference.Resolve();
 
-      // Handle case when reference is not resolved 
+      // Handle case when reference is not resolved
       if (resolveResult.ResolveErrorType == ResolveErrorType.NOT_RESOLVED)
       {
         var referenceText = reference.GetText();
@@ -168,8 +168,7 @@ namespace AlexPovar.ReSharperHelpers.ContextActions
       }
 
       return typeDecl?
-        .EnumerateMembers(assertionMethodName, true)
-        .OfType<IMethod>()
+        .EnumerateOwnMembersWithName<IMethod>(assertionMethodName, caseSensitive: true)
         .FirstOrDefault(m => m.Parameters.Count > 1 && (m.Parameters[0].Type.IsOpenType || parameterType.IsImplicitlyConvertibleTo(m.Parameters[0].Type, module.GetTypeConversionRule())));
     }
   }
