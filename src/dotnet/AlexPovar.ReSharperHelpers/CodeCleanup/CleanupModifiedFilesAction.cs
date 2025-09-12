@@ -30,7 +30,8 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
     void IExecutableAction.Execute(IDataContext context, DelegateExecute nextExecute)
     {
       var solution = context.GetData(ProjectModelDataConstants.SOLUTION);
-      if (solution == null || !solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute")) return;
+      if (solution == null || !solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute", true))
+        return;
 
       var collector = CodeCleanupFilesCollector.TryCreate(context).NotNull("collector != null");
 
@@ -38,12 +39,14 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
         "CodeCleanupActionBase.Execute",
         () =>
         {
-          if (!solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute")) return;
+          if (!solution.GetPsiServices().Caches.WaitForCaches("CodeCleanupActionBase.Execute", true))
+            return;
 
           var actionScope = collector.GetActionScope();
 
           var profile = this.GetProfile(collector);
-          if (profile == null) return;
+          if (profile == null)
+            return;
 
           if (this.SaveProfileAsRecentlyUsed)
           {
