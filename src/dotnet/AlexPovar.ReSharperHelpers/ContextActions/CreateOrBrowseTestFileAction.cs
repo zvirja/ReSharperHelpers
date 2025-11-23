@@ -12,6 +12,7 @@ using JetBrains.DocumentManagers.impl;
 using JetBrains.DocumentManagers.Transactions;
 using JetBrains.DocumentModel;
 using JetBrains.IDE;
+using JetBrains.IDE.Common;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.CodeCleanup.FileHeader;

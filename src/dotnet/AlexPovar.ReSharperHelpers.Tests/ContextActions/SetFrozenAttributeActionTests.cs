@@ -1,6 +1,8 @@
-﻿using AlexPovar.ReSharperHelpers.ContextActions.AutoFixture;
+﻿using System.Collections.Generic;
+using AlexPovar.ReSharperHelpers.ContextActions.AutoFixture;
 using JetBrains.ReSharper.Feature.Services.Bulbs;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
+using JetBrains.ReSharper.Feature.Services.Intentions;
 using JetBrains.ReSharper.FeaturesTestFramework.Intentions;
 using JetBrains.TextControl;
 using NUnit.Framework;
@@ -9,10 +11,14 @@ namespace AlexPovar.ReSharperHelpers.Tests.ContextActions
 {
   public class SetFrozenAttributeActionTests : PathedContextActionExecuteTestBase<SetFrozenAttributeAction>
   {
-    protected override IBulbAction SelectItem(ContextActionInstance contextAction, string attribute, ITextControl textControl)
+    protected override IIntentionAction SelectActionToExecute(IReadOnlyList<IIntentionAction> intentionActions, string actionName, ITextControl textControl)
     {
-      if (attribute == "Freeze") attribute = "[AutoFixture] Freeze";
-      return base.SelectItem(contextAction, attribute, textControl);
+      if (actionName == "Freeze")
+      {
+        actionName = "[AutoFixture] Freeze";
+      }
+
+      return base.SelectActionToExecute(intentionActions, actionName, textControl);
     }
 
     [Test] public void TestFrozenByExactTypeIsArranged() { this.DoNamedTest2(); }
