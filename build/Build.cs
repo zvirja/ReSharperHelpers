@@ -349,7 +349,6 @@ class Build : NukeBuild
             (tag: { } t, _, _) when Regex.IsMatch(t, "^v\\d.*") => CITrigger.SemVerTag,
             (_, isPr: true, _)                                  => CITrigger.PR,
             (_, _, branchName: "main")                          => CITrigger.MainBranch,
-            (_, _, branchName: "develop")                       => CITrigger.DevelopBranch,
             (_, _, branchName: "feature/consume-eap")           => CITrigger.ConsumeEapBranch,
             _                                                   => CITrigger.UnknownBranchOrTag
         };
