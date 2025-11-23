@@ -8,7 +8,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 using NuGet.Packaging;
 using Nuke.Common;
-using Nuke.Common.CI.AppVeyor;
+using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
@@ -287,93 +287,71 @@ class Build : NukeBuild
     // ================== AppVeyor ==================
     // ==============================================
 
-    static AppVeyor AppVeyorEnv => AppVeyor.Instance ?? throw new InvalidOperationException("Is not AppVeyor CI");
 
-    Target AppVeyor_DescribeState => _ => _
-        .Before(Prepare)
+    Target CI_DescribeState => _ => _
+      .Before(Prepare)
+      .Executes(() =>
+      {
+        var env = GitHubActions.Instance ?? throw new InvalidOperationException("Is not GitHub Actions CI");
+        var trigger = ResolveCITrigger();
+        Log.Information($"Build type: {env.RefType}, Ref name: '{env.RefName}', Is PR: {env.IsPullRequest}, trigger: {trigger}");
+      });
+
+    Target CI_Pipeline => _ => _
+        .DependsOn(ResolveCITarget(this), CI_DescribeState)
         .Executes(() =>
         {
-            var env = AppVeyorEnv;
-            var trigger = ResolveAppVeyorTrigger();
-            Log.Information($"Is tag: {env.RepositoryTag}, tag name: '{env.RepositoryTagName}', PR number: {env.PullRequestNumber}, branch name: '{env.RepositoryBranch}', trigger: {trigger}");
+            // CITrigger trigger = ResolveCITrigger();
+            // if (trigger != CiTrigger.PR)
+            // {
+            //     CiEnv.UpdateBuildVersion(CurrentBuildVersion.FileVersion);
+            //     Log.Information($"Updated build version to: '{CurrentBuildVersion.FileVersion}'");
+            // }
         });
 
-    Target AppVeyor_UploadTestResults => _ => _
-        .DependsOn(Test)
-        .Executes(async () =>
-        {
-            Log.Information($"Uploading tests result file: {TestResultFile}");
-
-            var testResultBytes = await File.ReadAllBytesAsync(TestResultFile);
-
-            using var multipartContent = new MultipartFormDataContent($"------------{DateTime.Now.Ticks:X}")
-            {
-                {new ByteArrayContent(testResultBytes), "file", Path.GetFileName(TestResultFile)!}
-            };
-
-            using var httpClient = new HttpClient();
-            var result = await httpClient.PostAsync($"https://ci.appveyor.com/api/testresults/nunit3/{AppVeyorEnv.JobId}", multipartContent);
-            result.EnsureSuccessStatusCode();
-            Log.Information($"Successfully uploaded the file");
-        });
-
-    Target AppVeyor_Pipeline => _ => _
-        .DependsOn(ResolveAppVeyorTarget(this), AppVeyor_DescribeState, AppVeyor_UploadTestResults)
-        .Executes(() =>
-        {
-            AppVeyorTrigger trigger = ResolveAppVeyorTrigger();
-            if (trigger != AppVeyorTrigger.PR)
-            {
-                AppVeyorEnv.UpdateBuildVersion(CurrentBuildVersion.FileVersion);
-                Log.Information($"Updated build version to: '{CurrentBuildVersion.FileVersion}'");
-            }
-        });
-
-    static Target ResolveAppVeyorTarget(Build build)
+    static Target ResolveCITarget(Build build)
     {
-        var trigger = ResolveAppVeyorTrigger();
+        var trigger = ResolveCITrigger();
         return trigger switch
         {
-            AppVeyorTrigger.SemVerTag        => build.PublishGallery,
-            AppVeyorTrigger.DevelopBranch    => build.PublishMyGet,
-            AppVeyorTrigger.ConsumeEapBranch => build.CompleteBuild,
-            AppVeyorTrigger.PR               => build.CompleteBuild,
-            AppVeyorTrigger.MainBranch       => build.CompleteBuild,
-            _                                => build.Compile
+            CITrigger.SemVerTag        => build.PublishGallery,
+            CITrigger.MainBranch       => build.PublishMyGet,
+            CITrigger.ConsumeEapBranch => build.CompleteBuild,
+            CITrigger.PR               => build.CompleteBuild,
+            _                          => build.Compile
         };
     }
 
-    enum AppVeyorTrigger
+    enum CITrigger
     {
         Invalid,
         SemVerTag,
         PR,
-        DevelopBranch,
         MainBranch,
         ConsumeEapBranch,
         UnknownBranchOrTag
     }
 
-    static AppVeyorTrigger ResolveAppVeyorTrigger()
+    static CITrigger ResolveCITrigger()
     {
-        var env = AppVeyor.Instance;
+        var env = GitHubActions.Instance;
         if (env == null)
         {
-            return AppVeyorTrigger.Invalid;
+            return CITrigger.Invalid;
         }
 
-        var tag = env.RepositoryTag ? env.RepositoryTagName : null;
-        var isPr = env.PullRequestNumber != null;
-        var branchName = env.RepositoryBranch;
+        var tag = env.RefType == "tag" ? env.RefName : null;
+        var isPr = env.IsPullRequest;
+        var branchName = env.RefName;
 
         return (tag, isPr, branchName) switch
         {
-            (tag: { } t, _, _) when Regex.IsMatch(t, "^v\\d.*") => AppVeyorTrigger.SemVerTag,
-            (_, isPr: true, _)                                  => AppVeyorTrigger.PR,
-            (_, _, branchName: "main")                          => AppVeyorTrigger.MainBranch,
-            (_, _, branchName: "develop")                       => AppVeyorTrigger.DevelopBranch,
-            (_, _, branchName: "feature/consume-eap")           => AppVeyorTrigger.ConsumeEapBranch,
-            _                                                   => AppVeyorTrigger.UnknownBranchOrTag
+            (tag: { } t, _, _) when Regex.IsMatch(t, "^v\\d.*") => CITrigger.SemVerTag,
+            (_, isPr: true, _)                                  => CITrigger.PR,
+            (_, _, branchName: "main")                          => CITrigger.MainBranch,
+            (_, _, branchName: "develop")                       => CITrigger.DevelopBranch,
+            (_, _, branchName: "feature/consume-eap")           => CITrigger.ConsumeEapBranch,
+            _                                                   => CITrigger.UnknownBranchOrTag
         };
     }
 }

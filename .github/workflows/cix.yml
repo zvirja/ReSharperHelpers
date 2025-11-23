@@ -1,0 +1,30 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: CI
+
+on:
+  push
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+    - name: Run build
+      env:
+        RESHARPER_GALLERY_KEY: ${{ secrets.RESHARPER_GALLERY_KEY }}
+        MYGET_KEY: ${{ secrets.MYGET_KEY }}
+      shell: pwsh
+      run: |
+        .\build.ps1 --target CI_Pipeline --resharper-gallery-key "$($Env:RESHARPER_GALLERY_KEY)" --myget-key "$($Env:MYGET_KEY)" --build-version git  --build-number $($Env:GITHUB_RUN_NUMBER) --no-logo
