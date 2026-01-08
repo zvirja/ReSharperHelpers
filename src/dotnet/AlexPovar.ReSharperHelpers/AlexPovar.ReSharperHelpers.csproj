@@ -42,4 +42,10 @@
     </ThemedIconsXamlV3>
     <ThemedIconPng Include="VisualStudio\MainIcons\clearIcon.png" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\PluginStrings.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

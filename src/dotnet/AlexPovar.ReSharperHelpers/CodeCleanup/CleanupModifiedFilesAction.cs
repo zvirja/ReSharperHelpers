@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AlexPovar.ReSharperHelpers.Resources;
 using JetBrains.Annotations;
 using JetBrains.Application.DataContext;
 using JetBrains.Application.Settings;
@@ -21,9 +22,17 @@ using JetBrains.Util;
 namespace AlexPovar.ReSharperHelpers.CodeCleanup
 {
 #if RESHARPER
-  [Action("HelpersCleanupGitModifiedFiles", "Cleanup git modified code...", Icon = typeof(AlexPovar.ReSharperHelpers.VisualStudio.MainThemedIcons.ClearIcon))]
+  [Action(
+    ActionId: "ResharperHelpersCleanupGitModifiedFiles",
+    ResourceType: typeof(PluginStrings),
+    TextResourceName: nameof(PluginStrings.Cleanup_git_modified_code),
+    Icon = typeof(AlexPovar.ReSharperHelpers.VisualStudio.MainThemedIcons.ClearIcon))]
 #else
-  [Action("HelpersCleanupGitModifiedFiles", "Cleanup git modified code...", Icon = typeof(JetBrains.ReSharper.Feature.Services.Resources.BulbThemedIcons.ContextAction))]
+  [Action(
+    ActionId: "ResharperHelpersCleanupGitModifiedFiles",
+    ResourceType: typeof(PluginStrings),
+    TextResourceName: nameof(PluginStrings.Cleanup_git_modified_code),
+    Icon = typeof(JetBrains.ReSharper.Feature.Services.Resources.BulbThemedIcons.ContextAction))]
 #endif
   public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
   {
