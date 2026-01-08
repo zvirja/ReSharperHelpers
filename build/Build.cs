@@ -18,7 +18,6 @@ using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.NUnit;
 using Serilog;
-using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.Globbing;
 using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
 using static Nuke.Common.Tools.NUnit.NUnitTasks;
@@ -211,14 +210,14 @@ class Build : NukeBuild
              """
           );
 
-          CopyDirectoryRecursively(riderNuGetDir / "dotFiles", riderPkgContentDir / "dotnet");
+          (riderNuGetDir / "dotFiles").Copy(riderPkgContentDir / "dotnet");
 
           // Build jar file. It's an empty file with metadata only. Is needed otherwise I cannot upload to marketplace
           {
             var jarContentDir = RiderPackageTmpDir / "jar";
             jarContentDir.CreateOrCleanDirectory();
 
-            CopyFileToDirectory(pluginXmlFile, jarContentDir / "META-INF");
+            pluginXmlFile.CopyToDirectory(jarContentDir / "META-INF");
 
             var jarPkgFilePath = riderPkgContentDir / "lib" / $"{riderPackageId}.jar";
             jarPkgFilePath.Parent.CreateDirectory();

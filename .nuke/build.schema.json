@@ -1,60 +1,66 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "$ref": "#/definitions/build",
-  "title": "Build Schema",
   "definitions": {
-    "build": {
-      "type": "object",
+    "Host": {
+      "type": "string",
+      "enum": [
+        "AppVeyor",
+        "AzurePipelines",
+        "Bamboo",
+        "Bitbucket",
+        "Bitrise",
+        "GitHubActions",
+        "GitLab",
+        "Jenkins",
+        "Rider",
+        "SpaceAutomation",
+        "TeamCity",
+        "Terminal",
+        "TravisCI",
+        "VisualStudio",
+        "VSCode"
+      ]
+    },
+    "ExecutableTarget": {
+      "type": "string",
+      "enum": [
+        "CalculateVersion",
+        "CI_DescribeState",
+        "CI_Pipeline",
+        "Clean",
+        "Compile",
+        "CompleteBuild",
+        "Pack",
+        "Prepare",
+        "PublishGallery",
+        "PublishMyGet",
+        "Restore",
+        "Test"
+      ]
+    },
+    "Verbosity": {
+      "type": "string",
+      "description": "",
+      "enum": [
+        "Verbose",
+        "Normal",
+        "Minimal",
+        "Quiet"
+      ]
+    },
+    "NukeBuild": {
       "properties": {
-        "BuildNumber": {
-          "type": "integer"
-        },
-        "BuildVersion": {
-          "type": "string"
-        },
-        "Configuration": {
-          "type": "string",
-          "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
-          "enum": [
-            "Debug",
-            "Release"
-          ]
-        },
         "Continue": {
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
-        },
-        "DevHostId": {
-          "type": "string",
-          "description": "Specify R# installation host to where Dev artifacts should be put"
         },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
         },
         "Host": {
-          "type": "string",
           "description": "Host for execution. Default is 'automatic'",
-          "enum": [
-            "AppVeyor",
-            "AzurePipelines",
-            "Bamboo",
-            "Bitbucket",
-            "Bitrise",
-            "GitHubActions",
-            "GitLab",
-            "Jenkins",
-            "Rider",
-            "SpaceAutomation",
-            "TeamCity",
-            "Terminal",
-            "TravisCI",
-            "VisualStudio",
-            "VSCode"
-          ]
-        },
-        "myget-key": {
-          "type": "string"
+          "$ref": "#/definitions/Host"
         },
         "NoLogo": {
           "type": "boolean",
@@ -75,10 +81,6 @@
             "type": "string"
           }
         },
-        "resharper-gallery-key": {
-          "type": "string",
-          "description": "API Key used to publish package to R# gallery"
-        },
         "Root": {
           "type": "string",
           "description": "Root directory during build execution"
@@ -87,61 +89,60 @@
           "type": "array",
           "description": "List of targets to be skipped. Empty list skips all dependencies",
           "items": {
-            "type": "string",
-            "enum": [
-              "AppVeyor_DescribeState",
-              "AppVeyor_Pipeline",
-              "AppVeyor_UploadTestResults",
-              "CalculateVersion",
-              "Clean",
-              "Compile",
-              "CompleteBuild",
-              "Pack",
-              "Prepare",
-              "PublishGallery",
-              "PublishMyGet",
-              "Restore",
-              "Test"
-            ]
+            "$ref": "#/definitions/ExecutableTarget"
           }
-        },
-        "Solution": {
-          "type": "string",
-          "description": "Path to a solution file that is automatically loaded"
         },
         "Target": {
           "type": "array",
           "description": "List of targets to be invoked. Default is '{default_target}'",
           "items": {
-            "type": "string",
-            "enum": [
-              "AppVeyor_DescribeState",
-              "AppVeyor_Pipeline",
-              "AppVeyor_UploadTestResults",
-              "CalculateVersion",
-              "Clean",
-              "Compile",
-              "CompleteBuild",
-              "Pack",
-              "Prepare",
-              "PublishGallery",
-              "PublishMyGet",
-              "Restore",
-              "Test"
-            ]
+            "$ref": "#/definitions/ExecutableTarget"
           }
         },
         "Verbosity": {
-          "type": "string",
           "description": "Logging verbosity during build execution. Default is 'Normal'",
-          "enum": [
-            "Minimal",
-            "Normal",
-            "Quiet",
-            "Verbose"
-          ]
+          "$ref": "#/definitions/Verbosity"
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "BuildNumber": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "BuildVersion": {
+          "type": "string"
+        },
+        "Configuration": {
+          "type": "string",
+          "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
+          "enum": [
+            "Debug",
+            "Release"
+          ]
+        },
+        "DevHostId": {
+          "type": "string",
+          "description": "Specify R# installation host to where Dev artifacts should be put"
+        },
+        "myget-key": {
+          "type": "string"
+        },
+        "resharper-gallery-key": {
+          "type": "string",
+          "description": "API Key used to publish package to R# gallery"
+        },
+        "Solution": {
+          "type": "string",
+          "description": "Path to a solution file that is automatically loaded"
+        }
+      }
+    },
+    {
+      "$ref": "#/definitions/NukeBuild"
+    }
+  ]
 }
