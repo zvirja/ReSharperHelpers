@@ -39,7 +39,7 @@ using JetBrains.Util.Extension;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Create or browse test file", Description = "Creates new or opens the existing test file.", Priority = short.MinValue)]
+  [ContextAction(GroupType = typeof(CSharpContextActions), Name = "[ReSharperHelpers] Create or browse test file", Description = "Creates new or opens the existing test file.", Priority = short.MinValue)]
   public class CreateOrBrowseTestFileAction : IBulbAction, IContextAction
   {
     private const string TemplateDescription = "[ReSharperHelpers] TestFile";

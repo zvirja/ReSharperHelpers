@@ -7,12 +7,11 @@ using JetBrains.ReSharper.Feature.Services.BulbActions;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
 using JetBrains.ReSharper.Feature.Services.CSharp.ContextActions;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
-using JetBrains.TextControl;
 using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions
 {
-  [ContextAction(Group = "C#", Name = "[ReSharperHelpers] Assert all parameters are not null (or empty) action", Description = "Assert all parameter are not null or empty.", Priority = -1)]
+  [ContextAction(GroupType = typeof(CSharpContextActions), Name = "[ReSharperHelpers] Assert all parameters are not null (or empty) action", Description = "Assert all parameter are not null or empty.", Priority = -1)]
   public class AssertAllParametersNotNullAction : AssertParameterNotNullAction
   {
     [CanBeNull] private IList<ICSharpParameterDeclaration> _myParameterDeclarations;

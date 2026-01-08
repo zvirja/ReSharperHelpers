@@ -10,7 +10,7 @@ using JetBrains.Util;
 
 namespace AlexPovar.ReSharperHelpers.ContextActions.AutoFixture;
 
-[ContextAction(Group = "C#", Name = "[ReSharperHelpers] Remove Greedy AutoFixture attribute", Description = "Removes Greedy AutoFixture attribute.", Priority = short.MinValue)]
+[ContextAction(GroupType = typeof(CSharpContextActions), Name = "[ReSharperHelpers] Remove Greedy AutoFixture attribute", Description = "Removes Greedy AutoFixture attribute.", Priority = short.MinValue)]
 public class RemoveGreedyAttributeAction : AutoFixtureAttributeActionBase
 {
   public RemoveGreedyAttributeAction([NotNull] ICSharpContextActionDataProvider provider) : base(provider, AutoFixtureConstants.GreedyAttributeType)
