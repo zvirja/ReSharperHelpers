@@ -8,7 +8,7 @@ using JetBrains.UI.SrcView.Controls.JetPopupMenu.Impl;
 
 namespace AlexPovar.ReSharperHelpers.VisualStudio.QuickActionsMenu;
 
-[ShellComponent(Instantiation.ContainerAsyncAnyThread)]
+[ShellComponent(Instantiation.ContainerAsyncAnyThreadUnsafe)]
 public class JetPopupMenusInteractivePatcher
 {
   public JetPopupMenusInteractivePatcher(JetPopupMenus menus)
