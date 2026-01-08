@@ -6,6 +6,8 @@
     <RootNamespace>AlexPovar.ReSharperHelpers</RootNamespace>
     <DefineConstants>$(DefineConstants);RIDER</DefineConstants>
     <IncludeBuildOutput>false</IncludeBuildOutput>
+    
+    <Title>ReSharper Helpers [Rider]</Title>
   </PropertyGroup>
 
   <ItemGroup>
