@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -106,9 +107,10 @@ class Build : NukeBuild
 
     Target Prepare => _ => _
         .DependsOn(CalculateVersion, Clean)
-        .Executes(() => { });
+        .Executes(() => {});
 
     Target Restore => _ => _
+        .DependsOn(Prepare)
         .Executes(() =>
         {
             DotNetRestore(c => c
@@ -118,18 +120,9 @@ class Build : NukeBuild
         });
 
     Target Compile => _ => _
-        .DependsOn(Prepare, Restore)
+        .DependsOn(Restore)
         .Executes(() =>
         {
-          // Workaround to suppose VS 2026
-          MSBuildPath = new[]
-            {
-              @"C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe",
-              @"C:\Program Files\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin\MSBuild.exe"
-            }
-            .FirstOrDefault(File.Exists);
-
-
             // Cannot use dotnet, as build relies on 'Microsoft.Build.Utilities.v4.0' which is available for MS Build only.
             MSBuild(c => c
                 .SetConfiguration(Configuration)
