@@ -23,15 +23,15 @@ namespace AlexPovar.ReSharperHelpers.CodeCleanup
 {
 #if RESHARPER
   [Action(
-    ActionId: "ResharperHelpersCleanupGitModifiedFiles",
     ResourceType: typeof(PluginStrings),
     TextResourceName: nameof(PluginStrings.Cleanup_git_modified_code),
+    ActionId = "ResharperHelpersCleanupGitModifiedFiles",
     Icon = typeof(AlexPovar.ReSharperHelpers.VisualStudio.MainThemedIcons.ClearIcon))]
 #else
   [Action(
-    ActionId: "ResharperHelpersCleanupGitModifiedFiles",
     ResourceType: typeof(PluginStrings),
     TextResourceName: nameof(PluginStrings.Cleanup_git_modified_code),
+    ActionId = "ResharperHelpersCleanupGitModifiedFiles",
     Icon = typeof(JetBrains.ReSharper.Feature.Services.Resources.BulbThemedIcons.ContextAction))]
 #endif
   public class CleanupModifiedFilesAction : CodeCleanupActionBase, IExecutableAction, IInsertLast<IntoSolutionItemGroup_Modify>
