@@ -33,7 +33,7 @@ Notice, this setting affects both existing tests discovery and new tests creatio
 
 ### Test project sub-namespace
 
-**Name:** `resharperhelpers_tests_project_sub_namespace` 
+**Name:** `resharperhelpers_tests_project_sub_namespace`
 
 **Format:** Dot-separated list of namespace chunks to prepend to test class name
 
@@ -92,7 +92,7 @@ Quick action to go to corresponding test file or create it. Usually, test projec
 Extend solution, project and directory context menu with additional action to perform cleanup on modified files only. Action uses git to get list of the modified files. All the dirty files (indexed and non-indexed) are included. If you select project or directory (or multiple ones simultaneously), list of files to cleanup is limited to the appropriate scope.
 
 ### Navigate to next/prev section in bulb menu
-When bulb menu is opened (e.g. after you press `Alt+Enter`), you can use `Ctrl` + `Up/Down` to navigate to next section. Useful if quick actions menu becomes really large.  
+When bulb menu is opened (e.g. after you press `Alt+Enter`), you can use `Ctrl` + `Up/Down` to navigate to next section. Useful if quick actions menu becomes really large.
 If section is very large, it jumps to the middle of the section before jumping to the next/previous one.
 ![Preview](doc/NavigateToNextPrevSection.gif)
 
@@ -112,10 +112,6 @@ Quick actions to add/remove `Pure` annotation attribute.
 ### Chop/one line method arguments
 Quick actions to chop method arguments or make them one line (remove all line breaks).
 Useful to format method signatures with large number of parameters (e.g. in tests).
-
-### Assert parameter is not null/Assert all
-Quick action for method argument to insert assertion statement. Allows to assert all nullable argument using `Assert all` action.
-If annotation attributes are available and relevant for argument, they are arranged.
 
 ### "Launch solution" build configuration
 Custom [R# Build Configuration](https://blog.jetbrains.com/dotnet/2015/10/15/introducing-resharper-build/) that builds solution and runs it. The difference comparing to the "VS Startup" (default) configuration is that the default one builds the startup project (with all dependencies) rather than a solution. If you have projects which you want to be always built, they might be skipped if your startup project doesn't depend on them.
