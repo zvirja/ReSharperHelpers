@@ -121,6 +121,15 @@ class Build : NukeBuild
         .DependsOn(Prepare, Restore)
         .Executes(() =>
         {
+          // Workaround to suppose VS 2026
+          MSBuildPath = new[]
+            {
+              @"C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe",
+              @"C:\Program Files\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin\MSBuild.exe"
+            }
+            .FirstOrDefault(File.Exists);
+
+
             // Cannot use dotnet, as build relies on 'Microsoft.Build.Utilities.v4.0' which is available for MS Build only.
             MSBuild(c => c
                 .SetConfiguration(Configuration)
