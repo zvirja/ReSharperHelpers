@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 8.0.0
+- Added support for ReSharper & Rider 2026.1
+- Removed obsolete Assert helpers - it lost its value long time ago
+
 ## 7.12.0
 - Added support for ReSharper & Rider 2025.3
 
