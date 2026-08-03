@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Text.RegularExpressions;
-using Nuke.Common.Tools.Git;
+using Fallout.Common.Tools.Git;
 
 public static class GitVersioning
 {

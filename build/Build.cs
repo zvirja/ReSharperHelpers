@@ -8,27 +8,27 @@ using System.Text.RegularExpressions;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 using NuGet.Packaging;
-using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.Execution;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.MSBuild;
-using Nuke.Common.Tools.NuGet;
-using Nuke.Common.Tools.NUnit;
+using Fallout.Common;
+using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.Execution;
+using Fallout.Common.IO;
+using Fallout.Common.ProjectModel;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.DotNet;
+using Fallout.Common.Tools.MSBuild;
+using Fallout.Common.Tools.NuGet;
+using Fallout.Common.Tools.NUnit;
 using Serilog;
-using static Nuke.Common.IO.Globbing;
-using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
-using static Nuke.Common.Tools.NUnit.NUnitTasks;
-using static Nuke.Common.Tools.NuGet.NuGetTasks;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Fallout.Common.IO.Globbing;
+using static Fallout.Common.Tools.MSBuild.MSBuildTasks;
+using static Fallout.Common.Tools.NUnit.NUnitTasks;
+using static Fallout.Common.Tools.NuGet.NuGetTasks;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
 // ReSharper disable InconsistentNaming
 
 [UnsetVisualStudioEnvironmentVariables]
-class Build : NukeBuild
+class Build : FalloutBuild
 {
     public static int Main () => Execute<Build>(x => x.CompleteBuild);
 

@@ -2,20 +2,20 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace></RootNamespace>
     <NoWarn>CS0649;CS0169</NoWarn>
-    <NukeRootDirectory>..</NukeRootDirectory>
-    <NukeScriptDirectory>..</NukeScriptDirectory>
-    <NukeExcludeDirectoryBuild>True</NukeExcludeDirectoryBuild>
+    <FalloutRootDirectory>..</FalloutRootDirectory>
+    <FalloutScriptDirectory>..</FalloutScriptDirectory>
+    <FalloutExcludeDirectoryBuild>True</FalloutExcludeDirectoryBuild>
     <LangVersion>latest</LangVersion>
-    <NukeTelemetryVersion>1</NukeTelemetryVersion>
+    <FalloutTelemetryVersion>1</FalloutTelemetryVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nuke.Common" Version="9.0.4" />
+    <PackageReference Include="Fallout.Common" Version="10.4.0-rc.5" />
     <PackageReference Include="NUnit.ConsoleRunner" Version="3.22.0" />
-    <PackageReference Include="NuGet.CommandLine" Version="7.3.1">
+    <PackageReference Include="NuGet.CommandLine" Version="7.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
